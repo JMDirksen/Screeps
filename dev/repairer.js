@@ -34,8 +34,7 @@ function run(creep) {
         return;
     }
     else {
-        creep.say('?');
-        creep.memory.job = getRepairJob(creep);
+        creep.idle();
     }
 }
 
