@@ -12,9 +12,11 @@ module.exports = function () {
         if (spawn.memory.transporters == undefined) spawn.memory.transporters = null;
         if (spawn.memory.repairers == undefined) spawn.memory.repairers = null;
         if (spawn.memory.attackers == undefined) spawn.memory.attackers = null;
+        if (spawn.memory.claimers == undefined) spawn.memory.claimers = null;
         if (spawn.memory.attackID == undefined) spawn.memory.attackID = null;
         if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3;
         if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null;
+        if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null;
 
         // Skip spawning
         if (spawn.spawning) continue;
@@ -114,6 +116,17 @@ module.exports = function () {
             const r = spawn.spawnCreep(body, name, {memory: 
                 {type: type, attackID: spawn.memory.attackID, pause: true}
             });
+            if (r == OK) return;
+            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
+        }
+
+        // Claimer
+        const claimersNeeded = spawn.memory.claimers || 1;
+        if (spawn.memory.claimRoom && spawn.room.countCreeps("claimer") < claimersNeeded) {
+            const type = 'claimer';
+            const name = spawn.generateCreepName(type);
+            let body = [CLAIM, MOVE];   // Cost: 650
+            const r = spawn.spawnCreep(body, name, {memory: {type: type, room: spawn.memory.claimRoom}});
             if (r == OK) return;
             else if (r == ERR_NOT_ENOUGH_ENERGY) return;
         }
