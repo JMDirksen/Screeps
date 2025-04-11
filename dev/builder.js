@@ -23,7 +23,7 @@ function run(creep) {
     if (creep.memory.build) {
         const site = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
         if(site) {
-            if (creep.build(site) == ERR_NOT_IN_RANGE) creep.goTo(site);
+            if (creep.build(site) == ERR_NOT_IN_RANGE) creep.goTo(site, 3);
         }
         else {
             creep.idle();

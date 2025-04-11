@@ -20,7 +20,7 @@ function run(creep) {
     // Harvest
     if (creep.memory.harvest) {
         const source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-        if(creep.harvest(source) == ERR_NOT_IN_RANGE) creep.goTo(source);
+        if(creep.harvest(source) == ERR_NOT_IN_RANGE) creep.goTo(source, 1);
     }
     
     // Deliver
@@ -35,7 +35,7 @@ function run(creep) {
             });
             if (storage) {
                 const r = creep.transfer(storage, RESOURCE_ENERGY);
-                if (r == ERR_NOT_IN_RANGE) creep.goTo(storage);
+                if (r == ERR_NOT_IN_RANGE) creep.goTo(storage, 1);
                 return;
             }
             
@@ -54,7 +54,7 @@ function run(creep) {
             });
             if (storage2) {
                 const r = creep.transfer(storage2, RESOURCE_ENERGY);
-                if (r == ERR_NOT_IN_RANGE) creep.goTo(storage2);
+                if (r == ERR_NOT_IN_RANGE) creep.goTo(storage2, 1);
                 return;
             }
 

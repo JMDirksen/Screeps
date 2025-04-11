@@ -1,9 +1,10 @@
 // goTo
-Creep.prototype.goTo = function(target, maxRooms = 1) {
+Creep.prototype.goTo = function(target, inRange = 0, maxRooms = 1) {
     let r = this.moveTo(target,{
         visualizePathStyle: {},
         reusePath: 5,
-        maxRooms: maxRooms
+        maxRooms: maxRooms,
+        range: inRange
     });
     switch(r) {
         case OK:
@@ -68,7 +69,7 @@ Creep.prototype.getEnergy = function(fromStorage = true) {
         if (r == ERR_INVALID_TARGET) r = this.pickup(energy);
         if (r == ERR_INVALID_TARGET) return false;
         if (r == ERR_NOT_IN_RANGE) {
-            this.goTo(energy);
+            this.goTo(energy, 1);
             return true;
         }
         if (r == OK) return true;

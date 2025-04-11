@@ -27,7 +27,10 @@ function run(creep) {
         if (job.hits == job.hitsMax) creep.memory.job = getRepairJob(creep);
         return;
     }
-    else if (r == ERR_NOT_IN_RANGE) creep.goTo(job);
+    else if (r == ERR_NOT_IN_RANGE) {
+        creep.goTo(job, 3);
+        return;
+    }
     else if (r == ERR_NOT_ENOUGH_RESOURCES) {
         creep.memory.job = 'getEnergy';
         creep.getEnergy();

@@ -27,7 +27,7 @@ function run(creep) {
     });
     if (spawn && creep.memory.transport) {
         const r = creep.transfer(spawn, RESOURCE_ENERGY);
-        if (r == ERR_NOT_IN_RANGE) creep.goTo(spawn);
+        if (r == ERR_NOT_IN_RANGE) creep.goTo(spawn, 1);
         return;
     }    
     if (spawn && !creep.memory.transport) {
@@ -43,7 +43,7 @@ function run(creep) {
     const tower = _.sortBy(towers, t => t.store.getUsedCapacity(RESOURCE_ENERGY))[0];    
     if (tower && creep.memory.transport) {
         const r = creep.transfer(tower, RESOURCE_ENERGY);
-        if (r == ERR_NOT_IN_RANGE) creep.goTo(tower);
+        if (r == ERR_NOT_IN_RANGE) creep.goTo(tower, 1);
         return;
     }    
     if (tower && !creep.memory.transport) {
@@ -58,7 +58,7 @@ function run(creep) {
     });
     if (storage && creep.memory.transport) {
         const r = creep.transfer(storage, RESOURCE_ENERGY);
-        if (r == ERR_NOT_IN_RANGE) creep.goTo(storage);
+        if (r == ERR_NOT_IN_RANGE) creep.goTo(storage, 1);
         return;
     }    
     if (storage && !creep.memory.transport) {

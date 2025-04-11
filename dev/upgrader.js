@@ -18,7 +18,7 @@ function run(creep) {
     // Upgrade
     if (creep.memory.upgrade) {
         if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE)
-            creep.goTo(creep.room.controller);
+            creep.goTo(creep.room.controller, 3);
     }
     
     // Get energy

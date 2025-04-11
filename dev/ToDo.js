@@ -3,6 +3,6 @@ WIP
 
 TODO
 - Transporter use jobs
-- Repairer/Builder: GoTo in range (beter path finding)
+x Repairer/Builder: GoTo in range (beter path finding)
 - Bigger creeps
 - towerRange in spawn memory
