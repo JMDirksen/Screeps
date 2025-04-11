@@ -77,6 +77,7 @@ Creep.prototype.getEnergy = function(fromStorage = true) {
             return false;
         }
     }
+    else return false;
     
 }
 

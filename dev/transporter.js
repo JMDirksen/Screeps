@@ -65,6 +65,12 @@ function run(creep) {
         if (creep.getEnergy(false)) return;
     }
 
+    // Switch to transporting if no energy to collect
+    if (!creep.memory.transport && creep.store.getUsedCapacity(RESOURCE_ENERGY)) {
+        creep.memory.transport = true;
+        return;
+    }
+    
     // Idle
     creep.idle();
     
