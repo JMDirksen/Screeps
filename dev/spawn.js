@@ -36,6 +36,17 @@ module.exports = function () {
         }
         */
 
+        // Harvester
+        const harvestersNeeded = spawn.memory.harvesters || 4;
+        if (spawn.room.countCreeps("harvester") < harvestersNeeded) {
+            const type = 'harvester';
+            const name = spawn.generateCreepName(type);
+            const body = [WORK, CARRY, MOVE, MOVE];
+            const r = spawn.spawnCreep(body, name, {memory: {type: type}});
+            if (r == OK) return;
+            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
+        }
+        
         // Transporter
         const transportersNeeded = spawn.memory.transporters || 2;
         if (spawn.room.countCreeps("transporter") < transportersNeeded) {
@@ -48,17 +59,6 @@ module.exports = function () {
             else if (r == ERR_NOT_ENOUGH_ENERGY) return;
         }
 
-        // Harvester
-        const harvestersNeeded = spawn.memory.harvesters || 4;
-        if (spawn.room.countCreeps("harvester") < harvestersNeeded) {
-            const type = 'harvester';
-            const name = spawn.generateCreepName(type);
-            const body = [WORK, CARRY, MOVE, MOVE];
-            const r = spawn.spawnCreep(body, name, {memory: {type: type}});
-            if (r == OK) return;
-            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
-        }
-        
         // Upgrader
         let upgradersNeeded = spawn.memory.upgraders || Math.min(spawn.room.controller.level, harvestersNeeded-1);
         if (spawn.room.controller.level == 8) upgradersNeeded = 1;
