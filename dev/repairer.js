@@ -17,7 +17,7 @@ function run(creep) {
     // Get energy
     if (creep.memory.job == 'getEnergy') {
         if (creep.isFull()) creep.memory.job = getRepairJob(creep);
-        else creep.getEnergy();
+        else return creep.getEnergy();
     }
 
     // Do job
