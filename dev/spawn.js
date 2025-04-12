@@ -123,9 +123,16 @@ module.exports = function () {
         // Claimer
         const claimersNeeded = spawn.memory.claimers || 1;
         if (spawn.memory.claimRoom && spawn.room.countCreeps("claimer") < claimersNeeded) {
+            const claimRoomSpawn = Game.rooms[spawn.memory.claimRoom].find(FIND_MY_STRUCTURES, {
+                filter: { structureType: STRUCTURE_SPAWN }
+            })[0];
+            if (claimRoomSpawn) {
+                spawn.memory.claimRoom = null;
+                return;
+            }
             const type = 'claimer';
             const name = spawn.generateCreepName(type);
-            let body = [CLAIM, MOVE];   // Cost: 650
+            let body = [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE];   // Cost: 900
             const r = spawn.spawnCreep(body, name, {memory: {type: type, room: spawn.memory.claimRoom}});
             if (r == OK) return;
             else if (r == ERR_NOT_ENOUGH_ENERGY) return;
