@@ -52,7 +52,7 @@ function run(creep) {
                     s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
                     && s.store.getFreeCapacity(RESOURCE_ENERGY)
             });
-            if (storage2) {
+            if (storage2 && storage2.pos.inRangeTo(creep.pos, 5)) {
                 const r = creep.transfer(storage2, RESOURCE_ENERGY);
                 if (r == ERR_NOT_IN_RANGE) creep.goTo(storage2, 1);
                 return;

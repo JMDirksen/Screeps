@@ -25,7 +25,11 @@ module.exports = function () {
         const harvestersNeeded = spawn.memory.harvesters || 4;
         if (spawn.room.countCreeps('harvester') < harvestersNeeded) {
             const type = 'harvester';
-            const body = [WORK, CARRY, MOVE, MOVE];
+            let body = [WORK, CARRY, MOVE, MOVE];   // Cost: 250
+            if (spawn.room.energyCapacityAvailable >= 400) body = [WORK, WORK, CARRY, MOVE, MOVE, MOVE];   // Cost: 400
+            if (spawn.room.energyCapacityAvailable >= 550) body = [WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE];   // Cost: 550
+            if (spawn.room.energyCapacityAvailable >= 700) body = [WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 700
+            if (spawn.room.energyCapacityAvailable >= 850) body = [WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 850
             if (spawn.buildCreep(type, body)) continue;
         }
         
@@ -33,8 +37,13 @@ module.exports = function () {
         const transportersNeeded = spawn.memory.transporters || 2;
         if (spawn.room.countCreeps('transporter') < transportersNeeded) {
             const type = 'transporter';
-            let body = [CARRY, CARRY, MOVE, MOVE];
-            if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
+            let body = [CARRY, CARRY, MOVE, MOVE];   // Cost: 200
+            if (spawn.room.energyCapacityAvailable >= 300) body = [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];   // Cost: 300
+            if (spawn.room.energyCapacityAvailable >= 400) body = [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];   // Cost: 400
+            if (spawn.room.energyCapacityAvailable >= 500) body = [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 500
+            if (spawn.room.energyCapacityAvailable >= 600) body = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 600
+            if (spawn.room.energyCapacityAvailable >= 700) body = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 700
+            if (spawn.room.energyCapacityAvailable >= 800) body = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 800
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -47,8 +56,12 @@ module.exports = function () {
         }
         if (spawn.room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader';
-            let body = [WORK, CARRY, MOVE, MOVE];
-            if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
+            let body = [WORK, CARRY, MOVE, MOVE];   // Cost: 250
+            if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];   // Cost: 350
+            if (spawn.room.energyCapacityAvailable >= 500) body = [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];   // Cost: 500
+            if (spawn.room.energyCapacityAvailable >= 600) body = [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 600
+            if (spawn.room.energyCapacityAvailable >= 750) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 750
+            if (spawn.room.energyCapacityAvailable >= 850) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 850
             if (spawn.buildCreep(type, body)) continue;
         }
         
@@ -57,7 +70,11 @@ module.exports = function () {
         if(spawn.room.find(FIND_HOSTILE_CREEPS).length) guardsNeeded += 3;
         if (spawn.room.countCreeps('guard') < guardsNeeded) {
             const type = 'guard';
-            const body = [ATTACK, ATTACK, MOVE, MOVE];
+            const body = [ATTACK, ATTACK, MOVE, MOVE];   // Cost: 260
+            if (spawn.room.energyCapacityAvailable >= 390) body = [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];   // Cost: 390
+            if (spawn.room.energyCapacityAvailable >= 520) body = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE];   // Cost: 520
+            if (spawn.room.energyCapacityAvailable >= 650) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 650
+            if (spawn.room.energyCapacityAvailable >= 780) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 780
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -66,8 +83,12 @@ module.exports = function () {
         const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
         if (sites && spawn.room.countCreeps('builder') < buildersNeeded) {
             const type = 'builder';
-            let body = [WORK, CARRY, MOVE, MOVE];
-            if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
+            let body = [WORK, CARRY, MOVE, MOVE];   // Cost: 250
+            if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];   // Cost: 350
+            if (spawn.room.energyCapacityAvailable >= 500) body = [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];   // Cost: 500
+            if (spawn.room.energyCapacityAvailable >= 600) body = [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 600
+            if (spawn.room.energyCapacityAvailable >= 750) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 750
+            if (spawn.room.energyCapacityAvailable >= 850) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 850
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -80,8 +101,12 @@ module.exports = function () {
         }).length;
         if (repairs && spawn.room.countCreeps('repairer') < repairersNeeded) {
             const type = 'repairer';
-            let body = [WORK, CARRY, MOVE, MOVE];
-            if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
+            let body = [WORK, CARRY, MOVE, MOVE];   // Cost: 250
+            if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];   // Cost: 350
+            if (spawn.room.energyCapacityAvailable >= 500) body = [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];   // Cost: 500
+            if (spawn.room.energyCapacityAvailable >= 600) body = [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 600
+            if (spawn.room.energyCapacityAvailable >= 750) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 750
+            if (spawn.room.energyCapacityAvailable >= 850) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 850
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -89,8 +114,11 @@ module.exports = function () {
         const attackersNeeded = spawn.memory.attackers || 5;
         if(spawn.memory.attackID && spawn.room.countCreeps('attackers') < attackersNeeded) {
             const type = 'attacker';
-            let body = [ATTACK, ATTACK, MOVE, MOVE];
-            if (spawn.room.energyCapacityAvailable >= 390) body = [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
+            const body = [ATTACK, ATTACK, MOVE, MOVE];   // Cost: 260
+            if (spawn.room.energyCapacityAvailable >= 390) body = [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];   // Cost: 390
+            if (spawn.room.energyCapacityAvailable >= 520) body = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE];   // Cost: 520
+            if (spawn.room.energyCapacityAvailable >= 650) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 650
+            if (spawn.room.energyCapacityAvailable >= 780) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 780
             if (spawn.buildCreep(type, body, {attackID: spawn.memory.attackID, pause: true})) continue;
         }
 
