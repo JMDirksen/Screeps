@@ -48,7 +48,7 @@ module.exports = function () {
         }
 
         // Upgrader
-        let upgradersNeeded = spawn.memory.upgraders || Math.min(spawn.room.controller.level, harvestersNeeded-1);
+        let upgradersNeeded = spawn.memory.upgraders || Math.min(spawn.room.controller.level + 1, harvestersNeeded-1);
         if (spawn.room.controller.level == 8) upgradersNeeded = 1;
         else if (upgradersNeeded > 1) {
             const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
