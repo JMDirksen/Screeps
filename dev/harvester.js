@@ -29,7 +29,7 @@ function run(creep) {
     else {
         
         // Spawn/Extension
-        if(!creep.room.countCreeps("transporter")) {
+        if(!creep.room.countCreeps('transporter')) {
             const storage = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                 filter: s => 
                     s.structureType.isInList(STRUCTURE_SPAWN, STRUCTURE_EXTENSION)
