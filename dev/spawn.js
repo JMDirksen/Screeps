@@ -70,7 +70,7 @@ module.exports = function () {
         if(spawn.room.find(FIND_HOSTILE_CREEPS).length) guardsNeeded += 3;
         if (spawn.room.countCreeps('guard') < guardsNeeded) {
             const type = 'guard';
-            const body = [ATTACK, ATTACK, MOVE, MOVE];   // Cost: 260
+            let body = [ATTACK, ATTACK, MOVE, MOVE];   // Cost: 260
             if (spawn.room.energyCapacityAvailable >= 390) body = [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];   // Cost: 390
             if (spawn.room.energyCapacityAvailable >= 520) body = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE];   // Cost: 520
             if (spawn.room.energyCapacityAvailable >= 650) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 650
@@ -114,7 +114,7 @@ module.exports = function () {
         const attackersNeeded = spawn.memory.attackers || 5;
         if(spawn.memory.attackID && spawn.room.countCreeps('attackers') < attackersNeeded) {
             const type = 'attacker';
-            const body = [ATTACK, ATTACK, MOVE, MOVE];   // Cost: 260
+            let body = [ATTACK, ATTACK, MOVE, MOVE];   // Cost: 260
             if (spawn.room.energyCapacityAvailable >= 390) body = [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];   // Cost: 390
             if (spawn.room.energyCapacityAvailable >= 520) body = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE];   // Cost: 520
             if (spawn.room.energyCapacityAvailable >= 650) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE];   // Cost: 650
