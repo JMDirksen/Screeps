@@ -25,8 +25,10 @@ module.exports.loop = function () {
     require('transporter')();
     require('repairer')();
     require('attacker')();
+    require('claimer')();
     require('tower')();
     require('link')();
     require('observer')();
+    require('guard')();
 
 }

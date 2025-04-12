@@ -1,19 +1,7 @@
 module.exports = function () {
-    for (const spawnName in Game.spawns) {
-        const spawn = Game.spawns[spawnName];
-
-        // Unpause attackers
-        const pausedCreeps = spawn.room.find(FIND_MY_CREEPS, {
-            filter: c => c.memory.type == 'attacker' && c.memory.pause
-        });
-        if(pausedCreeps.length >= spawn.memory.squadSize) {
-            for (const i in pausedCreeps) pausedCreeps[i].memory.pause = false;
-        }
-
-        const creeps = spawn.room.find(FIND_MY_CREEPS, {
-            filter: c => c.memory.type == 'attacker'
-        });
-        for (const i in creeps) run(creeps[i]);
+    for (const creepName in Game.creeps) {
+        const creep = Game.creeps[creepName];
+        if(creep.memory.type == 'attacker') run(creep);
     }
 };
 
