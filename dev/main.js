@@ -8,7 +8,7 @@ module.exports.loop = function () {
 
     // CPU Bucket check
     if(Game.cpu.bucket < 100) {
-        console.log("Skipping tick due to low CPU bucket");
+        console.log('Skipping tick due to low CPU bucket');
         return;
     }
     
@@ -18,17 +18,20 @@ module.exports.loop = function () {
         delete Memory.creeps[name];
     }
 
+    // Run creep types
     require('harvester')();
-    require("spawn")();
     require('upgrader')();
     require('builder')();
     require('transporter')();
     require('repairer')();
     require('attacker')();
     require('claimer')();
+    require('guard')();
+
+    // Run structures
+    if (!(Game.time % 10)) require('spawn')();
     require('tower')();
     require('link')();
     require('observer')();
-    require('guard')();
 
 }

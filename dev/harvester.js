@@ -20,7 +20,9 @@ function run(creep) {
     // Harvest
     if (creep.memory.harvest) {
         const source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-        if(creep.harvest(source) == ERR_NOT_IN_RANGE) creep.goTo(source, 1);
+        const r = creep.harvest(source);
+        if (r == ERR_NOT_IN_RANGE) creep.goTo(source, 1);
+        else if (r == ERR_INVALID_TARGET) creep.memory.harvest = false;
     }
     
     // Deliver
