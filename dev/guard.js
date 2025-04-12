@@ -13,7 +13,7 @@ function run(creep) {
 
     const target = creep.pos.findClosestByRange(creep.room.find(FIND_MY_SPAWNS)[0].pos.findInRange(FIND_HOSTILE_CREEPS, 15));
     if(target) {
-        if (creep.attack(target) == ERR_NOT_IN_RANGE) creep.goTo(target);
+        if (creep.attack(target) == ERR_NOT_IN_RANGE) creep.goTo(target, 1);
     }
     else {
         creep.idle();

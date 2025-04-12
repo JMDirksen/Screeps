@@ -39,11 +39,7 @@ function run(creep) {
     }
 
     // Supply spawn
-    const spawn = creep.room.find(FIND_MY_STRUCTURES, {
-        filter: s => 
-            s.structureType == STRUCTURE_SPAWN
-            && s.store.getFreeCapacity(RESOURCE_ENERGY)
-    })[0];
+    const spawn = creep.room.find(FIND_MY_SPAWNS, { filter: s => s.store.getFreeCapacity(RESOURCE_ENERGY)})[0];
     if (spawn) {
         if (creep.transfer(spawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) creep.goTo(spawn, 1);
         return;

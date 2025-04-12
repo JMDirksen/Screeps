@@ -7,3 +7,11 @@ StructureSpawn.prototype.generateCreepName = function(type) {
         }
     }
 }
+
+StructureSpawn.prototype.buildCreep = function (type, body, memory = null) {
+    const name = this.generateCreepName(type);
+    memory = Object.assign({type: type}, memory);
+    const r = this.spawnCreep(body, name, {memory: memory});
+    if (r == OK || r == ERR_NOT_ENOUGH_ENERGY) return true;
+    return false;
+}

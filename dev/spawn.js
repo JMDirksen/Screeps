@@ -20,43 +20,22 @@ module.exports = function () {
 
         // Skip spawning
         if (spawn.spawning) continue;
-        //if (spawn.room.energyAvailable < 250) continue;
-        
-        // Guard
-        /*
-        let guardsNeeded = spawn.memory.guards || 1;
-        if(spawn.room.find(FIND_HOSTILE_CREEPS).length) guardsNeeded += 3;
-        if (spawn.room.countCreeps("guard") < guardsNeeded) {
-            const type = 'guard';
-            const name = spawn.generateCreepName(type);
-            const body = [ATTACK, ATTACK, MOVE, MOVE];
-            const r = spawn.spawnCreep(body, name, {memory: {type: type}});
-            if (r == OK) return;
-            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
-        }
-        */
 
         // Harvester
         const harvestersNeeded = spawn.memory.harvesters || 4;
-        if (spawn.room.countCreeps("harvester") < harvestersNeeded) {
+        if (spawn.room.countCreeps('harvester') < harvestersNeeded) {
             const type = 'harvester';
-            const name = spawn.generateCreepName(type);
             const body = [WORK, CARRY, MOVE, MOVE];
-            const r = spawn.spawnCreep(body, name, {memory: {type: type}});
-            if (r == OK) return;
-            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
+            if (spawn.buildCreep(type, body)) continue;
         }
         
         // Transporter
         const transportersNeeded = spawn.memory.transporters || 2;
-        if (spawn.room.countCreeps("transporter") < transportersNeeded) {
+        if (spawn.room.countCreeps('transporter') < transportersNeeded) {
             const type = 'transporter';
-            const name = spawn.generateCreepName(type);
             let body = [CARRY, CARRY, MOVE, MOVE];
             if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
-            const r = spawn.spawnCreep(body, name, {memory: {type: type}});
-            if (r == OK) return;
-            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
+            if (spawn.buildCreep(type, body)) continue;
         }
 
         // Upgrader
@@ -66,27 +45,30 @@ module.exports = function () {
             const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
             if (sites) upgradersNeeded = 1;
         }
-        if (spawn.room.countCreeps("upgrader") < upgradersNeeded) {
+        if (spawn.room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader';
-            const name = spawn.generateCreepName(type);
             let body = [WORK, CARRY, MOVE, MOVE];
             if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
-            const r = spawn.spawnCreep(body, name, {memory: {type: type}});
-            if (r == OK) return;
-            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
+            if (spawn.buildCreep(type, body)) continue;
         }
         
+        // Guard
+        let guardsNeeded = spawn.memory.guards || 1;
+        if(spawn.room.find(FIND_HOSTILE_CREEPS).length) guardsNeeded += 3;
+        if (spawn.room.countCreeps('guard') < guardsNeeded) {
+            const type = 'guard';
+            const body = [ATTACK, ATTACK, MOVE, MOVE];
+            if (spawn.buildCreep(type, body)) continue;
+        }
+
         // Builder
         const buildersNeeded = spawn.memory.builders || 2;
         const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
-        if (sites && spawn.room.countCreeps("builder") < buildersNeeded) {
+        if (sites && spawn.room.countCreeps('builder') < buildersNeeded) {
             const type = 'builder';
-            const name = spawn.generateCreepName(type);
             let body = [WORK, CARRY, MOVE, MOVE];
             if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
-            const r = spawn.spawnCreep(body, name, {memory: {type: type}});
-            if (r == OK) return;
-            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
+            if (spawn.buildCreep(type, body)) continue;
         }
 
         // Repairer
@@ -96,33 +78,25 @@ module.exports = function () {
 				s.structureType.isInList(STRUCTURE_ROAD, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART)
 				&& s.hits < s.hitsMax
         }).length;
-        if (repairs && spawn.room.countCreeps("repairer") < repairersNeeded) {
+        if (repairs && spawn.room.countCreeps('repairer') < repairersNeeded) {
             const type = 'repairer';
-            const name = spawn.generateCreepName(type);
             let body = [WORK, CARRY, MOVE, MOVE];
             if (spawn.room.energyCapacityAvailable >= 350) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
-            const r = spawn.spawnCreep(body, name, {memory: {type: type}});
-            if (r == OK) return;
-            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
+            if (spawn.buildCreep(type, body)) continue;
         }
 
         // Attacker
         const attackersNeeded = spawn.memory.attackers || 5;
-        if(spawn.memory.attackID && spawn.room.countCreeps("attackers") < attackersNeeded) {
+        if(spawn.memory.attackID && spawn.room.countCreeps('attackers') < attackersNeeded) {
             const type = 'attacker';
-            const name = spawn.generateCreepName(type);
             let body = [ATTACK, ATTACK, MOVE, MOVE];
             if (spawn.room.energyCapacityAvailable >= 390) body = [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
-            const r = spawn.spawnCreep(body, name, {memory: 
-                {type: type, attackID: spawn.memory.attackID, pause: true}
-            });
-            if (r == OK) return;
-            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
+            if (spawn.buildCreep(type, body, {attackID: spawn.memory.attackID, pause: true})) continue;
         }
 
         // Claimer
         const claimersNeeded = spawn.memory.claimers || 1;
-        if (spawn.memory.claimRoom && spawn.room.countCreeps("claimer") < claimersNeeded) {
+        if (spawn.memory.claimRoom && spawn.room.countCreeps('claimer') < claimersNeeded) {
             const claimRoomSpawn = Game.rooms[spawn.memory.claimRoom].find(FIND_MY_STRUCTURES, {
                 filter: { structureType: STRUCTURE_SPAWN }
             })[0];
@@ -131,11 +105,8 @@ module.exports = function () {
                 return;
             }
             const type = 'claimer';
-            const name = spawn.generateCreepName(type);
             let body = [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE];   // Cost: 900
-            const r = spawn.spawnCreep(body, name, {memory: {type: type, room: spawn.memory.claimRoom}});
-            if (r == OK) return;
-            else if (r == ERR_NOT_ENOUGH_ENERGY) return;
+            if (spawn.buildCreep(type, body, {room: spawn.memory.claimRoom})) continue;
         }
 
     }
