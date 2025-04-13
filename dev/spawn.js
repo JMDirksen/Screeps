@@ -124,19 +124,21 @@ module.exports = function () {
         // Claimer
         const claimersNeeded = spawn.memory.claimers || 1;
         if (spawn.memory.claimRoom && spawn.room.countCreeps('claimer') < claimersNeeded) {
-            // Check/stop if room is fully claimed (has spawn)
-            if (Game.rooms[spawn.memory.claimRoom]) {
-                const claimRoomSpawn = Game.rooms[spawn.memory.claimRoom].find(FIND_MY_STRUCTURES, {
-                    filter: { structureType: STRUCTURE_SPAWN }
-                })[0];
-                if (claimRoomSpawn) {
-                    spawn.memory.claimRoom = null;
-                    continue;
-                }
+            // Check/stop if room is fully claimed (has owned spawn)
+            if (Game.rooms[spawn.memory.claimRoom] && Game.rooms[spawn.memory.claimRoom].find(FIND_MY_SPAWNS).length) {
+                spawn.memory.claimRoom = null;
+                continue;
             }
             const type = 'claimer';
             let body = null;
-            if (spawn.energyPossible(900)) body = { tier: 1, parts: [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE] };
+            // Claimer when room not visible or controller not owned
+            if (!Game.rooms[spawn.memory.claimRoom] || !Game.rooms[spawn.memory.claimRoom].controller.my) {
+                if (spawn.energyPossible(900)) body = { tier: 2, parts: [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE] };
+            }
+            // Claimer supporter when room already claimed
+            else {
+                if (spawn.energyPossible(750)) body = { tier: 1, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            }
             if (body && spawn.buildCreep(type, body, { room: spawn.memory.claimRoom })) continue;
         }
 

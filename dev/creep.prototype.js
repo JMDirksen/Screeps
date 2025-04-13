@@ -1,12 +1,12 @@
 // goTo
-Creep.prototype.goTo = function(target, inRange = 0, maxRooms = 1) {
-    let r = this.moveTo(target,{
+Creep.prototype.goTo = function (target, inRange = 0, maxRooms = 1) {
+    let r = this.moveTo(target, {
         visualizePathStyle: {},
         reusePath: 5,
         maxRooms: maxRooms,
         range: inRange
     });
-    switch(r) {
+    switch (r) {
         case OK:
             return true;
             break;
@@ -27,17 +27,17 @@ Creep.prototype.goTo = function(target, inRange = 0, maxRooms = 1) {
 }
 
 // isEmpty
-Creep.prototype.isEmpty = function() {
+Creep.prototype.isEmpty = function () {
     return !_.sum(this.carry);
 }
 
 // isFull
-Creep.prototype.isFull = function() {
+Creep.prototype.isFull = function () {
     return _.sum(this.carry) == this.carryCapacity;
 }
 
 // getEnergy
-Creep.prototype.getEnergy = function(fromStorage = true) {
+Creep.prototype.getEnergy = function (fromStorage = true) {
     // Structures
     let energySources = this.room.find(FIND_STRUCTURES, {
         filter: s => (
@@ -54,16 +54,16 @@ Creep.prototype.getEnergy = function(fromStorage = true) {
     // Tombstones
     energySources = energySources.concat(this.room.find(FIND_TOMBSTONES, {
         filter: t => t.store[RESOURCE_ENERGY]
-    }));    
+    }));
     // Ruins
     energySources = energySources.concat(this.room.find(FIND_RUINS, {
         filter: r => r.store[RESOURCE_ENERGY]
     }));
     // Dropped energy
     energySources = energySources.concat(this.room.find(FIND_DROPPED_RESOURCES, {
-            filter: { resourceType: RESOURCE_ENERGY }
+        filter: { resourceType: RESOURCE_ENERGY }
     }));
-    if(energySources.length) {
+    if (energySources.length) {
         let energy = this.pos.findClosestByPath(energySources);
         let r = this.withdraw(energy, RESOURCE_ENERGY);
         if (r == ERR_INVALID_TARGET) r = this.pickup(energy);
@@ -79,27 +79,27 @@ Creep.prototype.getEnergy = function(fromStorage = true) {
         }
     }
     else return false;
-    
+
 }
 
 // Idle
-Creep.prototype.idle = function() {
+Creep.prototype.idle = function () {
     let spawn = this.pos.findClosestByRange(FIND_MY_SPAWNS);
     // Move towards spawn
-    if(spawn && !this.pos.inRangeTo(spawn, 2)) this.goTo(spawn);
+    if (spawn && !this.pos.inRangeTo(spawn, 2)) this.goTo(spawn);
     // Move random
     else this.move(Math.floor(Math.random() * 8) + 1);
 }
 
 // switchRoom
-Creep.prototype.switchRoom = function() {
+Creep.prototype.switchRoom = function () {
     let roomName = this.memory.room;
-    if(roomName) {
+    if (roomName) {
         let room = Game.rooms[roomName];
         // Room visible
-        if(room) {
-            if(this.pos.inRangeTo(new RoomPosition(25, 25, roomName), 20)) this.memory.room = null;
-            this.moveTo(new RoomPosition(25, 25, roomName), {range: 15, visualizePathStyle: {}});
+        if (room) {
+            if (this.pos.inRangeTo(new RoomPosition(25, 25, roomName), 20)) this.memory.room = null;
+            this.moveTo(new RoomPosition(25, 25, roomName), { range: 15, visualizePathStyle: {} });
             return true;
         }
         // Room not visible yet
@@ -112,4 +112,8 @@ Creep.prototype.switchRoom = function() {
         }
     }
     return false;
+}
+
+Creep.prototype.hasBodyPart = function (type) {
+    return _.filter(this.body, { type: type }).length > 0
 }
