@@ -140,23 +140,43 @@ module.exports = function () {
         }
 
         // Claimer
-        const claimersNeeded = spawn.memory.claimers || 1;
-        if (spawn.memory.claimRoom && spawn.room.countCreeps('claimer') < claimersNeeded) {
-            // Check/stop if room is fully claimed (has owned spawn)
-            if (Game.rooms[spawn.memory.claimRoom] && Game.rooms[spawn.memory.claimRoom].find(FIND_MY_SPAWNS).length) {
-                spawn.memory.claimRoom = null;
-                continue;
-            }
+        const claimersNeeded = spawn.memory.claimers || 3;
+        if (spawn.memory.claimRoom) {
             const type = 'claimer';
+            const room = Game.rooms[spawn.memory.claimRoom];
             let body = null;
-            // Claimer when room not visible or controller not owned
-            if (!Game.rooms[spawn.memory.claimRoom] || !Game.rooms[spawn.memory.claimRoom].controller.my) {
+
+            // Room visible
+            if (room) {
+
+                // Check/stop if room is fully claimed (has owned spawn)
+                if (room.find(FIND_MY_SPAWNS).length) {
+                    spawn.memory.claimRoom = null;
+                    continue;
+                }
+
+                // Check max claimers
+                if (room.countCreeps('claimer') >= claimersNeeded) {
+                    continue;
+                }
+
+                // Claimer when room visible but controller not owned
+                if (!room.controller.my) {
+                    if (spawn.energyPossible(900)) body = { tier: 2, parts: [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE] };
+                }
+
+                // Claimer supporter when room has no spawn yet
+                else {
+                    if (spawn.energyPossible(750)) body = { tier: 1, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+                }
+            }
+
+            // Room not visible
+            else {
+                // Claimer when room not visible (and thus controller not owned)
                 if (spawn.energyPossible(900)) body = { tier: 2, parts: [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE] };
             }
-            // Claimer supporter when room already claimed
-            else {
-                if (spawn.energyPossible(750)) body = { tier: 1, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            }
+
             if (body && spawn.buildCreep(type, body, { room: spawn.memory.claimRoom })) continue;
         }
 
