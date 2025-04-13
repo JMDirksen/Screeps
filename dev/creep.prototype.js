@@ -84,12 +84,11 @@ Creep.prototype.getEnergy = function (fromStorage = true) {
 
 // Idle
 Creep.prototype.idle = function () {
+    const spawn = this.room.find(FIND_MY_SPAWNS)[0];
     // Move towards spawn
-    const spawn = this.pos.findClosestByRange(FIND_MY_SPAWNS);
-    const controller = this.room.controller;
     if (spawn && !this.pos.inRangeTo(spawn, 2)) this.goTo(spawn, 2);
     // Move towards controller
-    else if (controller && !this.pos.inRangeTo(controller, 2)) this.goTo(controller, 2);
+    else if (!spawn && !this.pos.inRangeTo(this.room.controller, 2)) this.goTo(this.room.controller, 2);
     // Move random
     else this.move(Math.floor(Math.random() * 8) + 1);
 }
