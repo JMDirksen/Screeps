@@ -11,6 +11,7 @@ module.exports = function () {
         if (spawn.memory.builders == undefined) spawn.memory.builders = null;
         if (spawn.memory.transporters == undefined) spawn.memory.transporters = null;
         if (spawn.memory.repairers == undefined) spawn.memory.repairers = null;
+        if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = null;
         if (spawn.memory.attackers == undefined) spawn.memory.attackers = null;
         if (spawn.memory.claimers == undefined) spawn.memory.claimers = null;
         if (spawn.memory.attackID == undefined) spawn.memory.attackID = null;
@@ -93,14 +94,31 @@ module.exports = function () {
         }
 
         // Repairer
-        const repairersNeeded = spawn.memory.repairers || 2;
+        const repairersNeeded = spawn.memory.repairers || 1;
         const repairs = spawn.room.find(FIND_STRUCTURES, {
             filter: s =>
-                s.structureType.isInList(STRUCTURE_ROAD, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART)
+                s.structureType.isInList(STRUCTURE_ROAD, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK, STRUCTURE_TOWER)
                 && s.hits < s.hitsMax
         }).length;
         if (repairs && spawn.room.countCreeps('repairer') < repairersNeeded) {
             const type = 'repairer';
+            let body = null;
+            if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
+            if (spawn.buildCreep(type, body)) continue;
+        }
+
+        // Wall repairer
+        const wallRepairersNeeded = spawn.memory.wallRepairers || 1;
+        const wallRepairs = spawn.room.find(FIND_STRUCTURES, {
+            filter: s =>
+                s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
+                && s.hits < s.hitsMax
+        }).length;
+        if (wallRepairs && spawn.room.countCreeps('wallRepairer') < wallRepairersNeeded) {
+            const type = 'wallRepairer';
             let body = null;
             if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
             else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };

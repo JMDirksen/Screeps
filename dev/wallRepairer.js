@@ -1,7 +1,7 @@
 module.exports = function () {
     for (const creepName in Game.creeps) {
         const creep = Game.creeps[creepName];
-        if (creep.memory.type == 'repairer') run(creep);
+        if (creep.memory.type == 'wallRepairer') run(creep);
     }
 };
 
@@ -44,7 +44,7 @@ function run(creep) {
 function getRepairJob(creep) {
     const structures = creep.room.find(FIND_STRUCTURES, {
         filter: s =>
-            s.structureType.isInList(STRUCTURE_ROAD, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK, STRUCTURE_TOWER)
+            s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
             && s.hits < s.hitsMax
     });
     const structure = _.sortBy(structures, 'hits')[0];
