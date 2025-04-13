@@ -21,16 +21,17 @@ module.exports = function () {
         // Skip spawning
         if (spawn.spawning) continue;
 
+        // Max energy per RCL: 1:300 2:550 3:800 4:1300 5:1800 6:2300 7:5300 8:12300
+
         // Harvester
         const harvestersNeeded = spawn.memory.harvesters || 4;
         if (spawn.room.countCreeps('harvester') < harvestersNeeded) {
             const type = 'harvester';
             let body = null;
-            if (spawn.energyPossible(850)) body = [WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(700)) body = [WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(550)) body = [WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(400)) body = [WORK, WORK, CARRY, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(250)) body = [WORK, CARRY, MOVE, MOVE];
+            if (spawn.energyPossible(1300)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(700)) body = { tier: 3, parts: [WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(550)) body = { tier: 2, parts: [WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -39,13 +40,10 @@ module.exports = function () {
         if (spawn.room.countCreeps('transporter') < transportersNeeded) {
             const type = 'transporter';
             let body = null;
-            if (spawn.energyPossible(800)) body = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(700)) body = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(600)) body = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(500)) body = [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(400)) body = [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(300)) body = [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(200)) body = [CARRY, CARRY, MOVE, MOVE];
+            if (spawn.energyPossible(1300)) body = { tier: 4, parts: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(800)) body = { tier: 3, parts: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(300)) body = { tier: 1, parts: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE] };
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -59,12 +57,10 @@ module.exports = function () {
         if (spawn.room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader';
             let body = null;
-            if (spawn.energyPossible(850)) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(750)) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(600)) body = [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(500)) body = [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(350)) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(250)) body = [WORK, CARRY, MOVE, MOVE];
+            if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -74,11 +70,10 @@ module.exports = function () {
         if (spawn.room.countCreeps('guard') < guardsNeeded) {
             const type = 'guard';
             let body = null;
-            if (spawn.energyPossible(780)) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(650)) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(520)) body = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(390)) body = [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(260)) body = [ATTACK, ATTACK, MOVE, MOVE];
+            if (spawn.energyPossible(1300)) body = { tier: 4, parts: [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(780)) body = { tier: 3, parts: [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(520)) body = { tier: 2, parts: [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(260)) body = { tier: 1, parts: [ATTACK, ATTACK, MOVE, MOVE] };
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -88,12 +83,10 @@ module.exports = function () {
         if (sites && spawn.room.countCreeps('builder') < buildersNeeded) {
             const type = 'builder';
             let body = null;
-            if (spawn.energyPossible(850)) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(750)) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(600)) body = [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(500)) body = [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(350)) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(250)) body = [WORK, CARRY, MOVE, MOVE];
+            if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -107,12 +100,10 @@ module.exports = function () {
         if (repairs && spawn.room.countCreeps('repairer') < repairersNeeded) {
             const type = 'repairer';
             let body = null;
-            if (spawn.energyPossible(850)) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(750)) body = [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(600)) body = [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(500)) body = [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(350)) body = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(250)) body = [WORK, CARRY, MOVE, MOVE];
+            if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
             if (spawn.buildCreep(type, body)) continue;
         }
 
@@ -121,11 +112,10 @@ module.exports = function () {
         if (spawn.memory.attackID && spawn.room.countCreeps('attackers') < attackersNeeded) {
             const type = 'attacker';
             let body = null;
-            if (spawn.energyPossible(780)) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(650)) body = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(520)) body = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(390)) body = [ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
-            else if (spawn.energyPossible(260)) body = [ATTACK, ATTACK, MOVE, MOVE];
+            if (spawn.energyPossible(1300)) body = { tier: 4, parts: [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(780)) body = { tier: 3, parts: [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(520)) body = { tier: 2, parts: [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE] };
+            else if (spawn.energyPossible(260)) body = { tier: 1, parts: [ATTACK, ATTACK, MOVE, MOVE] };
             if (spawn.buildCreep(type, body, { attackID: spawn.memory.attackID, pause: true })) continue;
         }
 
@@ -144,8 +134,8 @@ module.exports = function () {
             }
             const type = 'claimer';
             let body = null;
-            if (spawn.energyPossible(900)) body = [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE];
-            if (spawn.buildCreep(type, body, { room: spawn.memory.claimRoom })) continue;
+            if (spawn.energyPossible(900)) body = { tier: 1, parts: [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE] };
+            if (body && spawn.buildCreep(type, body, { room: spawn.memory.claimRoom })) continue;
         }
 
     }
