@@ -47,7 +47,7 @@ function getRepairJob(creep) {
             s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
             && s.hits < s.hitsMax
     });
-    const structure = _.sortBy(structures, 'hits')[0];
+    const structure = _.sortByOrder(structures, ['hits', 'structureType'], ['asc', 'desc'])[0];
     if (structure) return structure.id;
     else return false;
 }
