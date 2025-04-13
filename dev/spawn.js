@@ -17,6 +17,8 @@ module.exports = function () {
         if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3;
         if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null;
         if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null;
+        if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 20;
+        if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 5;
 
         // Skip spawning
         if (spawn.spawning) continue;
