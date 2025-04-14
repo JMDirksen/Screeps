@@ -20,6 +20,7 @@ module.exports = function () {
         if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null;
         if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 20;
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 5;
+        if (spawn.memory.roomEnergyProduction == undefined) spawn.memory.roomEnergyProduction = spawn.room.energyProduction()
 
         // Skip spawning
         if (spawn.spawning) continue;
@@ -27,11 +28,10 @@ module.exports = function () {
         // Max energy per RCL: 1:300 2:550 3:800 4:1300 5:1800 6:2300 7:5300 8:12300
 
         // Harvester
-        let energyProduction = spawn.room.energyProduction()
         let roomHarvesters = spawn.room.find(FIND_MY_CREEPS, { filter: c => c.memory.type == 'harvester' })
         let energyHarvesting = 0
         roomHarvesters.forEach(c => { energyHarvesting += c.countParts('work') * 2 })
-        if (energyHarvesting < energyProduction) {
+        if (energyHarvesting < spawn.memory.roomEnergyProduction) {
             const type = 'harvester';
             let body = null;
             if (spawn.energyPossible(1300)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
