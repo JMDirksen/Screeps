@@ -20,6 +20,7 @@ module.exports = function () {
         if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 20;
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 5;
         if (spawn.memory.roomEnergyProduction == undefined) spawn.memory.roomEnergyProduction = spawn.room.energyProduction()
+        if (spawn.memory.roomSourceSpots == undefined) spawn.memory.roomSourceSpots = spawn.room.sourceSpots()
         if (spawn.memory.remoteHarvestRoom == undefined) spawn.memory.remoteHarvestRoom = null;
 
         // Skip spawning
@@ -31,7 +32,7 @@ module.exports = function () {
         let roomHarvesters = spawn.room.find(FIND_MY_CREEPS, { filter: c => c.memory.type == 'harvester' })
         let energyHarvesting = 0
         roomHarvesters.forEach(c => { energyHarvesting += c.countParts('work') * 2 })
-        if (energyHarvesting < spawn.memory.roomEnergyProduction) {
+        if (energyHarvesting < spawn.memory.roomEnergyProduction && roomHarvesters.length < spawn.memory.roomSourceSpots) {
             const type = 'harvester';
             let body = null;
             if (spawn.energyPossible(1300)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
@@ -189,7 +190,7 @@ module.exports = function () {
             let energyHarvesting = 0
             remoteHarvesters.forEach(c => energyHarvesting += c.countParts('work') * 2)
             let roomEnergyProduction = Game.rooms[spawn.memory.remoteHarvestRoom].energyProduction()
-            if (energyHarvesting < roomEnergyProduction) {
+            if (energyHarvesting < roomEnergyProduction && remoteHarvesters.length < Game.rooms[spawn.memory.remoteHarvestRoom].sourceSpots()) {
                 const type = 'remoteHarvester';
                 let body = null;
                 if (spawn.energyPossible(1300)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
