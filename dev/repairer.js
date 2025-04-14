@@ -12,7 +12,10 @@ function run(creep) {
     }
 
     // Get job
-    if (!creep.memory.job) creep.memory.job = getRepairJob(creep);
+    if (!creep.memory.job) {
+        creep.memory.job = getRepairJob(creep)
+        if (!creep.memory.job) return creep.idle()
+    }
 
     // Get energy
     if (creep.memory.job == 'getEnergy') {
@@ -37,7 +40,8 @@ function run(creep) {
         return;
     }
     else {
-        creep.idle();
+        creep.memory.job = false
+        creep.idle()
     }
 }
 
