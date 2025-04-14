@@ -3,3 +3,8 @@ Room.prototype.countCreeps = function (type) {
         filter: c => c.memory.type == type
     }).length;
 }
+
+Room.prototype.energyProduction = function () {
+    let sources = this.find(FIND_SOURCES);
+    return _.sum(sources, 'energyCapacity') / 300;
+}

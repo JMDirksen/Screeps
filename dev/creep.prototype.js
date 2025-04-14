@@ -119,3 +119,8 @@ Creep.prototype.switchRoom = function () {
 Creep.prototype.hasBodyPart = function (type) {
     return _.filter(this.body, { type: type }).length > 0
 }
+
+Creep.prototype.countParts = function (type = null) {
+    if(!type) return this.body.length
+    else return _.filter(this.body, { type: type }).length
+}

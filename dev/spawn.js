@@ -27,8 +27,11 @@ module.exports = function () {
         // Max energy per RCL: 1:300 2:550 3:800 4:1300 5:1800 6:2300 7:5300 8:12300
 
         // Harvester
-        const harvestersNeeded = spawn.memory.harvesters || 4;
-        if (spawn.room.countCreeps('harvester') < harvestersNeeded) {
+        let energyProduction = spawn.room.energyProduction()
+        let roomHarvesters = spawn.room.find(FIND_MY_CREEPS, { filter: c => c.memory.type == 'harvester' })
+        let energyHarvesting = 0
+        roomHarvesters.forEach(c => { energyHarvesting += c.countParts('work') * 2 })
+        if (energyHarvesting < energyProduction) {
             const type = 'harvester';
             let body = null;
             if (spawn.energyPossible(1300)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
@@ -51,7 +54,7 @@ module.exports = function () {
         }
 
         // Upgrader
-        let upgradersNeeded = spawn.memory.upgraders || Math.min(spawn.room.controller.level + 1, harvestersNeeded - 1);
+        let upgradersNeeded = spawn.memory.upgraders || 1
         if (spawn.room.controller.level == 8) upgradersNeeded = 1;
         else if (upgradersNeeded > 1) {
             const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
