@@ -26,8 +26,11 @@ function run(creep) {
             return creep.switchRoom()
         }
 
-        const source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-        if (source && creep.harvest(source) == ERR_NOT_IN_RANGE) creep.goTo(source, 1)
+        if (creep.getEnergy()) return
+        else {
+            const source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE)
+            if (source && creep.harvest(source) == ERR_NOT_IN_RANGE) creep.goTo(source, 1)
+        }
     }
 
     // Deliver to source room

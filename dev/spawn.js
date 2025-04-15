@@ -22,6 +22,7 @@ module.exports = function () {
         if (spawn.memory.roomEnergyProduction == undefined) spawn.memory.roomEnergyProduction = spawn.room.energyProduction()
         if (spawn.memory.roomSourceSpots == undefined) spawn.memory.roomSourceSpots = spawn.room.sourceSpots()
         if (spawn.memory.remoteHarvestRoom == undefined) spawn.memory.remoteHarvestRoom = null;
+        if (spawn.memory.guardRange == undefined) spawn.memory.guardRange = 20
 
         // Skip spawning
         if (spawn.spawning) continue;

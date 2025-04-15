@@ -47,7 +47,7 @@ Creep.prototype.getEnergy = function (fromStorage = true) {
     });
     // Storage
     if (fromStorage) {
-        energySources = energySources.concat(this.room.find(FIND_MY_STRUCTURES, {
+        energySources = energySources.concat(this.room.find(FIND_STRUCTURES, {
             filter: s => s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY]
         }));
     }
@@ -121,6 +121,6 @@ Creep.prototype.hasBodyPart = function (type) {
 }
 
 Creep.prototype.countParts = function (type = null) {
-    if(!type) return this.body.length
+    if (!type) return this.body.length
     else return _.filter(this.body, { type: type }).length
 }
