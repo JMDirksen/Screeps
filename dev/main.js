@@ -20,6 +20,7 @@ module.exports.loop = function () {
 
     // Run creep types
     require('harvester')();
+    require('remoteHarvester')();
     require('upgrader')();
     require('builder')();
     require('transporter')();

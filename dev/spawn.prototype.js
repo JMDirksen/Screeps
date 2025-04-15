@@ -1,5 +1,5 @@
-StructureSpawn.prototype.generateCreepName = function (type, tier = null) {
-    const t = type.charAt(0).toUpperCase();
+StructureSpawn.prototype.generateCreepName = function (type, tier = null, overrideName = null) {
+    const t = overrideName ? overrideName : type.charAt(0).toUpperCase()
     for (let i = 1; i <= 100; i++) {
         const name = t + tier + i;
         if (!Game.creeps[name]) {
@@ -8,8 +8,8 @@ StructureSpawn.prototype.generateCreepName = function (type, tier = null) {
     }
 }
 
-StructureSpawn.prototype.buildCreep = function (type, body, memory = null) {
-    const name = this.generateCreepName(type, body.tier);
+StructureSpawn.prototype.buildCreep = function (type, body, memory = null, overrideName = null) {
+    const name = this.generateCreepName(type, body.tier, overrideName);
     memory = Object.assign({ type: type }, memory);
     const r = this.spawnCreep(body.parts, name, { memory: memory });
     if (r == OK || r == ERR_NOT_ENOUGH_ENERGY) return true;

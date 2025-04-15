@@ -189,15 +189,20 @@ module.exports = function () {
             let remoteHarvesters = _.filter(Game.creeps, c => c.memory.type == 'remoteHarvester')
             let energyHarvesting = 0
             remoteHarvesters.forEach(c => energyHarvesting += c.countParts('work') * 2)
-            let roomEnergyProduction = Game.rooms[spawn.memory.remoteHarvestRoom].energyProduction()
-            if (energyHarvesting < roomEnergyProduction && remoteHarvesters.length < Game.rooms[spawn.memory.remoteHarvestRoom].sourceSpots()) {
+            let roomEnergyProduction = 1
+            let sourceSpots = 1
+            if (Game.rooms[spawn.memory.remoteHarvestRoom]) {
+                roomEnergyProduction = Game.rooms[spawn.memory.remoteHarvestRoom].energyProduction()
+                sourceSpots = Game.rooms[spawn.memory.remoteHarvestRoom].sourceSpots()
+            }
+            if (energyHarvesting < roomEnergyProduction && remoteHarvesters.length < sourceSpots) {
                 const type = 'remoteHarvester';
                 let body = null;
-                if (spawn.energyPossible(1300)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                else if (spawn.energyPossible(700)) body = { tier: 3, parts: [WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                else if (spawn.energyPossible(550)) body = { tier: 2, parts: [WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE] };
+                if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+                else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+                else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
                 else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
-                if (spawn.buildCreep(type, body, { sourceRoom: spawn.room.name, remoteRoom: spawn.memory.remoteHarvestRoom })) continue;
+                if (spawn.buildCreep(type, body, { sourceRoom: spawn.room.name, remoteRoom: spawn.memory.remoteHarvestRoom }, 'RH')) continue;
             }
         }
 
