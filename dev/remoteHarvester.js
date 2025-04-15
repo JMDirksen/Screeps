@@ -39,11 +39,11 @@ function run(creep) {
             return creep.switchRoom()
         }
 
-        const storage = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+        const storage = creep.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
                 && s.store.getFreeCapacity(RESOURCE_ENERGY)
-        });
+        })
         if (storage) {
             if (creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) creep.goTo(storage, 1)
         }
