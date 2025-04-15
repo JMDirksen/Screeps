@@ -44,7 +44,7 @@ module.exports = function () {
         }
 
         // Transporter
-        const transportersNeeded = spawn.memory.transporters || 2;
+        const transportersNeeded = spawn.memory.transporters || 1
         if (spawn.room.countCreeps('transporter') < transportersNeeded) {
             const type = 'transporter';
             let body = null;
@@ -57,7 +57,7 @@ module.exports = function () {
 
         // Upgrader
         let upgradersNeeded = spawn.memory.upgraders || 1
-        if (spawn.room.controller.level == 8) upgradersNeeded = 1;
+        if (spawn.room.controller.level == 8) upgradersNeeded = 1
         else if (upgradersNeeded > 1) {
             const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
             if (sites) upgradersNeeded = 1;
@@ -72,8 +72,34 @@ module.exports = function () {
             if (spawn.buildCreep(type, body)) continue;
         }
 
+        // Remote harvester
+        if (spawn.memory.remoteHarvestRoom) {
+            let remoteHarvesters = _.filter(Game.creeps, c =>
+                c.memory.type == 'remoteHarvester'
+                && c.memory.sourceRoom == spawn.room.name
+                && c.memory.remoteRoom == spawn.memory.remoteHarvestRoom
+            )
+            let energyHarvesting = 0
+            remoteHarvesters.forEach(c => energyHarvesting += c.countParts('work') * 2)
+            let roomEnergyProduction = 1
+            let sourceSpots = 1
+            if (Game.rooms[spawn.memory.remoteHarvestRoom]) {
+                roomEnergyProduction = Game.rooms[spawn.memory.remoteHarvestRoom].energyProduction()
+                sourceSpots = Game.rooms[spawn.memory.remoteHarvestRoom].sourceSpots()
+            }
+            if (energyHarvesting < roomEnergyProduction && remoteHarvesters.length < sourceSpots) {
+                const type = 'remoteHarvester';
+                let body = null;
+                if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+                else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+                else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
+                else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
+                if (spawn.buildCreep(type, body, { sourceRoom: spawn.room.name, remoteRoom: spawn.memory.remoteHarvestRoom }, 'RH')) continue;
+            }
+        }
+
         // Guard
-        let guardsNeeded = spawn.memory.guards || 1;
+        let guardsNeeded = spawn.memory.guards || 1
         if (spawn.room.find(FIND_HOSTILE_CREEPS).length) guardsNeeded += 3;
         if (spawn.room.countCreeps('guard') < guardsNeeded) {
             const type = 'guard';
@@ -86,7 +112,7 @@ module.exports = function () {
         }
 
         // Builder
-        const buildersNeeded = spawn.memory.builders || 2;
+        const buildersNeeded = spawn.memory.builders || 1
         const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
         if (sites && spawn.room.countCreeps('builder') < buildersNeeded) {
             const type = 'builder';
@@ -99,7 +125,7 @@ module.exports = function () {
         }
 
         // Repairer
-        const repairersNeeded = spawn.memory.repairers || 1;
+        const repairersNeeded = spawn.memory.repairers || 1
         const repairs = spawn.room.find(FIND_STRUCTURES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_ROAD, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK, STRUCTURE_TOWER)
@@ -116,7 +142,7 @@ module.exports = function () {
         }
 
         // Wall repairer
-        const wallRepairersNeeded = spawn.memory.wallRepairers || 1;
+        const wallRepairersNeeded = spawn.memory.wallRepairers || 1
         const wallRepairs = spawn.room.find(FIND_STRUCTURES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
@@ -145,7 +171,7 @@ module.exports = function () {
         }
 
         // Claimer
-        const claimersNeeded = spawn.memory.claimers || 3;
+        const claimersNeeded = spawn.memory.claimers || 3
         if (spawn.memory.claimRoom) {
             const type = 'claimer';
             const room = Game.rooms[spawn.memory.claimRoom];
@@ -183,28 +209,6 @@ module.exports = function () {
             }
 
             if (body && spawn.buildCreep(type, body, { room: spawn.memory.claimRoom })) continue;
-        }
-
-        // Remote harvester
-        if (spawn.memory.remoteHarvestRoom) {
-            let remoteHarvesters = _.filter(Game.creeps, c => c.memory.type == 'remoteHarvester')
-            let energyHarvesting = 0
-            remoteHarvesters.forEach(c => energyHarvesting += c.countParts('work') * 2)
-            let roomEnergyProduction = 1
-            let sourceSpots = 1
-            if (Game.rooms[spawn.memory.remoteHarvestRoom]) {
-                roomEnergyProduction = Game.rooms[spawn.memory.remoteHarvestRoom].energyProduction()
-                sourceSpots = Game.rooms[spawn.memory.remoteHarvestRoom].sourceSpots()
-            }
-            if (energyHarvesting < roomEnergyProduction && remoteHarvesters.length < sourceSpots) {
-                const type = 'remoteHarvester';
-                let body = null;
-                if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
-                else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
-                if (spawn.buildCreep(type, body, { sourceRoom: spawn.room.name, remoteRoom: spawn.memory.remoteHarvestRoom }, 'RH')) continue;
-            }
         }
 
     }
