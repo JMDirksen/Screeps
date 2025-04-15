@@ -42,9 +42,9 @@ function run(creep) {
                 return;
             }
 
-            // Drop
+            // Idle
             else {
-                creep.drop(RESOURCE_ENERGY);
+                creep.idle()
             }
         }
 
@@ -55,15 +55,20 @@ function run(creep) {
                     s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
                     && s.store.getFreeCapacity(RESOURCE_ENERGY)
             });
-            if (storage2 && storage2.pos.inRangeTo(creep.pos, 5)) {
+            if (storage2) {
                 const r = creep.transfer(storage2, RESOURCE_ENERGY);
                 if (r == ERR_NOT_IN_RANGE) creep.goTo(storage2, 1);
                 return;
             }
 
+            // Idle (when there is a storage structure)
+            else if (creep.room.find(FIND_STRUCTURES, {
+                filter: s => s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
+            }).length) creep.idle()
+
             // Drop
             else {
-                creep.drop(RESOURCE_ENERGY);
+                creep.drop(RESOURCE_ENERGY)
             }
 
         }
