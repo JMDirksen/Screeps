@@ -28,6 +28,11 @@ function run(creep) {
     let r = creep.repair(job);
     if (r == OK) {
         if (job.hits == job.hitsMax) creep.memory.job = getRepairJob(creep);
+        creep.memory.timer++
+        if(creep.memory.timer >= 10) {
+            creep.memory.timer = 0
+            creep.memory.job = getRepairJob(creep)
+        }
         return;
     }
     else if (r == ERR_NOT_IN_RANGE) {
