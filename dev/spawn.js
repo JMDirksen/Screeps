@@ -44,7 +44,7 @@ module.exports = function () {
         }
 
         // Transporter
-        const transportersNeeded = spawn.memory.transporters || 1
+        const transportersNeeded = spawn.memory.transporters || 2
         if (spawn.room.countCreeps('transporter') < transportersNeeded) {
             const type = 'transporter';
             let body = null;
