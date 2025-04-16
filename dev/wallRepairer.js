@@ -27,13 +27,14 @@ function run(creep) {
     let job = Game.getObjectById(creep.memory.job);
     let r = creep.repair(job);
     if (r == OK) {
-        if (job.hits == job.hitsMax) creep.memory.job = getRepairJob(creep);
+        if (job.hits == job.hitsMax) creep.memory.job = getRepairJob(creep)
+        // Run job for 5 times
         creep.memory.timer++
-        if(creep.memory.timer >= 10) {
+        if (creep.memory.timer >= 5) {
             creep.memory.timer = 0
             creep.memory.job = getRepairJob(creep)
         }
-        return;
+        return
     }
     else if (r == ERR_NOT_IN_RANGE) {
         creep.goTo(job, 3);
