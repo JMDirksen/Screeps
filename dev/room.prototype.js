@@ -29,3 +29,14 @@ Room.prototype.sourceSpots = function () {
     }
     return countAccessible
 }
+
+Room.prototype.storedEnergy = function (includeDropped = false) {
+    let storageStructures = this.find(FIND_STRUCTURES, {
+        filter: s =>
+            s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
+    })
+    let storedEnergy = _.sum(storageStructures, s => s.store[RESOURCE_ENERGY])
+    if (!includeDropped) return storedEnergy
+    let droppedEnergy = this.find(FIND_DROPPED_RESOURCES, { filter: r => r.resourceType == RESOURCE_ENERGY })
+    return storedEnergy + droppedEnergy
+}

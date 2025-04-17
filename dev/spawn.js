@@ -56,12 +56,10 @@ module.exports = function () {
         }
 
         // Upgrader
-        let upgradersNeeded = spawn.memory.upgraders || 1
+        let upgradersNeeded = spawn.memory.upgraders || 2
         if (spawn.room.controller.level == 8) upgradersNeeded = 1
-        else if (upgradersNeeded > 1) {
-            const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
-            if (sites) upgradersNeeded = 1;
-        }
+        if (spawn.room.storedEnergy() < 1000) upgradersNeeded = 1
+        if (spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
         if (spawn.room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader';
             let body = null;
@@ -87,6 +85,7 @@ module.exports = function () {
 
         // Builder
         const buildersNeeded = spawn.memory.builders || 1
+        if (spawn.room.storedEnergy(true) < 100) buildersNeeded = 0
         const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
         if (sites && spawn.room.countCreeps('builder') < buildersNeeded) {
             const type = 'builder';
@@ -116,7 +115,8 @@ module.exports = function () {
         }
 
         // Wall repairer
-        const wallRepairersNeeded = spawn.memory.wallRepairers || 1
+        const wallRepairersNeeded = spawn.memory.wallRepairers || 2
+        if (spawn.room.storedEnergy() < 1000) wallRepairersNeeded = 1
         const wallRepairs = spawn.room.find(FIND_STRUCTURES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
