@@ -20,7 +20,7 @@ function run(creep) {
         const controller = creep.room.controller
 
         // Sign controller
-        const sign = 'Mine mine mine...'
+        const sign = '🤖 Mine mine mine...'
         if (!controller.sign || controller.sign.username != creep.owner.username || controller.sign.text != sign) {
             if (creep.signController(controller, sign) == ERR_NOT_IN_RANGE)
                 return creep.goTo(controller, 1)
