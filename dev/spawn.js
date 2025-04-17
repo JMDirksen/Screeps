@@ -191,6 +191,9 @@ module.exports = function () {
                     continue;
                 }
 
+                // Check for danger
+                if (room.hasDanger()) continue
+
                 // Claimer when room visible but controller not owned
                 if (!room.controller.my) {
                     if (spawn.energyPossible(900)) body = { tier: 2, parts: [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE] };

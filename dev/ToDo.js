@@ -7,7 +7,8 @@
 [ ] Remote harvest multiple rooms
 [ ] Spawn remote harvester only when there is energy storage capacity available
 [ ] Spawn remote harvester only when there are no enemies in source/remote rooms
-[ ] Spawn claimers only when there is no danger in target room
+[x] Spawn claimers only when there is no danger in target room
+[ ] Cancel claiming when claimer got attacked
 [ ] Attackers squads
 [ ] Ranged attackers
 [ ] Wall repairer prioritize decaying ramparts

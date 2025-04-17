@@ -40,3 +40,11 @@ Room.prototype.storedEnergy = function (includeDropped = false) {
     let droppedEnergy = this.find(FIND_DROPPED_RESOURCES, { filter: r => r.resourceType == RESOURCE_ENERGY })
     return storedEnergy + droppedEnergy
 }
+
+Room.prototype.hasDanger = function () {
+    return this.find(FIND_HOSTILE_CREEPS, {
+        filter: c =>
+            c.getActiveBodyparts(ATTACK) > 0
+            || c.getActiveBodyparts(RANGED_ATTACK) > 0
+    }).length > 0
+}
