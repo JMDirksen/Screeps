@@ -12,7 +12,7 @@ function run(creep) {
     }
 
     // Claim
-    if (creep.hasBodyPart('claim')) {
+    if (creep.getActiveBodyparts(CLAIM)) {
         const controller = creep.room.controller;
         if (controller && !controller.my) {
             if (creep.claimController(controller) == ERR_NOT_IN_RANGE) {
