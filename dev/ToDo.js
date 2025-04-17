@@ -10,6 +10,7 @@
 [ ] Spawn claimers only when there is no danger in target room
 [ ] Attackers squads
 [ ] Ranged attackers
+[ ] Wall repairer prioritize decaying ramparts
 [x] Upgrader: (un)sign controller
 
 */
