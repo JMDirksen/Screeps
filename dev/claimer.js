@@ -6,6 +6,18 @@ module.exports = function () {
 };
 
 function run(creep) {
+    // Got shot at
+    if (creep.hits < creep.hitsMax) {
+        const spawnRoomSpawn = Game.rooms[creep.memory.spawnRoom].spawn()
+        const claimRoom = spawnRoomSpawn.memory.claimRoom
+        if (claimRoom) {
+            spawnRoomSpawn.memory.claimRoom = null
+            const msg = 'Claimer ' + creep.name + ' got shot, claiming ' + claimRoom + ' canceled'
+            console.log(msg)
+            Game.notify(msg)
+        }
+    }
+
     // Switch room
     if (creep.switchRoom()) {
         return;

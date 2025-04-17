@@ -9,11 +9,11 @@ StructureSpawn.prototype.generateCreepName = function (type, tier = null, overri
 }
 
 StructureSpawn.prototype.buildCreep = function (type, body, memory = null, overrideName = null) {
-    const name = this.generateCreepName(type, body.tier, overrideName);
-    memory = Object.assign({ type: type }, memory);
-    const r = this.spawnCreep(body.parts, name, { memory: memory });
-    if (r == OK || r == ERR_NOT_ENOUGH_ENERGY) return true;
-    return false;
+    const name = this.generateCreepName(type, body.tier, overrideName)
+    memory = Object.assign({ type: type, spawnRoom: this.room.name }, memory)
+    const r = this.spawnCreep(body.parts, name, { memory: memory })
+    if (r == OK || r == ERR_NOT_ENOUGH_ENERGY) return true
+    return false
 }
 
 StructureSpawn.prototype.energyPossible = function (amount) {

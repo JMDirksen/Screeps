@@ -48,3 +48,7 @@ Room.prototype.hasDanger = function () {
             || c.getActiveBodyparts(RANGED_ATTACK) > 0
     }).length > 0
 }
+
+Room.prototype.spawn = function () {
+    return this.find(FIND_MY_SPAWNS)[0]
+}
