@@ -57,6 +57,7 @@ module.exports = function () {
 
         // Upgrader
         let upgradersNeeded = spawn.memory.upgraders || 2
+        if (spawn.room.storedEnergy() >= 5000) upgradersNeeded += 2
         if (spawn.room.controller.level == 8) upgradersNeeded = 1
         if (spawn.room.storedEnergy() < 1000) upgradersNeeded = 1
         if (spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
