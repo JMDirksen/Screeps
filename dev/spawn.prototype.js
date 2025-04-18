@@ -13,7 +13,9 @@ StructureSpawn.prototype.buildCreep = function (type, body, memory = null, overr
     const memMerge = Object.assign({ type: type, spawnRoom: this.room.name }, memory)
     const r = this.spawnCreep(body.parts, name, { memory: memMerge })
     if (r == OK) {
-        verbose(this.room.name + ' spawning ' + type + ' ' + name + ' ' + JSON.stringify(memory) + '...')
+        let extraInfo = ''
+        if (memory) extraInfo = JSON.stringify(memory)
+        verbose(this.room.name + ' ' + this.name + ' spawning ' + type + ' ' + name + ' ' + extraInfo)
         return true
     }
     else if (r == ERR_NOT_ENOUGH_ENERGY) return true
