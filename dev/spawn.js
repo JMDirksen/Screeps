@@ -4,24 +4,24 @@ module.exports = function () {
     for (const spawnName in Game.spawns) {
         const spawn = Game.spawns[spawnName];
 
-        // Setup spawn memory
-        if (spawn.memory.guards == undefined) spawn.memory.guards = null;
-        if (spawn.memory.upgraders == undefined) spawn.memory.upgraders = null;
-        if (spawn.memory.builders == undefined) spawn.memory.builders = null;
-        if (spawn.memory.transporters == undefined) spawn.memory.transporters = null;
-        if (spawn.memory.repairers == undefined) spawn.memory.repairers = null;
-        if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = null;
-        if (spawn.memory.attackers == undefined) spawn.memory.attackers = null;
-        if (spawn.memory.claimers == undefined) spawn.memory.claimers = null;
-        if (spawn.memory.attackID == undefined) spawn.memory.attackID = null;
-        if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3;
-        if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null;
-        if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null;
-        if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 20;
-        if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 5;
+        // Setup spawn memory defaults
+        if (spawn.memory.guards == undefined) spawn.memory.guards = 1
+        if (spawn.memory.upgraders == undefined) spawn.memory.upgraders = 2
+        if (spawn.memory.builders == undefined) spawn.memory.builders = 1
+        if (spawn.memory.transporters == undefined) spawn.memory.transporters = 2
+        if (spawn.memory.repairers == undefined) spawn.memory.repairers = 1
+        if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = 2
+        if (spawn.memory.attackers == undefined) spawn.memory.attackers = 5
+        if (spawn.memory.claimers == undefined) spawn.memory.claimers = 3
+        if (spawn.memory.attackID == undefined) spawn.memory.attackID = null
+        if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3
+        if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null
+        if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null
+        if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 20
+        if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 5
         if (spawn.memory.roomEnergyProduction == undefined) spawn.memory.roomEnergyProduction = spawn.room.energyProduction()
         if (spawn.memory.roomSourceSpots == undefined) spawn.memory.roomSourceSpots = spawn.room.sourceSpots()
-        if (spawn.memory.remoteHarvestRoom == undefined) spawn.memory.remoteHarvestRoom = null;
+        if (spawn.memory.remoteHarvestRoom == undefined) spawn.memory.remoteHarvestRoom = null
         if (spawn.memory.guardRange == undefined) spawn.memory.guardRange = 20
 
         // Skip spawning
@@ -44,7 +44,7 @@ module.exports = function () {
         }
 
         // Transporter
-        const transportersNeeded = spawn.memory.transporters || 2
+        const transportersNeeded = spawn.memory.transporters
         if (spawn.room.countCreeps('transporter') < transportersNeeded) {
             const type = 'transporter';
             let body = null;
@@ -56,7 +56,7 @@ module.exports = function () {
         }
 
         // Upgrader
-        let upgradersNeeded = spawn.memory.upgraders || 2
+        let upgradersNeeded = spawn.memory.upgraders
         if (spawn.room.storedEnergy() >= 5000) upgradersNeeded += 2
         if (spawn.room.controller.level == 8) upgradersNeeded = 1
         if (spawn.room.storedEnergy() < 1000) upgradersNeeded = 1
@@ -72,7 +72,7 @@ module.exports = function () {
         }
 
         // Guard
-        let guardsNeeded = spawn.memory.guards || 1
+        let guardsNeeded = spawn.memory.guards
         if (spawn.room.find(FIND_HOSTILE_CREEPS).length) guardsNeeded += 1
         if (spawn.room.countCreeps('guard') < guardsNeeded) {
             const type = 'guard';
@@ -85,7 +85,7 @@ module.exports = function () {
         }
 
         // Builder
-        let buildersNeeded = spawn.memory.builders || 1
+        let buildersNeeded = spawn.memory.builders
         if (spawn.room.storedEnergy(true) < 100) buildersNeeded = 0
         const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
         if (sites && spawn.room.countCreeps('builder') < buildersNeeded) {
@@ -99,7 +99,7 @@ module.exports = function () {
         }
 
         // Repairer
-        const repairersNeeded = spawn.memory.repairers || 1
+        const repairersNeeded = spawn.memory.repairers
         const repairs = spawn.room.find(FIND_STRUCTURES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_ROAD, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK, STRUCTURE_TOWER)
@@ -116,7 +116,7 @@ module.exports = function () {
         }
 
         // Wall repairer
-        let wallRepairersNeeded = spawn.memory.wallRepairers || 2
+        let wallRepairersNeeded = spawn.memory.wallRepairers
         if (spawn.room.storedEnergy() < 1000) wallRepairersNeeded = 1
         const wallRepairs = spawn.room.find(FIND_STRUCTURES, {
             filter: s =>
@@ -134,7 +134,7 @@ module.exports = function () {
         }
 
         // Attacker
-        const attackersNeeded = spawn.memory.attackers || 5;
+        const attackersNeeded = spawn.memory.attackers
         if (spawn.memory.attackID && spawn.room.countCreeps('attackers') < attackersNeeded) {
             const type = 'attacker';
             let body = null;
@@ -172,7 +172,7 @@ module.exports = function () {
         }
 
         // Claimer
-        const claimersNeeded = spawn.memory.claimers || 3
+        const claimersNeeded = spawn.memory.claimers
         if (spawn.memory.claimRoom) {
             const type = 'claimer';
             const room = Game.rooms[spawn.memory.claimRoom];
