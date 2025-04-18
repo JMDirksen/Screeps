@@ -123,8 +123,3 @@ Creep.prototype.switchRoom = function () {
     }
     return false;
 }
-
-Creep.prototype.countParts = function (type = null) {
-    if (!type) return this.body.length
-    else return _.filter(this.body, { type: type }).length
-}

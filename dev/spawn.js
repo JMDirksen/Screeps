@@ -1,6 +1,7 @@
 module.exports = function () {
 
     // Iterate spawns
+    spawnloop:
     for (const spawnName in Game.spawns) {
         const spawn = Game.spawns[spawnName];
 
@@ -21,7 +22,7 @@ module.exports = function () {
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 5
         if (spawn.memory.roomEnergyProduction == undefined) spawn.memory.roomEnergyProduction = spawn.room.energyProduction()
         if (spawn.memory.roomSourceSpots == undefined) spawn.memory.roomSourceSpots = spawn.room.sourceSpots()
-        if (spawn.memory.remoteHarvestRoom == undefined) spawn.memory.remoteHarvestRoom = null
+        if (spawn.memory.remoteHarvestRooms == undefined) spawn.memory.remoteHarvestRooms = null
         if (spawn.memory.guardRange == undefined) spawn.memory.guardRange = 20
 
         // Skip spawning
@@ -32,7 +33,7 @@ module.exports = function () {
         // Harvester
         let roomHarvesters = spawn.room.find(FIND_MY_CREEPS, { filter: c => c.memory.type == 'harvester' })
         let energyHarvesting = 0
-        roomHarvesters.forEach(c => { energyHarvesting += c.countParts('work') * 2 })
+        roomHarvesters.forEach(c => { energyHarvesting += c.getActiveBodyparts(WORK) * 2 })
         if (energyHarvesting < spawn.memory.roomEnergyProduction && roomHarvesters.length < spawn.memory.roomSourceSpots) {
             const type = 'harvester';
             let body = null;
@@ -146,28 +147,32 @@ module.exports = function () {
         }
 
         // Remote harvester
-        if (spawn.memory.remoteHarvestRoom) {
-            let remoteHarvesters = _.filter(Game.creeps, c =>
-                c.memory.type == 'remoteHarvester'
-                && c.memory.sourceRoom == spawn.room.name
-                && c.memory.remoteRoom == spawn.memory.remoteHarvestRoom
-            )
-            let energyHarvesting = 0
-            remoteHarvesters.forEach(c => energyHarvesting += c.countParts('work') * 2)
-            let roomEnergyProduction = 1
-            let sourceSpots = 1
-            if (Game.rooms[spawn.memory.remoteHarvestRoom]) {
-                roomEnergyProduction = Game.rooms[spawn.memory.remoteHarvestRoom].energyProduction()
-                sourceSpots = Game.rooms[spawn.memory.remoteHarvestRoom].sourceSpots()
-            }
-            if (energyHarvesting < roomEnergyProduction && remoteHarvesters.length < sourceSpots) {
-                const type = 'remoteHarvester';
-                let body = null;
-                if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
-                else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
-                if (spawn.buildCreep(type, body, { sourceRoom: spawn.room.name, remoteRoom: spawn.memory.remoteHarvestRoom }, 'RH')) continue;
+        if (spawn.memory.remoteHarvestRooms) {
+            const remoteHarvestRooms = spawn.memory.remoteHarvestRooms.split(',')
+            for (let remoteHarvestRoom of remoteHarvestRooms) {
+                remoteHarvestRoom = remoteHarvestRoom.trim()
+                let remoteHarvesters = _.filter(Game.creeps, c =>
+                    c.memory.type == 'remoteHarvester'
+                    && c.memory.spawnRoom == spawn.room.name
+                    && c.memory.remoteRoom == remoteHarvestRoom
+                )
+                let energyHarvesting = 0
+                remoteHarvesters.forEach(c => energyHarvesting += c.getActiveBodyparts(WORK) * 2)
+                let roomEnergyProduction = 1
+                let sourceSpots = 1
+                if (Game.rooms[remoteHarvestRoom]) {
+                    roomEnergyProduction = Game.rooms[remoteHarvestRoom].energyProduction()
+                    sourceSpots = Game.rooms[remoteHarvestRoom].sourceSpots()
+                }
+                if (energyHarvesting < roomEnergyProduction && remoteHarvesters.length < sourceSpots) {
+                    const type = 'remoteHarvester';
+                    let body = null;
+                    if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+                    else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
+                    else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
+                    else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
+                    if (spawn.buildCreep(type, body, { remoteRoom: remoteHarvestRoom }, 'RH')) continue spawnloop
+                }
             }
         }
 

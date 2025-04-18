@@ -37,8 +37,8 @@ function run(creep) {
     else {
 
         // Switch room
-        if (creep.room.name != creep.memory.sourceRoom) {
-            creep.memory.room = creep.memory.sourceRoom
+        if (creep.room.name != creep.memory.spawnRoom) {
+            creep.memory.room = creep.memory.spawnRoom
             return creep.switchRoom()
         }
 

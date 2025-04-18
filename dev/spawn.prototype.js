@@ -10,9 +10,13 @@ StructureSpawn.prototype.generateCreepName = function (type, tier = null, overri
 
 StructureSpawn.prototype.buildCreep = function (type, body, memory = null, overrideName = null) {
     const name = this.generateCreepName(type, body.tier, overrideName)
-    memory = Object.assign({ type: type, spawnRoom: this.room.name }, memory)
-    const r = this.spawnCreep(body.parts, name, { memory: memory })
-    if (r == OK || r == ERR_NOT_ENOUGH_ENERGY) return true
+    const memMerge = Object.assign({ type: type, spawnRoom: this.room.name }, memory)
+    const r = this.spawnCreep(body.parts, name, { memory: memMerge })
+    if (r == OK) {
+        verbose(this.room.name + ' spawning ' + type + ' ' + name + ' ' + JSON.stringify(memory) + '...')
+        return true
+    }
+    else if (r == ERR_NOT_ENOUGH_ENERGY) return true
     return false
 }
 
