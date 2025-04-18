@@ -11,7 +11,7 @@
 [x] Cancel claiming when claimer got attacked
 [ ] Attackers squads
 [ ] Ranged attackers
-[ ] Wall repairer prioritize decaying ramparts
+[x] Wall repairer prioritize decaying ramparts
 [x] Upgrader: (un)sign controller
 
 */

@@ -52,12 +52,19 @@ function run(creep) {
 }
 
 function getRepairJob(creep) {
+    const prioRamparts = creep.room.find(FIND_STRUCTURES, {
+        filter: s =>
+            s.structureType == STRUCTURE_RAMPART
+            && s.hits <= 900
+    })
+    if (prioRamparts.length) return _.sortBy(prioRamparts, 'hits')[0].id
+
     const structures = creep.room.find(FIND_STRUCTURES, {
         filter: s =>
             s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
             && s.hits < s.hitsMax
-    });
-    const structure = _.sortByOrder(structures, ['hits', 'structureType'], ['asc', 'desc'])[0];
-    if (structure) return structure.id;
-    else return false;
+    })
+    if (structures.length) return _.sortByOrder(structures, ['hits', 'structureType'], ['asc', 'desc'])[0].id
+
+    return false
 }
