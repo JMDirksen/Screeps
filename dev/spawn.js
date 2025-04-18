@@ -151,6 +151,7 @@ module.exports = function () {
             const remoteHarvestRooms = spawn.memory.remoteHarvestRooms.split(',')
             for (let remoteHarvestRoom of remoteHarvestRooms) {
                 remoteHarvestRoom = remoteHarvestRoom.trim()
+                if (!remoteHarvestRoom.length) continue
                 let remoteHarvesters = _.filter(Game.creeps, c =>
                     c.memory.type == 'remoteHarvester'
                     && c.memory.spawnRoom == spawn.room.name

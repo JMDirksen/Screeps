@@ -15,10 +15,16 @@ module.exports.loop = function () {
 
     // Clear memory
     for (const name in Memory.creeps) {
-        if (!Game.creeps[name]) delete Memory.creeps[name]
+        if (!Game.creeps[name]) {
+            verbose(name + ' died...')
+            delete Memory.creeps[name]
+        }
     }
     for (const name in Memory.spawns) {
-        if (!Game.spawns[name]) delete Memory.spawns[name]
+        if (!Game.spawns[name]) {
+            verbose(name + ' is gone...')
+            delete Memory.spawns[name]
+        }
     }
 
     // Run creep types
