@@ -85,7 +85,7 @@ module.exports = function () {
         }
 
         // Builder
-        const buildersNeeded = spawn.memory.builders || 1
+        let buildersNeeded = spawn.memory.builders || 1
         if (spawn.room.storedEnergy(true) < 100) buildersNeeded = 0
         const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
         if (sites && spawn.room.countCreeps('builder') < buildersNeeded) {
@@ -116,7 +116,7 @@ module.exports = function () {
         }
 
         // Wall repairer
-        const wallRepairersNeeded = spawn.memory.wallRepairers || 2
+        let wallRepairersNeeded = spawn.memory.wallRepairers || 2
         if (spawn.room.storedEnergy() < 1000) wallRepairersNeeded = 1
         const wallRepairs = spawn.room.find(FIND_STRUCTURES, {
             filter: s =>
