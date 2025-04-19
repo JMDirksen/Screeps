@@ -41,6 +41,14 @@ Room.prototype.storedEnergy = function (includeDropped = false) {
     return storedEnergy + droppedEnergy
 }
 
+Room.prototype.availableStorage = function (type = RESOURCE_ENERGY) {
+    let storageStructures = this.find(FIND_STRUCTURES, {
+        filter: s =>
+            s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
+    })
+    return _.sum(storageStructures, s => s.store.getFreeCapacity(type))
+}
+
 Room.prototype.hasDanger = function () {
     return this.find(FIND_HOSTILE_CREEPS, {
         filter: c =>

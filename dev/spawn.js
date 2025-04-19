@@ -148,15 +148,28 @@ module.exports = function () {
 
         // Remote harvester
         if (spawn.memory.remoteHarvestRooms) {
+            // Check for local energy storage capacity
+            const availableEnergyStorage = spawn.room.availableStorage()
+            debug(spawn.room.name + ' availableEnergyStorage: ' + availableEnergyStorage)
+            if (availableEnergyStorage < 500) continue
+
+            // Iterate remote rooms
             const remoteHarvestRooms = spawn.memory.remoteHarvestRooms.split(',')
             for (let remoteHarvestRoom of remoteHarvestRooms) {
                 remoteHarvestRoom = remoteHarvestRoom.trim()
                 if (!remoteHarvestRoom.length) continue
+
+                // Check for hostiles
+
+
+                // Count remote harvesters in remote room
                 let remoteHarvesters = _.filter(Game.creeps, c =>
                     c.memory.type == 'remoteHarvester'
                     && c.memory.spawnRoom == spawn.room.name
                     && c.memory.remoteRoom == remoteHarvestRoom
                 )
+
+                // Get remote harvesting capability / production
                 let energyHarvesting = 0
                 remoteHarvesters.forEach(c => energyHarvesting += c.getActiveBodyparts(WORK) * 2)
                 let roomEnergyProduction = 1
@@ -165,6 +178,8 @@ module.exports = function () {
                     roomEnergyProduction = Game.rooms[remoteHarvestRoom].energyProduction()
                     sourceSpots = Game.rooms[remoteHarvestRoom].sourceSpots()
                 }
+
+                // Spawn remote harvester
                 if (energyHarvesting < roomEnergyProduction && remoteHarvesters.length < sourceSpots) {
                     const type = 'remoteHarvester';
                     let body = null;
@@ -174,6 +189,7 @@ module.exports = function () {
                     else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
                     if (spawn.buildCreep(type, body, { remoteRoom: remoteHarvestRoom }, 'RH')) continue spawnloop
                 }
+
             }
         }
 
