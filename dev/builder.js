@@ -21,6 +21,16 @@ function run(creep) {
 
     // Build
     if (creep.memory.build) {
+        // Build walls
+        const wall = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
+            filter: s => s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
+        })[0]
+        if (wall) {
+            if (creep.build(wall) == ERR_NOT_IN_RANGE) creep.goTo(wall, 3)
+            return
+        }
+
+        // Build rest
         const sites = creep.room.find(FIND_MY_CONSTRUCTION_SITES)
         if (!sites.length) return creep.idle()
         const site = _.sortByOrder(sites, ['progress'], ['desc'])[0]
@@ -37,5 +47,4 @@ function run(creep) {
         if (creep.store[RESOURCE_ENERGY]) creep.memory.build = true;
         creep.idle();
     }
-
 }
