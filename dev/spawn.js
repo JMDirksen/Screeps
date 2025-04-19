@@ -160,7 +160,7 @@ module.exports = function () {
 
             // Check for hostiles (source room)
             if (spawn.room.hasDanger()) {
-                verbose(spawn.room.name + ' has hostiles!')
+                info(spawn.room.name + ' has hostiles!')
                 continue
             }
 
@@ -172,7 +172,7 @@ module.exports = function () {
 
                 // Check for hostiles (visible remote room)
                 if (Game.rooms[remoteHarvestRoom] && Game.rooms[remoteHarvestRoom].hasDanger()) {
-                    verbose(spawn.room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles!')
+                    info(spawn.room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles!')
                     continue
                 }
 

@@ -16,13 +16,13 @@ module.exports.loop = function () {
     // Clear memory
     for (const name in Memory.creeps) {
         if (!Game.creeps[name]) {
-            verbose(name + ' died ' + JSON.stringify(_.omit(Memory.creeps[name], ['_move', 'path'])))
+            info(name + ' died ' + JSON.stringify(_.omit(Memory.creeps[name], ['_move', 'path'])))
             delete Memory.creeps[name]
         }
     }
     for (const name in Memory.spawns) {
         if (!Game.spawns[name]) {
-            verbose(name + ' is gone')
+            info(name + ' is gone')
             delete Memory.spawns[name]
         }
     }

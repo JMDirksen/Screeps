@@ -1,6 +1,6 @@
-global.verbose = function (text) {
+global.info = function (text) {
     if (typeof text === 'object') text = JSON.stringify(text)
-    if (Memory.verbose) console.log('<font color="Cyan">Verbose: </font>' + text)
+    if (Memory.info) console.log('<font color="Cyan">Info: </font>' + text)
 }
 
 global.debug = function (text) {
