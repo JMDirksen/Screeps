@@ -11,19 +11,32 @@ function run(creep) {
         return;
     }
 
-    let target = null;
-    if (creep.room.find(FIND_MY_SPAWNS).length) {
-        let range = creep.room.find(FIND_MY_SPAWNS)[0].memory.guardRange
-        target = creep.pos.findClosestByRange(creep.room.find(FIND_MY_SPAWNS)[0].pos.findInRange(FIND_HOSTILE_CREEPS, range));
+    const spawn = creep.room.spawn()
+
+    // Get target
+    let target = null
+    if (spawn) {
+        const targets = spawn.pos.findInRange(FIND_HOSTILE_CREEPS, spawn.memory.guardRange)
+        target = creep.pos.findClosestByPath(targets)
     }
     else {
-        target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
+        target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS)
     }
+
+    // Attack
     if (target) {
-        if (creep.attack(target) == ERR_NOT_IN_RANGE) creep.goTo(target, 1);
+        const range = creep.pos.getRangeTo(target)
+        // Move
+        if (range > 1) creep.goTo(target, 1)
+        // Attack
+        if (range == 1) creep.attack(target)
+        // Ranged attack
+        if (range <= 3) creep.rangedAttack(target)
     }
+
+    // Idle
     else {
-        creep.idle();
+        creep.idle()
     }
 
 }

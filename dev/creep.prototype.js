@@ -8,22 +8,25 @@ Creep.prototype.goTo = function (target, inRange = 0, maxRooms = 1) {
     });
     switch (r) {
         case OK:
-            return true;
-            break;
+            return true
+            break
         case ERR_TIRED:
-            this.say('.');
-            return true;
-            break;
+            this.say('💤')
+            return true
+            break
         case ERR_NO_PATH:
-            this.say('?');
-            break;
+            this.say('⛔')
+            break
         case ERR_INVALID_TARGET:
-            this.say('??');
-            break;
+            this.say('🎯')
+            break
+        case ERR_NO_BODYPART:
+            this.say('💔')
+            break
         default:
-            this.say(r);
+            this.say(r)
     }
-    return false;
+    return false
 }
 
 // isEmpty
