@@ -15,7 +15,7 @@ StructureSpawn.prototype.buildCreep = function (type, body, memory = null, overr
     if (r == OK) {
         let extraInfo = ''
         if (memory) extraInfo = JSON.stringify(memory)
-        info(this.room.name + ' ' + this.name + ' spawning ' + type + ' ' + name + ' ' + extraInfo)
+        info(this.room.name + ' spawning ' + type + ' ' + name + ' ' + extraInfo)
         return true
     }
     else if (r == ERR_NOT_ENOUGH_ENERGY) return true
