@@ -57,6 +57,7 @@ function getRepairJob(creep) {
         filter: s =>
             s.structureType == STRUCTURE_RAMPART
             && s.hits <= 900
+            && !creepsWithJob(creep.memory.type, s.id).length
     })
     if (prioRamparts.length) return _.sortBy(prioRamparts, 'hits')[0].id
 
@@ -65,6 +66,7 @@ function getRepairJob(creep) {
         filter: s =>
             s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
             && s.hits < s.hitsMax
+            && !creepsWithJob(creep.memory.type, s.id).length
     })
     if (structures.length) {
         // Iterate 5K repair blocks
