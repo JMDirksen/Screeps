@@ -28,9 +28,9 @@ function run(creep) {
     let r = creep.repair(job);
     if (r == OK) {
         if (job.hits == job.hitsMax) creep.memory.job = getRepairJob(creep)
-        // Run job for 5 times
+        // Run job for 10 times
         creep.memory.timer++
-        if (creep.memory.timer >= 5) {
+        if (creep.memory.timer >= 10) {
             creep.memory.timer = 0
             creep.memory.job = getRepairJob(creep)
         }
