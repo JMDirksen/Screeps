@@ -153,14 +153,23 @@ module.exports = function () {
             debug(spawn.room.name + ' availableEnergyStorage: ' + availableEnergyStorage)
             if (availableEnergyStorage < 500) continue
 
+            // Check for hostiles (source room)
+            if (spawn.room.hasDanger()) {
+                debug(spawn.room.name + ' has hostiles!')
+                continue
+            }
+
             // Iterate remote rooms
             const remoteHarvestRooms = spawn.memory.remoteHarvestRooms.split(',')
             for (let remoteHarvestRoom of remoteHarvestRooms) {
                 remoteHarvestRoom = remoteHarvestRoom.trim()
                 if (!remoteHarvestRoom.length) continue
 
-                // Check for hostiles
-
+                // Check for hostiles (visible remote room)
+                if (Game.rooms[remoteHarvestRoom] && Game.rooms[remoteHarvestRoom].hasDanger()) {
+                    debug(spawn.room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles!')
+                    continue
+                }
 
                 // Count remote harvesters in remote room
                 let remoteHarvesters = _.filter(Game.creeps, c =>
