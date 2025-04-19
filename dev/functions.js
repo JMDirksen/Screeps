@@ -1,3 +1,6 @@
+if (Memory.info == undefined) Memory.info = true
+if (Memory.debug == undefined) Memory.debug = false
+
 global.info = function (text) {
     if (typeof text === 'object') text = JSON.stringify(text)
     if (Memory.info) console.log('<font color="Cyan">Info: </font>' + text)
