@@ -6,24 +6,29 @@ module.exports = function () {
         const spawn = Game.spawns[spawnName];
 
         // Setup spawn memory defaults
-        if (spawn.memory.guards == undefined) spawn.memory.guards = 1
-        if (spawn.memory.upgraders == undefined) spawn.memory.upgraders = 2
-        if (spawn.memory.builders == undefined) spawn.memory.builders = 1
-        if (spawn.memory.transporters == undefined) spawn.memory.transporters = 2
-        if (spawn.memory.repairers == undefined) spawn.memory.repairers = 1
-        if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = 2
+        // Creep counts
         if (spawn.memory.attackers == undefined) spawn.memory.attackers = 5
+        if (spawn.memory.builders == undefined) spawn.memory.builders = 2
         if (spawn.memory.claimers == undefined) spawn.memory.claimers = 3
-        if (spawn.memory.attackID == undefined) spawn.memory.attackID = null
+        if (spawn.memory.guards == undefined) spawn.memory.guards = 1
+        if (spawn.memory.repairers == undefined) spawn.memory.repairers = 1
+        if (spawn.memory.transporters == undefined) spawn.memory.transporters = 2
+        if (spawn.memory.upgraders == undefined) spawn.memory.upgraders = 2
+        if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = 2
+        // Creep settings
+        if (spawn.memory.guardRange == undefined) spawn.memory.guardRange = 20
         if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3
+        // Structure settings
         if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null
-        if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null
         if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 20
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 5
+        // Instructions
+        if (spawn.memory.attackID == undefined) spawn.memory.attackID = null
+        if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null
+        if (spawn.memory.remoteHarvestRooms == undefined) spawn.memory.remoteHarvestRooms = null
+        // Statistics
         if (spawn.memory.roomEnergyProduction == undefined) spawn.memory.roomEnergyProduction = spawn.room.energyProduction()
         if (spawn.memory.roomSourceSpots == undefined) spawn.memory.roomSourceSpots = spawn.room.sourceSpots()
-        if (spawn.memory.remoteHarvestRooms == undefined) spawn.memory.remoteHarvestRooms = null
-        if (spawn.memory.guardRange == undefined) spawn.memory.guardRange = 20
 
         // Skip spawning
         if (spawn.spawning) continue;
@@ -150,12 +155,12 @@ module.exports = function () {
         if (spawn.memory.remoteHarvestRooms) {
             // Check for local energy storage capacity
             const availableEnergyStorage = spawn.room.availableStorage()
-            debug(spawn.room.name + ' availableEnergyStorage: ' + availableEnergyStorage)
+            //debug(spawn.room.name + ' availableEnergyStorage: ' + availableEnergyStorage)
             if (availableEnergyStorage < 500) continue
 
             // Check for hostiles (source room)
             if (spawn.room.hasDanger()) {
-                debug(spawn.room.name + ' has hostiles!')
+                verbose(spawn.room.name + ' has hostiles!')
                 continue
             }
 
@@ -167,7 +172,7 @@ module.exports = function () {
 
                 // Check for hostiles (visible remote room)
                 if (Game.rooms[remoteHarvestRoom] && Game.rooms[remoteHarvestRoom].hasDanger()) {
-                    debug(spawn.room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles!')
+                    verbose(spawn.room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles!')
                     continue
                 }
 

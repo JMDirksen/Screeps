@@ -5,5 +5,5 @@ global.verbose = function (text) {
 
 global.debug = function (text) {
     if (typeof text === 'object') text = JSON.stringify(text)
-    if (Memory.verbose) console.log('<font color="DarkGoldenrod">Debug: </font>' + text)
+    if (Memory.debug) console.log('<font color="DarkGoldenrod">Debug: </font>' + text)
 }
