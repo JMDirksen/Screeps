@@ -94,7 +94,9 @@ module.exports = function () {
         // Builder
         let buildersNeeded = spawn.memory.builders
         if (spawn.room.storedEnergy(true) < 100) buildersNeeded = 0
-        const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length
+        const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES, {
+            filter: s => !s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
+        }).length
         if (sites && spawn.room.countCreeps('builder') < buildersNeeded) {
             const type = 'builder';
             let body = null;
@@ -125,19 +127,23 @@ module.exports = function () {
         // Wall repairer
         let wallRepairersNeeded = spawn.memory.wallRepairers
         if (spawn.room.storedEnergy() < 1000) wallRepairersNeeded = 1
+        const wallBuilds = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
+            filter: s =>
+                s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
+        }).length
         const wallRepairs = spawn.room.find(FIND_STRUCTURES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
                 && s.hits < s.hitsMax
-        }).length;
-        if (wallRepairs && spawn.room.countCreeps('wallRepairer') < wallRepairersNeeded) {
-            const type = 'wallRepairer';
-            let body = null;
-            if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
-            if (spawn.buildCreep(type, body)) continue;
+        }).length
+        if ((wallRepairs || wallBuilds) && spawn.room.countCreeps('wallRepairer') < wallRepairersNeeded) {
+            const type = 'wallRepairer'
+            let body = null
+            if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] }
+            else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] }
+            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] }
+            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] }
+            if (spawn.buildCreep(type, body)) continue
         }
 
         // Attacker

@@ -7,7 +7,7 @@ module.exports = function () {
 
 function run(creep) {
     // Flee
-    if(creep.flee()) return
+    if (creep.flee()) return
 
     // Switch room
     if (creep.switchRoom()) {
@@ -28,7 +28,8 @@ function run(creep) {
 
     // Do job
     let job = Game.getObjectById(creep.memory.job);
-    let r = creep.repair(job);
+    if (job instanceof ConstructionSite) r = creep.build(job)
+    else r = creep.repair(job)
     if (r == OK) {
         if (job.hits == job.hitsMax) creep.memory.job = getRepairJob(creep)
         // Run job for 10 times
@@ -40,13 +41,13 @@ function run(creep) {
         return
     }
     else if (r == ERR_NOT_IN_RANGE) {
-        creep.goTo(job, 3);
-        return;
+        creep.goTo(job, 3)
+        return
     }
     else if (r == ERR_NOT_ENOUGH_RESOURCES) {
-        creep.memory.job = 'getEnergy';
-        creep.getEnergy();
-        return;
+        creep.memory.job = 'getEnergy'
+        creep.getEnergy()
+        return
     }
     else {
         creep.memory.job = false
@@ -55,6 +56,12 @@ function run(creep) {
 }
 
 function getRepairJob(creep) {
+    // Build walls
+    const walls = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
+        filter: s => s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
+    })
+    if (walls.length) return creep.pos.findClosestByPath(walls).id
+
     // Prioritize decaying ramparts
     const prioRamparts = creep.room.find(FIND_STRUCTURES, {
         filter: s =>
