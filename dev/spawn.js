@@ -16,7 +16,6 @@ module.exports = function () {
         if (spawn.memory.upgraders == undefined) spawn.memory.upgraders = 2
         if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = 2
         // Creep settings
-        if (spawn.memory.guardRange == undefined) spawn.memory.guardRange = 25
         if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3
         // Structure settings
         if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null

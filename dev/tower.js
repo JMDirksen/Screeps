@@ -9,30 +9,40 @@ module.exports = function () {
 		for (let t = 0; t < towers.length; t++) {
 			const tower = towers[t];
 
-			// Attack healers first
+			// Attack healer
 			let healer = tower.pos.findInRange(FIND_HOSTILE_CREEPS, spawn.memory.towerAttackRange, {
-				filter: c => _.includes(JSON.stringify(c.body), 'heal')
-			})[0];
+				filter: c => c.getActiveBodyparts(HEAL)
+			})[0]
 			if (healer != undefined) {
-				tower.attack(healer);
-				continue;
+				tower.attack(healer)
+				continue
 			}
 
-			// Attack random hostile
-			let hostiles = tower.pos.findInRange(FIND_HOSTILE_CREEPS, spawn.memory.towerAttackRange);
-			let hostile = hostiles[Math.floor(Math.random() * hostiles.length)];
+			// Attack hostile
+			let hostile = tower.pos.findInRange(FIND_HOSTILE_CREEPS, spawn.memory.towerAttackRange, {
+				filter: c => c.getActiveBodyparts(ATTACK) || c.getActiveBodyparts(RANGED_ATTACK)
+			})[0]
 			if (hostile) {
-				tower.attack(hostile);
-				continue;
+				tower.attack(hostile)
+				continue
 			}
 
 			// Heal my creeps
 			let healCreep = tower.pos.findInRange(FIND_MY_CREEPS, spawn.memory.towerHealRange, {
 				filter: c => c.hits < c.hitsMax
-			})[0];
+			})[0]
 			if (healCreep) {
-				tower.heal(healCreep);
-				continue;
+				tower.heal(healCreep)
+				continue
+			}
+
+			// Heal guards
+			let healGuard = tower.pos.findClosestByRange(FIND_MY_CREEPS, {
+				filter: c => c.memory.type == 'guard' && c.hits < c.hitsMax
+			})
+			if (healGuard) {
+				tower.heal(healGuard)
+				continue
 			}
 
 		}
