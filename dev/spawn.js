@@ -88,7 +88,7 @@ module.exports = function () {
             else if (spawn.energyPossible(760)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK, HEAL] }
             else if (spawn.energyPossible(460)) body = { tier: 2, parts: [MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK] }
             else if (spawn.energyPossible(260)) body = { tier: 1, parts: [MOVE, MOVE, ATTACK, ATTACK] }
-            if (spawn.buildCreep(type, body)) continue
+            if (spawn.buildCreep(type, body, { guardRoom: spawn.room.name })) continue
         }
 
         // Builder
@@ -160,7 +160,7 @@ module.exports = function () {
 
             // Check for hostiles (source room)
             if (spawn.room.hasDanger()) {
-                info(spawn.room.name + ' has hostiles!')
+                info(spawn.room.name + ' has hostiles, not spawing remote harvester')
                 continue
             }
 
@@ -172,7 +172,7 @@ module.exports = function () {
 
                 // Check for hostiles (visible remote room)
                 if (Game.rooms[remoteHarvestRoom] && Game.rooms[remoteHarvestRoom].hasDanger()) {
-                    info(spawn.room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles!')
+                    info(spawn.room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles, not spawing remote harvester')
                     continue
                 }
 

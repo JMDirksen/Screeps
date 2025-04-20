@@ -6,10 +6,15 @@ module.exports = function () {
 };
 
 function run(creep) {
-    // Switch room
-    if (creep.switchRoom()) {
-        return;
+    // Back to guard room
+    if (creep.room.name != creep.memory.guardRoom) {
+        creep.memory.room = creep.memory.guardRoom
+        creep.say('🔙')
+        info(creep.room.name + ' ' + creep.name + ' going back to guard room 🔙')
     }
+
+    // Switch room
+    if (creep.switchRoom()) return
 
     // Get hostile target
     let target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS, {

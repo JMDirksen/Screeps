@@ -131,6 +131,7 @@ Creep.prototype.switchRoom = function () {
     return false
 }
 
+// Flee
 Creep.prototype.flee = function (range = 4) {
     let hostiles = 0
     if (!this.memory.flee) {
@@ -144,7 +145,8 @@ Creep.prototype.flee = function (range = 4) {
         if (!this.memory.flee) {
             this.memory.flee = true
             delete this.memory.job
-            info(this.room + ' ' + this.name + ' is fleeing 🆘')
+            delete this.memory.harvest
+            info(this.room.name + ' ' + this.name + ' is fleeing 🆘')
         }
         this.say('🆘')
 

@@ -29,11 +29,13 @@ function run(creep) {
         })
         const eTower = _.sortBy(eTowers, t => t.store.getUsedCapacity(RESOURCE_ENERGY))[0]
         if (eTower && creep.memory.transport) {
+            creep.say('❗')
             const r = creep.transfer(eTower, RESOURCE_ENERGY)
             if (r == ERR_NOT_IN_RANGE) creep.goTo(eTower, 1)
             return
         }
         if (eTower && !creep.memory.transport) {
+            creep.say('❗')
             if (creep.getEnergy()) return
         }
     }
