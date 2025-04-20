@@ -16,7 +16,7 @@ module.exports.loop = function () {
     // Clear memory
     for (const name in Memory.creeps) {
         if (!Game.creeps[name]) {
-            info(name + ' died ' + JSON.stringify(_.omit(Memory.creeps[name], ['_move', 'path', 'timer'])))
+            info(name + ' died 🪦 ' + JSON.stringify(_.omit(Memory.creeps[name], ['_move', 'path', 'timer', 'build', 'harvest'])))
             delete Memory.creeps[name]
         }
     }
