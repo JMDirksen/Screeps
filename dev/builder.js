@@ -1,25 +1,25 @@
 module.exports = function () {
     for (const creepName in Game.creeps) {
-        const creep = Game.creeps[creepName];
-        if (creep.memory.type == 'builder') run(creep);
+        const creep = Game.creeps[creepName]
+        if (creep.memory.type == 'builder') run(creep)
     }
-};
+}
 
 function run(creep) {
     // Flee
-    if(creep.flee()) return
+    if (creep.flee()) return
 
     // Switch room
     if (creep.switchRoom()) {
-        return;
+        return
     }
 
     // Check if empty/full
     if (creep.memory.build && creep.isEmpty()) {
-        creep.memory.build = false;
+        creep.memory.build = false
     }
     if (!creep.memory.build && creep.isFull()) {
-        creep.memory.build = true;
+        creep.memory.build = true
     }
 
     // Build
@@ -47,7 +47,7 @@ function run(creep) {
 
     // Get energy
     else if (!creep.getEnergy()) {
-        if (creep.store[RESOURCE_ENERGY]) creep.memory.build = true;
-        creep.idle();
+        if (creep.store[RESOURCE_ENERGY]) creep.memory.build = true
+        creep.idle()
     }
 }

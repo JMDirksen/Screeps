@@ -1,20 +1,23 @@
 module.exports = function () {
     for (const creepName in Game.creeps) {
-        const creep = Game.creeps[creepName];
-        if (creep.memory.type == 'remoteHarvester') run(creep);
+        const creep = Game.creeps[creepName]
+        if (creep.memory.type == 'remoteHarvester') run(creep)
     }
-};
+}
 
 function run(creep) {
+    // Flee
+    if (creep.flee()) return
+
     // Switch room
-    if (creep.switchRoom()) return;
+    if (creep.switchRoom()) return
 
     // Check if empty/full
     if (!creep.memory.harvest && creep.isEmpty()) {
-        creep.memory.harvest = true;
+        creep.memory.harvest = true
     }
     if (creep.memory.harvest && creep.isFull()) {
-        creep.memory.harvest = false;
+        creep.memory.harvest = false
     }
 
     // Harvest in remote room

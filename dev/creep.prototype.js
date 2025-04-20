@@ -102,32 +102,33 @@ Creep.prototype.idle = function () {
     // Move random
     else {
         this.move(Math.floor(Math.random() * 8) + 1)
+        // Cancel flee mode
         if (this.memory.flee) delete this.memory.flee
     }
 }
 
 // switchRoom
 Creep.prototype.switchRoom = function () {
-    let roomName = this.memory.room;
+    let roomName = this.memory.room
     if (roomName) {
-        let room = Game.rooms[roomName];
+        let room = Game.rooms[roomName]
         // Room visible
         if (room) {
             let roomMidPoint = new RoomPosition(25, 25, roomName)
             if (this.pos.inRangeTo(roomMidPoint, 23)) this.memory.room = null
             this.goTo(roomMidPoint, 15, 16)
-            return true;
+            return true
         }
         // Room not visible yet
         else {
             let exit = this.pos.findClosestByPath(
                 this.room.findExitTo(roomName)
             );
-            this.goTo(exit);
-            return true;
+            this.goTo(exit)
+            return true
         }
     }
-    return false;
+    return false
 }
 
 Creep.prototype.flee = function () {
@@ -142,9 +143,19 @@ Creep.prototype.flee = function () {
         // Set flee mode
         this.memory.flee = true
         delete this.memory.job
-        // Flee to idle flag
-        this.idle()
         this.say('🆘')
+
+        // Return to spawn room
+        if (this.room.name != this.memory.spawnRoom) {
+            this.memory.room = this.memory.spawnRoom
+            this.switchRoom()
+        }
+
+        // Flee to idle flag
+        else {
+            this.idle()
+        }
+
         return true
     }
     return false
