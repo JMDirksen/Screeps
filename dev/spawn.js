@@ -20,8 +20,8 @@ module.exports = function () {
         if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3
         // Structure settings
         if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null
-        if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 20
-        if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 5
+        if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 10
+        if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 10
         // Instructions
         if (spawn.memory.attackID == undefined) spawn.memory.attackID = null
         if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null

@@ -7,7 +7,7 @@ module.exports = function () {
 
 function run(creep) {
     // Flee
-    if(creep.flee()) return
+    if (creep.flee()) return
 
     // Switch room
     if (creep.switchRoom()) return
@@ -18,6 +18,24 @@ function run(creep) {
     }
     if (!creep.memory.transport && creep.isFull()) {
         creep.memory.transport = true;
+    }
+
+    // Emergency tower supply
+    if (creep.room.hasDanger()) {
+        const eTowers = creep.room.find(FIND_MY_STRUCTURES, {
+            filter: s =>
+                s.structureType == STRUCTURE_TOWER
+                && s.store.getFreeCapacity(RESOURCE_ENERGY) >= 750
+        })
+        const eTower = _.sortBy(eTowers, t => t.store.getUsedCapacity(RESOURCE_ENERGY))[0]
+        if (eTower && creep.memory.transport) {
+            const r = creep.transfer(eTower, RESOURCE_ENERGY)
+            if (r == ERR_NOT_IN_RANGE) creep.goTo(eTower, 1)
+            return
+        }
+        if (eTower && !creep.memory.transport) {
+            if (creep.getEnergy()) return
+        }
     }
 
     // Spawn/Extension

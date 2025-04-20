@@ -7,6 +7,6 @@
 [ ] Ranged attackers
 [x] Builders prioritize walls/ramparts
 [x] Creeps flee from hostiles
-[ ] Emergency tower supply
+[x] Emergency tower supply
 
 */
