@@ -6,6 +6,9 @@ module.exports = function () {
 };
 
 function run(creep) {
+    // Flee
+    if (creep.flee()) return
+
     // Switch room
     if (creep.switchRoom()) return;
 

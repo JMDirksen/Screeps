@@ -100,7 +100,10 @@ Creep.prototype.idle = function () {
     else if (!idleFlag && !spawn && !this.pos.inRangeTo(this.room.controller, 2)) this.goTo(this.room.controller, 2)
 
     // Move random
-    else this.move(Math.floor(Math.random() * 8) + 1)
+    else {
+        this.move(Math.floor(Math.random() * 8) + 1)
+        if (this.memory.flee) delete this.memory.flee
+    }
 }
 
 // switchRoom
@@ -125,4 +128,23 @@ Creep.prototype.switchRoom = function () {
         }
     }
     return false;
+}
+
+Creep.prototype.flee = function () {
+    let hostiles = 0
+    if (!this.memory.flee) {
+        hostiles = this.pos.findInRange(FIND_HOSTILE_CREEPS, 4, {
+            filter: c => c.getActiveBodyparts(ATTACK) || c.getActiveBodyparts(RANGED_ATTACK)
+        }).length
+    }
+
+    if (this.memory.flee || hostiles) {
+        // Set flee mode
+        this.memory.flee = true
+        // Flee to idle flag
+        this.idle()
+        this.say('🆘')
+        return true
+    }
+    return false
 }

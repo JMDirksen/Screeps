@@ -6,6 +6,8 @@ module.exports = function () {
 };
 
 function run(creep) {
+    // Flee
+    if(creep.flee()) return
 
     // Check if empty/full
     if (creep.memory.upgrade && creep.isEmpty()) {
