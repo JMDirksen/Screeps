@@ -47,41 +47,48 @@ Creep.prototype.getEnergy = function (fromStorage = true) {
             s.structureType == STRUCTURE_CONTAINER
             || s.structureType == STRUCTURE_LINK
         ) && s.store[RESOURCE_ENERGY]
-    });
+    })
     // Storage
     if (fromStorage) {
         energySources = energySources.concat(this.room.find(FIND_STRUCTURES, {
             filter: s => s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY]
-        }));
+        }))
     }
     // Tombstones
     energySources = energySources.concat(this.room.find(FIND_TOMBSTONES, {
         filter: t => t.store[RESOURCE_ENERGY]
-    }));
+    }))
     // Ruins
     energySources = energySources.concat(this.room.find(FIND_RUINS, {
         filter: r => r.store[RESOURCE_ENERGY]
-    }));
-    // Dropped energy
-    energySources = energySources.concat(this.room.find(FIND_DROPPED_RESOURCES, {
-        filter: { resourceType: RESOURCE_ENERGY }
-    }));
+    }))
+
+    // Dropped energy (only if no storage structures)
+    const storageStructures = this.room.find(FIND_STRUCTURES, {
+        filter: s => s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
+    }).length
+    if (!storageStructures) {
+        energySources = energySources.concat(this.room.find(FIND_DROPPED_RESOURCES, {
+            filter: { resourceType: RESOURCE_ENERGY }
+        }))
+    }
+
     if (energySources.length) {
-        let energy = this.pos.findClosestByPath(energySources);
-        let r = this.withdraw(energy, RESOURCE_ENERGY);
-        if (r == ERR_INVALID_TARGET) r = this.pickup(energy);
-        if (r == ERR_INVALID_TARGET) return false;
+        let energy = this.pos.findClosestByPath(energySources)
+        let r = this.withdraw(energy, RESOURCE_ENERGY)
+        if (r == ERR_INVALID_TARGET) r = this.pickup(energy)
+        if (r == ERR_INVALID_TARGET) return false
         if (r == ERR_NOT_IN_RANGE) {
-            this.goTo(energy, 1);
-            return true;
+            this.goTo(energy, 1)
+            return true
         }
-        if (r == OK) return true;
+        if (r == OK) return true
         else {
-            this.say(r);
-            return false;
+            this.say(r)
+            return false
         }
     }
-    else return false;
+    else return false
 
 }
 
