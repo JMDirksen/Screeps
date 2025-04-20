@@ -11,17 +11,10 @@ function run(creep) {
         return;
     }
 
-    const spawn = creep.room.spawn()
-
-    // Get target
-    let target = null
-    if (spawn) {
-        const targets = spawn.pos.findInRange(FIND_HOSTILE_CREEPS, spawn.memory.guardRange)
-        target = creep.pos.findClosestByPath(targets)
-    }
-    else {
-        target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS)
-    }
+    // Get hostile target
+    let target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS, {
+        filter: c => c.getActiveBodyparts(ATTACK) || c.getActiveBodyparts(RANGED_ATTACK)
+    })
 
     // Attack
     if (target) {
@@ -32,10 +25,24 @@ function run(creep) {
         if (range == 1) creep.attack(target)
         // Ranged attack
         if (range <= 3) creep.rangedAttack(target)
+        // Heal self
+        if (range > 1 && creep.hits < creep.hitsMax) creep.heal(creep)
+        // Heal other
+        else if (range > 1 && (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 3, { filter: c => c.hits < c.hitsMax })[0])) {
+            creep.rangedHeal(healCreep)
+        }
     }
 
-    // Idle
     else {
+        // Heal self
+        if (creep.hits < creep.hitsMax) creep.heal(creep)
+
+        // Heal other
+        else if (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 3, { filter: c => c.hits < c.hitsMax })[0]) {
+            creep.rangedHeal(healCreep)
+        }
+
+        // Idle
         creep.idle()
     }
 

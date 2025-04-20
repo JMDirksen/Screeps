@@ -141,6 +141,7 @@ Creep.prototype.flee = function () {
     if (this.memory.flee || hostiles) {
         // Set flee mode
         this.memory.flee = true
+        delete this.memory.job
         // Flee to idle flag
         this.idle()
         this.say('🆘')

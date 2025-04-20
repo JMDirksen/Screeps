@@ -9,8 +9,8 @@ module.exports.loop = function () {
 
     // CPU Bucket check
     if (Game.cpu.bucket < 100) {
-        console.log('Skipping tick due to low CPU bucket')
-        return;
+        info('Skipping tick due to low CPU bucket')
+        return
     }
 
     // Clear memory

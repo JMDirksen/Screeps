@@ -78,13 +78,14 @@ module.exports = function () {
         }
 
         // Guard
+        // Max energy per RCL: 1:300 2:550 3:800 4:1300 5:1800 6:2300 7:5300 8:12300
         let guardsNeeded = spawn.memory.guards
         if (spawn.room.find(FIND_HOSTILE_CREEPS).length) guardsNeeded += 1
         if (spawn.room.countCreeps('guard') < guardsNeeded) {
-            const type = 'guard';
-            let body = null;
-            if (spawn.energyPossible(1250)) body = { tier: 4, parts: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK] }
-            else if (spawn.energyPossible(790)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK] }
+            const type = 'guard'
+            let body = null
+            if (spawn.energyPossible(1290)) body = { tier: 4, parts: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL] }
+            else if (spawn.energyPossible(760)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK, HEAL] }
             else if (spawn.energyPossible(460)) body = { tier: 2, parts: [MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK] }
             else if (spawn.energyPossible(260)) body = { tier: 1, parts: [MOVE, MOVE, ATTACK, ATTACK] }
             if (spawn.buildCreep(type, body)) continue;
