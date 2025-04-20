@@ -131,18 +131,21 @@ Creep.prototype.switchRoom = function () {
     return false
 }
 
-Creep.prototype.flee = function () {
+Creep.prototype.flee = function (range = 4) {
     let hostiles = 0
     if (!this.memory.flee) {
-        hostiles = this.pos.findInRange(FIND_HOSTILE_CREEPS, 4, {
+        hostiles = this.pos.findInRange(FIND_HOSTILE_CREEPS, range, {
             filter: c => c.getActiveBodyparts(ATTACK) || c.getActiveBodyparts(RANGED_ATTACK)
         }).length
     }
 
     if (this.memory.flee || hostiles) {
         // Set flee mode
-        this.memory.flee = true
-        delete this.memory.job
+        if (!this.memory.flee) {
+            this.memory.flee = true
+            delete this.memory.job
+            info(this.room + ' ' + this.name + ' is fleeing 🆘')
+        }
         this.say('🆘')
 
         // Return to spawn room
