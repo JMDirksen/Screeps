@@ -9,7 +9,7 @@ StructureSpawn.prototype.generateCreepName = function (type, tier = null, overri
 }
 
 StructureSpawn.prototype.buildCreep = function (type, body, memory = null, overrideName = null) {
-    if(!body) return false
+    if (!body) return false
     const name = this.generateCreepName(type, body.tier, overrideName)
     const memMerge = Object.assign({ type: type, spawnRoom: this.room.name }, memory)
     const r = this.spawnCreep(body.parts, name, { memory: memMerge })

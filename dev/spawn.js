@@ -10,7 +10,7 @@ module.exports = function () {
         if (spawn.memory.attackers == undefined) spawn.memory.attackers = 5
         if (spawn.memory.builders == undefined) spawn.memory.builders = 2
         if (spawn.memory.claimers == undefined) spawn.memory.claimers = 3
-        if (spawn.memory.guards == undefined) spawn.memory.guards = 1
+        if (spawn.memory.guards == undefined) spawn.memory.guards = 2
         if (spawn.memory.repairers == undefined) spawn.memory.repairers = 1
         if (spawn.memory.transporters == undefined) spawn.memory.transporters = 2
         if (spawn.memory.upgraders == undefined) spawn.memory.upgraders = 2
@@ -77,9 +77,10 @@ module.exports = function () {
         }
 
         // Guard
-        // Max energy per RCL: 1:300 2:550 3:800 4:1300 5:1800 6:2300 7:5300 8:12300
         let guardsNeeded = spawn.memory.guards
-        if (spawn.room.find(FIND_HOSTILE_CREEPS).length) guardsNeeded += 1
+        if (spawn.room.find(FIND_HOSTILE_CREEPS, {
+            filter: c => c.getActiveBodyparts(ATTACK) || c.getActiveBodyparts(RANGED_ATTACK)
+        }).length) guardsNeeded += 1
         if (spawn.room.countCreeps('guard') < guardsNeeded) {
             const type = 'guard'
             let body = null
@@ -87,7 +88,7 @@ module.exports = function () {
             else if (spawn.energyPossible(760)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK, HEAL] }
             else if (spawn.energyPossible(460)) body = { tier: 2, parts: [MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK] }
             else if (spawn.energyPossible(260)) body = { tier: 1, parts: [MOVE, MOVE, ATTACK, ATTACK] }
-            if (spawn.buildCreep(type, body)) continue;
+            if (spawn.buildCreep(type, body)) continue
         }
 
         // Builder
@@ -155,7 +156,6 @@ module.exports = function () {
         if (spawn.memory.remoteHarvestRooms) {
             // Check for local energy storage capacity
             const availableEnergyStorage = spawn.room.availableStorage()
-            //debug(spawn.room.name + ' availableEnergyStorage: ' + availableEnergyStorage)
             if (availableEnergyStorage < 500) continue
 
             // Check for hostiles (source room)
