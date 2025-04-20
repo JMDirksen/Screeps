@@ -25,10 +25,15 @@ function run(creep) {
         if (range == 1) creep.attack(target)
         // Ranged attack
         if (range <= 3) creep.rangedAttack(target)
+
         // Heal self
         if (range > 1 && creep.hits < creep.hitsMax) creep.heal(creep)
         // Heal other
-        else if (range > 1 && (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 3, { filter: c => c.hits < c.hitsMax })[0])) {
+        else if (range > 1 && (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 1, { filter: c => c.hits < c.hitsMax })[0])) {
+            creep.heal(healCreep)
+        }
+        // Ranged heal other
+        if (range > 3 && (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 3, { filter: c => c.hits < c.hitsMax })[0])) {
             creep.rangedHeal(healCreep)
         }
     }
@@ -38,7 +43,12 @@ function run(creep) {
         if (creep.hits < creep.hitsMax) creep.heal(creep)
 
         // Heal other
-        else if (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 3, { filter: c => c.hits < c.hitsMax })[0]) {
+        else if (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 1, { filter: c => c.hits < c.hitsMax })[0]) {
+            creep.heal(healCreep)
+        }
+
+        // Ranged heal other
+        if (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 3, { filter: c => c.hits < c.hitsMax })[0]) {
             creep.rangedHeal(healCreep)
         }
 
