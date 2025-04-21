@@ -40,39 +40,38 @@ Creep.prototype.isFull = function () {
 }
 
 // getEnergy
-Creep.prototype.getEnergy = function (fromStorage = true) {
+Creep.prototype.getEnergy = function (opts = {}) {
+    if (opts.fromStorage === undefined) opts.fromStorage = true
+    if (opts.minAmount === undefined) opts.minAmount = 50
+
     // Structures
     let energySources = this.room.find(FIND_STRUCTURES, {
         filter: s => (
             s.structureType == STRUCTURE_CONTAINER
             || s.structureType == STRUCTURE_LINK
-        ) && s.store[RESOURCE_ENERGY]
+        ) && s.store[RESOURCE_ENERGY] >= opts.minAmount
     })
     // Storage
-    if (fromStorage) {
+    if (opts.fromStorage) {
         energySources = energySources.concat(this.room.find(FIND_STRUCTURES, {
-            filter: s => s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY]
+            filter: s => s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] >= opts.minAmount
         }))
     }
     // Tombstones
     energySources = energySources.concat(this.room.find(FIND_TOMBSTONES, {
-        filter: t => t.store[RESOURCE_ENERGY]
+        filter: t => t.store[RESOURCE_ENERGY] >= opts.minAmount
     }))
     // Ruins
     energySources = energySources.concat(this.room.find(FIND_RUINS, {
-        filter: r => r.store[RESOURCE_ENERGY]
+        filter: r => r.store[RESOURCE_ENERGY] >= opts.minAmount
     }))
 
-    // Dropped energy (only if no storage structures)
-    const storageStructures = this.room.find(FIND_STRUCTURES, {
-        filter: s => s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
-    }).length
-    if (!storageStructures) {
-        energySources = energySources.concat(this.room.find(FIND_DROPPED_RESOURCES, {
-            filter: { resourceType: RESOURCE_ENERGY }
-        }))
-    }
+    // Dropped energy
+    energySources = energySources.concat(this.room.find(FIND_DROPPED_RESOURCES, {
+        filter: r => r.resourceType == RESOURCE_ENERGY && r.amount >= opts.minAmount
+    }))
 
+    // Go fetch closest
     if (energySources.length) {
         let energy = this.pos.findClosestByPath(energySources)
         let r = this.withdraw(energy, RESOURCE_ENERGY)
@@ -89,7 +88,6 @@ Creep.prototype.getEnergy = function (fromStorage = true) {
         }
     }
     else return false
-
 }
 
 // Idle
@@ -176,7 +174,7 @@ Creep.prototype.flee = function (range = 4) {
 // CountParts
 Creep.prototype.countActiveParts = function (types = []) {
     let count = 0
-    for(const type of types) {
+    for (const type of types) {
         count += this.getActiveBodyparts(type)
     }
     return count

@@ -83,7 +83,7 @@ function run(creep) {
         return;
     }
     if (storage && !creep.memory.transport) {
-        if (creep.getEnergy(false)) return;
+        if (creep.getEnergy({ fromStorage: false })) return;
     }
 
     // Switch to transporting if no energy to collect
