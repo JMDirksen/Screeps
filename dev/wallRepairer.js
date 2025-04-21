@@ -1,7 +1,7 @@
 module.exports = function () {
     for (const creepName in Game.creeps) {
-        const creep = Game.creeps[creepName];
-        if (creep.memory.type == 'wallRepairer') run(creep);
+        const creep = Game.creeps[creepName]
+        if (creep.memory.type == 'wallRepairer') run(creep)
     }
 };
 
@@ -10,58 +10,52 @@ function run(creep) {
     if (creep.flee()) return
 
     // Switch room
-    if (creep.switchRoom()) {
-        return;
-    }
+    if (creep.switchRoom()) return
 
     // Get job
     if (!creep.memory.job) {
         creep.memory.job = getRepairJob(creep)
-        if (!creep.memory.job) return creep.idle()
+        if (!creep.memory.job) {
+            if (!creep.isFull()) creep.memory.job = 'getEnergy'
+            else return creep.idle()
+        }
     }
 
     // Get energy
     if (creep.memory.job == 'getEnergy') {
-        if (creep.isFull()) creep.memory.job = getRepairJob(creep);
-        else return creep.getEnergy();
+        if (creep.isFull()) creep.memory.job = getRepairJob(creep)
+        else if (!creep.getEnergy()) return creep.idle()
     }
 
     // Do job
-    let job = Game.getObjectById(creep.memory.job);
-    if (job instanceof ConstructionSite) r = creep.build(job)
-    else r = creep.repair(job)
-    if (r == OK) {
-        if (job.hits == job.hitsMax) creep.memory.job = getRepairJob(creep)
-        // Run job for 10 times
-        creep.memory.timer++
-        if (creep.memory.timer >= 10) {
-            creep.memory.timer = 0
-            creep.memory.job = getRepairJob(creep)
-        }
-        return
+    let job = Game.getObjectById(creep.memory.job)
+    // Build
+    if (job instanceof ConstructionSite) {
+        let r = creep.build(job)
+        if (r == OK) creep.memory.job = getRepairJob(creep)
+        else if (r == ERR_NOT_IN_RANGE) creep.goTo(job, 3)
+        else if (r == ERR_NOT_ENOUGH_RESOURCES) creep.memory.job = 'getEnergy', creep.getEnergy()
+        else creep.memory.job = false, creep.idle()
     }
-    else if (r == ERR_NOT_IN_RANGE) {
-        creep.goTo(job, 3)
-        return
-    }
-    else if (r == ERR_NOT_ENOUGH_RESOURCES) {
-        creep.memory.job = 'getEnergy'
-        creep.getEnergy()
-        return
-    }
+    // Repair
     else {
-        creep.memory.job = false
-        creep.idle()
+        let r = creep.repair(job)
+        if (r == OK) {
+            if (job.hits == job.hitsMax) creep.memory.job = getRepairJob(creep)
+            // Run job for 10 times
+            creep.memory.timer++
+            if (creep.memory.timer >= 10) {
+                creep.memory.timer = 0
+                creep.memory.job = getRepairJob(creep)
+            }
+        }
+        else if (r == ERR_NOT_IN_RANGE) creep.goTo(job, 3)
+        else if (r == ERR_NOT_ENOUGH_RESOURCES) creep.memory.job = 'getEnergy', creep.getEnergy()
+        else creep.memory.job = false, creep.idle()
     }
 }
 
 function getRepairJob(creep) {
-    // Build walls
-    const walls = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
-        filter: s => s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
-    })
-    if (walls.length) return creep.pos.findClosestByPath(walls).id
-
     // Prioritize decaying ramparts
     const prioRamparts = creep.room.find(FIND_STRUCTURES, {
         filter: s =>
@@ -70,6 +64,12 @@ function getRepairJob(creep) {
             && !creepsWithJob(creep.memory.type, s.id).length
     })
     if (prioRamparts.length) return _.sortBy(prioRamparts, 'hits')[0].id
+
+    // Build walls
+    const walls = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
+        filter: s => s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
+    })
+    if (walls.length) return creep.pos.findClosestByPath(walls).id
 
     // All walls
     const structures = creep.room.find(FIND_STRUCTURES, {
