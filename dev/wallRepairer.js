@@ -69,7 +69,7 @@ function getRepairJob(creep) {
     const walls = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
         filter: s => s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
     })
-    if (walls.length) return creep.pos.findClosestByPath(walls).id
+    if (walls.length) return creep.pos.findClosestByPath(walls, { range: 3 }).id
 
     // All walls
     const structures = creep.room.find(FIND_STRUCTURES, {
@@ -83,7 +83,7 @@ function getRepairJob(creep) {
         for (i = 0; i < 3000000; i += 5000) {
             let structuresInBlock = _.filter(structures, s => s.hits >= i && s.hits < i + 5000)
             if (structuresInBlock.length) {
-                let structure = creep.pos.findClosestByPath(structuresInBlock)
+                let structure = creep.pos.findClosestByPath(structuresInBlock, { range: 3 })
                 //debug(creep.name + ' structure: ' + structure)
                 return structure.id
             }

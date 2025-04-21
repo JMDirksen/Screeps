@@ -28,7 +28,7 @@ function run(creep) {
             filter: s => !s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
         })
         if (!sites.length) return creep.idle()
-        const site = creep.pos.findClosestByPath(sites)
+        const site = creep.pos.findClosestByPath(sites, { range: 3 })
         if (site) {
             if (creep.build(site) == ERR_NOT_IN_RANGE) creep.goTo(site, 3)
         }
