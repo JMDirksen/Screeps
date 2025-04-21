@@ -24,9 +24,11 @@ function run(creep) {
 
     // Build
     if (creep.memory.build) {
-        const sites = creep.room.find(FIND_MY_CONSTRUCTION_SITES)
+        const sites = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
+            filter: s => !s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
+        })
         if (!sites.length) return creep.idle()
-        const site = _.sortByOrder(sites, ['progress'], ['desc'])[0]
+        const site = creep.pos.findClosestByPath(sites)
         if (site) {
             if (creep.build(site) == ERR_NOT_IN_RANGE) creep.goTo(site, 3)
         }
