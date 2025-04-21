@@ -127,7 +127,7 @@ module.exports = function () {
         // Wall repairer
         let wallRepairersNeeded = spawn.memory.wallRepairers
         if (spawn.room.storedEnergy() < 1000) wallRepairersNeeded = 1
-        const wallBuilds = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
+        const wallBuilds = spawn.room.find(FIND_MY_CONSTRUCTION_SITES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
         }).length
