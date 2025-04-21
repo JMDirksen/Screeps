@@ -18,7 +18,7 @@ function run(creep) {
 
     // Get hostile target
     let target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS, {
-        filter: c => c.getActiveBodyparts(ATTACK) || c.getActiveBodyparts(RANGED_ATTACK)
+        filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK])
     })
 
     // Attack

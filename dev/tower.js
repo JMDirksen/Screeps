@@ -1,34 +1,30 @@
 module.exports = function () {
 	for (const roomName in Game.rooms) {
-		const room = Game.rooms[roomName];
-		const spawn = room.find(FIND_MY_SPAWNS)[0];
+		const room = Game.rooms[roomName]
+		const spawn = room.find(FIND_MY_SPAWNS)[0]
+		const attackRange = spawn.memory.towerAttackRange
+		const healRange = spawn.memory.towerHealRange
 
 		const towers = Game.rooms[roomName].find(FIND_MY_STRUCTURES, {
 			filter: s => s.structureType == STRUCTURE_TOWER
-		});
+		})
+
+		// Iterate towers
 		for (let t = 0; t < towers.length; t++) {
-			const tower = towers[t];
+			const tower = towers[t]
+			const pos = tower.pos
 
-			// Attack healer
-			let healer = tower.pos.findInRange(FIND_HOSTILE_CREEPS, spawn.memory.towerAttackRange, {
-				filter: c => c.getActiveBodyparts(HEAL)
-			})[0]
-			if (healer != undefined) {
-				tower.attack(healer)
-				continue
-			}
-
-			// Attack hostile
-			let hostile = tower.pos.findInRange(FIND_HOSTILE_CREEPS, spawn.memory.towerAttackRange, {
-				filter: c => c.getActiveBodyparts(ATTACK) || c.getActiveBodyparts(RANGED_ATTACK)
-			})[0]
+			// Attack weakest hostile in range
+			const hostile = _.sortBy(pos.findInRange(FIND_HOSTILE_CREEPS, attackRange, {
+				filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK])
+			}), 'hits')[0]
 			if (hostile) {
 				tower.attack(hostile)
 				continue
 			}
 
-			// Heal my creeps
-			let healCreep = tower.pos.findInRange(FIND_MY_CREEPS, spawn.memory.towerHealRange, {
+			// Heal my creeps in range
+			let healCreep = pos.findInRange(FIND_MY_CREEPS, healRange, {
 				filter: c => c.hits < c.hitsMax
 			})[0]
 			if (healCreep) {
@@ -36,8 +32,8 @@ module.exports = function () {
 				continue
 			}
 
-			// Heal guards
-			let healGuard = tower.pos.findClosestByRange(FIND_MY_CREEPS, {
+			// Heal guards ignoring range
+			let healGuard = pos.findClosestByRange(FIND_MY_CREEPS, {
 				filter: c => c.memory.type == 'guard' && c.hits < c.hitsMax
 			})
 			if (healGuard) {

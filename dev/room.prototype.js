@@ -51,7 +51,7 @@ Room.prototype.availableStorage = function (type = RESOURCE_ENERGY) {
 
 Room.prototype.hasDanger = function () {
     return this.find(FIND_HOSTILE_CREEPS, {
-        filter: c => c.getActiveBodyparts(ATTACK) || c.getActiveBodyparts(RANGED_ATTACK)
+        filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK])
     }).length > 0
 }
 

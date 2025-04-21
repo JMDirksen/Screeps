@@ -143,7 +143,7 @@ Creep.prototype.flee = function (range = 4) {
     let hostiles = 0
     if (!this.memory.flee) {
         hostiles = this.pos.findInRange(FIND_HOSTILE_CREEPS, range, {
-            filter: c => c.getActiveBodyparts(ATTACK) || c.getActiveBodyparts(RANGED_ATTACK)
+            filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK])
         }).length
     }
 
@@ -171,4 +171,13 @@ Creep.prototype.flee = function (range = 4) {
         return true
     }
     return false
+}
+
+// CountParts
+Creep.prototype.countActiveParts = function (types = []) {
+    let count = 0
+    for(const type of types) {
+        count += this.getActiveBodyparts(type)
+    }
+    return count
 }
