@@ -44,8 +44,7 @@ function run(creep) {
     const spawn = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: s =>
             s.structureType.isInList(STRUCTURE_SPAWN, STRUCTURE_EXTENSION)
-            && s.store.getFreeCapacity(RESOURCE_ENERGY),
-        range: 1
+            && s.store.getFreeCapacity(RESOURCE_ENERGY)
     });
     if (spawn && creep.memory.transport) {
         const r = creep.transfer(spawn, RESOURCE_ENERGY);
@@ -76,8 +75,7 @@ function run(creep) {
     const storage = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: s =>
             s.structureType == STRUCTURE_STORAGE
-            && s.store.getFreeCapacity(RESOURCE_ENERGY),
-        range: 1
+            && s.store.getFreeCapacity(RESOURCE_ENERGY)
     });
     if (storage && creep.memory.transport) {
         const r = creep.transfer(storage, RESOURCE_ENERGY);

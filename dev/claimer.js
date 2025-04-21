@@ -35,12 +35,12 @@ function run(creep) {
     }
 
     // Harvest
-    if (creep.isEmpty()) creep.memory.harvest = true
-    if (creep.isFull()) creep.memory.harvest = false
+    if (creep.isEmpty()) creep.memory.harvest = true;
+    if (creep.isFull()) creep.memory.harvest = false;
     if (creep.memory.harvest) {
-        const source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE, { range: 1 })
-        if (creep.harvest(source) == ERR_NOT_IN_RANGE) creep.goTo(source, 1)
-        return
+        const source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+        if (creep.harvest(source) == ERR_NOT_IN_RANGE) creep.goTo(source, 1);
+        return;
     }
 
     // Build spawn

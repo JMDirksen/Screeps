@@ -73,7 +73,7 @@ Creep.prototype.getEnergy = function (opts = {}) {
 
     // Go fetch closest
     if (energySources.length) {
-        let energy = this.pos.findClosestByPath(energySources, { range: 1 })
+        let energy = this.pos.findClosestByPath(energySources)
         let r = this.withdraw(energy, RESOURCE_ENERGY)
         if (r == ERR_INVALID_TARGET) r = this.pickup(energy)
         if (r == ERR_INVALID_TARGET) return false
@@ -92,7 +92,7 @@ Creep.prototype.getEnergy = function (opts = {}) {
 
 // Idle
 Creep.prototype.idle = function () {
-    const idleFlag = this.pos.findClosestByPath(FIND_FLAGS, { filter: { color: COLOR_WHITE }, range: 2 })
+    const idleFlag = this.pos.findClosestByPath(FIND_FLAGS, { filter: { color: COLOR_WHITE } })
     const spawn = this.room.spawn()
 
     // Move towards idle flag

@@ -31,7 +31,7 @@ function run(creep) {
 
         if (creep.getEnergy()) return
         else {
-            const source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE, { range: 1 })
+            const source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE)
             if (source && creep.harvest(source) == ERR_NOT_IN_RANGE) creep.goTo(source, 1)
         }
     }
@@ -48,8 +48,7 @@ function run(creep) {
         const storage = creep.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
-                && s.store.getFreeCapacity(RESOURCE_ENERGY),
-            range: 1
+                && s.store.getFreeCapacity(RESOURCE_ENERGY)
         })
         if (storage) {
             if (creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) creep.goTo(storage, 1)
