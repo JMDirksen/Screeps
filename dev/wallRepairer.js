@@ -32,7 +32,7 @@ function run(creep) {
     // Build
     if (job instanceof ConstructionSite) {
         let r = creep.build(job)
-        if (r == OK) creep.memory.job = getRepairJob(creep)
+        if (r == OK) creep.memory.job = false
         else if (r == ERR_NOT_IN_RANGE) creep.goTo(job, 3)
         else if (r == ERR_NOT_ENOUGH_RESOURCES) creep.memory.job = 'getEnergy', creep.getEnergy()
         else creep.memory.job = false, creep.idle()
@@ -41,12 +41,12 @@ function run(creep) {
     else {
         let r = creep.repair(job)
         if (r == OK) {
-            if (job.hits == job.hitsMax) creep.memory.job = getRepairJob(creep)
+            if (job.hits == job.hitsMax) return creep.memory.job = false
             // Run job for 10 times
             creep.memory.timer++
             if (creep.memory.timer >= 10) {
                 creep.memory.timer = 0
-                creep.memory.job = getRepairJob(creep)
+                creep.memory.job = false
             }
         }
         else if (r == ERR_NOT_IN_RANGE) creep.goTo(job, 3)
