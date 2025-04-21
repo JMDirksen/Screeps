@@ -9,20 +9,20 @@ module.exports.loop = function () {
 
     // CPU Bucket check
     if (Game.cpu.bucket < 100) {
-        info('Skipping tick due to low CPU bucket')
+        info('🪣 Skipping tick due to low CPU bucket')
         return
     }
 
     // Clear memory
     for (const name in Memory.creeps) {
         if (!Game.creeps[name]) {
-            info(name + ' died 🪦 ' + JSON.stringify(_.omit(Memory.creeps[name], ['_move', 'path', 'timer', 'build', 'harvest'])))
+            info('🪦 ' + name + ' died ' + JSON.stringify(_.omit(Memory.creeps[name], ['_move', 'path', 'timer', 'build', 'harvest'])))
             delete Memory.creeps[name]
         }
     }
     for (const name in Memory.spawns) {
         if (!Game.spawns[name]) {
-            info(name + ' is gone')
+            info('🔥 ' + name + ' is gone')
             delete Memory.spawns[name]
         }
     }

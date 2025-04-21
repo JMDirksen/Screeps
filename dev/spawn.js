@@ -166,7 +166,7 @@ module.exports = function () {
 
             // Check for hostiles (source room)
             if (spawn.room.hasDanger()) {
-                info(spawn.room.name + ' has hostiles, not spawing remote harvester')
+                info('⛔ ' + spawn.room.name + ' has hostiles, not spawing remote harvester')
                 continue
             }
 
@@ -178,7 +178,7 @@ module.exports = function () {
 
                 // Check for hostiles (visible remote room)
                 if (Game.rooms[remoteHarvestRoom] && Game.rooms[remoteHarvestRoom].hasDanger()) {
-                    info(spawn.room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles, not spawing remote harvester')
+                    info('⛔ ' + spawn.room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles, not spawing remote harvester')
                     continue
                 }
 

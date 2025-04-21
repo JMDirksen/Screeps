@@ -151,7 +151,7 @@ Creep.prototype.flee = function (range = 4) {
             this.memory.flee = true
             delete this.memory.job
             delete this.memory.harvest
-            info(this.room.name + ' ' + this.name + ' is fleeing 🆘')
+            info('🆘 ' + this.room.name + ' ' + this.name + ' is fleeing')
         }
         this.say('🆘')
 
