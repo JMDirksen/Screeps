@@ -58,7 +58,7 @@ Room.prototype.getCapacity = function (type = RESOURCE_ENERGY) {
 }
 
 Room.prototype.getUsedCapacityPercentage = function (type = RESOURCE_ENERGY) {
-    return Math.round(this.getUsedCapacity(type) / this.getCapacity(type) * 100)
+    return Math.round(this.getUsedCapacity(type) / Math.max(this.getCapacity(type), 1) * 100)
 }
 
 Room.prototype.hasDanger = function () {
