@@ -13,7 +13,6 @@ module.exports = function () {
         if (spawn.memory.guards == undefined) spawn.memory.guards = 2
         if (spawn.memory.repairers == undefined) spawn.memory.repairers = 1
         if (spawn.memory.transporters == undefined) spawn.memory.transporters = 2
-        if (spawn.memory.upgraders == undefined) spawn.memory.upgraders = 2
         if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = 2
         // Creep settings
         if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3
@@ -61,11 +60,11 @@ module.exports = function () {
         }
 
         // Upgrader
-        let upgradersNeeded = spawn.memory.upgraders
-        if (spawn.room.storedEnergy() >= 5000) upgradersNeeded += 2
+        let upgradersNeeded = spawn.room.controller.level
+        if (spawn.room.getUsedCapacityPercentage() >= 80) upgradersNeeded += 2
         if (spawn.room.controller.level == 8) upgradersNeeded = 1
-        if (spawn.room.storedEnergy() < 1000) upgradersNeeded = 1
-        if (spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
+        else if (spawn.room.getUsedCapacity() < 1000) upgradersNeeded = 1
+        else if (spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
         if (spawn.room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader';
             let body = null;
@@ -93,7 +92,7 @@ module.exports = function () {
 
         // Builder
         let buildersNeeded = spawn.memory.builders
-        if (spawn.room.storedEnergy(true) < 100) buildersNeeded = 0
+        if (spawn.room.getUsedCapacity(RESOURCE_ENERGY, true) < 100) buildersNeeded = 0
         const sites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES, {
             filter: s => !s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
         }).length
@@ -126,7 +125,7 @@ module.exports = function () {
 
         // Wall repairer
         let wallRepairersNeeded = spawn.memory.wallRepairers
-        if (spawn.room.storedEnergy() < 1000) wallRepairersNeeded = 1
+        if (spawn.room.getUsedCapacity() < 1000) wallRepairersNeeded = 1
         const wallBuilds = spawn.room.find(FIND_MY_CONSTRUCTION_SITES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
@@ -161,7 +160,7 @@ module.exports = function () {
         // Remote harvester
         if (spawn.memory.remoteHarvestRooms) {
             // Check for local energy storage capacity
-            const availableEnergyStorage = spawn.room.availableStorage()
+            const availableEnergyStorage = spawn.room.getFreeCapacity()
             if (availableEnergyStorage < 500) continue
 
             // Check for hostiles (source room)

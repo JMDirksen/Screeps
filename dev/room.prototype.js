@@ -30,23 +30,35 @@ Room.prototype.sourceSpots = function () {
     return countAccessible
 }
 
-Room.prototype.storedEnergy = function (includeDropped = false) {
-    let storageStructures = this.find(FIND_STRUCTURES, {
-        filter: s =>
-            s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
-    })
-    let storedEnergy = _.sum(storageStructures, s => s.store[RESOURCE_ENERGY])
-    if (!includeDropped) return storedEnergy
-    let droppedEnergy = this.find(FIND_DROPPED_RESOURCES, { filter: r => r.resourceType == RESOURCE_ENERGY })
-    return storedEnergy + droppedEnergy
-}
-
-Room.prototype.availableStorage = function (type = RESOURCE_ENERGY) {
+Room.prototype.getFreeCapacity = function (type = RESOURCE_ENERGY) {
     let storageStructures = this.find(FIND_STRUCTURES, {
         filter: s =>
             s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
     })
     return _.sum(storageStructures, s => s.store.getFreeCapacity(type))
+}
+
+Room.prototype.getUsedCapacity = function (type = RESOURCE_ENERGY, includeDropped = false) {
+    let storageStructures = this.find(FIND_STRUCTURES, {
+        filter: s =>
+            s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
+    })
+    let storedEnergy = _.sum(storageStructures, s => s.store.getUsedCapacity(type))
+    if (!includeDropped) return storedEnergy
+    let droppedEnergy = this.find(FIND_DROPPED_RESOURCES, { filter: r => r.resourceType == RESOURCE_ENERGY })
+    return storedEnergy + droppedEnergy
+}
+
+Room.prototype.getCapacity = function (type = RESOURCE_ENERGY) {
+    let storageStructures = this.find(FIND_STRUCTURES, {
+        filter: s =>
+            s.structureType.isInList(STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK)
+    })
+    return _.sum(storageStructures, s => s.store.getCapacity(type))
+}
+
+Room.prototype.getUsedCapacityPercentage = function (type = RESOURCE_ENERGY) {
+    return Math.round(this.getUsedCapacity(type) / this.getCapacity(type) * 100)
 }
 
 Room.prototype.hasDanger = function () {
