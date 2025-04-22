@@ -63,7 +63,7 @@ module.exports = function () {
         let upgradersNeeded = spawn.room.controller.level
         if (spawn.room.getUsedCapacityPercentage() >= 80) upgradersNeeded += 2
         if (spawn.room.controller.level == 8) upgradersNeeded = 1
-        else if (spawn.room.getUsedCapacity() < 1000) upgradersNeeded = 1
+        else if (spawn.room.getUsedCapacityPercentage() < 20) upgradersNeeded = 1
         else if (spawn.room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
         if (spawn.room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader';
