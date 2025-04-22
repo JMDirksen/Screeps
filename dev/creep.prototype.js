@@ -1,8 +1,9 @@
 // goTo
+if (Memory.reusePath == undefined) Memory.reusePath = 5
 Creep.prototype.goTo = function (target, inRange = 0, maxRooms = 1) {
     let r = this.moveTo(target, {
         visualizePathStyle: {},
-        reusePath: 5,
+        reusePath: Memory.reusePath,
         maxRooms: maxRooms,
         range: inRange
     });
