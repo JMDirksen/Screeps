@@ -1,9 +1,10 @@
 // Load prototypes
-require('creep.prototype')
-require('spawn.prototype')
-require('room.prototype')
-require('string.prototype')
 require('functions')
+require('creep.prototype')
+require('room.prototype')
+require('roomposition.prototype')
+require('spawn.prototype')
+require('string.prototype')
 
 module.exports.loop = function () {
 

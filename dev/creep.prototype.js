@@ -117,7 +117,13 @@ Creep.prototype.idle = function () {
 
     // Move random
     else {
-        this.move(Math.floor(Math.random() * 8) + 1)
+        do {
+            rndDirection = Math.floor(Math.random() * 8) + 1
+            // Check for plain
+            terrain = this.pos.lookForInDirection(rndDirection, LOOK_TERRAIN)[0]
+            //debug(`${this.name} ${rndDirection} ${JSON.stringify(terrain)}`)
+        } while (terrain != 'plain')
+        this.move(rndDirection)
         // Cancel flee mode
         if (this.memory.flee) delete this.memory.flee
     }
