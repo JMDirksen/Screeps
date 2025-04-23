@@ -1,44 +1,26 @@
-RoomPosition.prototype.lookInDirection = function (direction) {
-    switch (direction) {
-        case TOP:
-            return this.y -= 1, this.look()
-        case TOP_RIGHT:
-            return this.x += 1, this.y -= 1, this.look()
-        case RIGHT:
-            return this.x += 1, this.look()
-        case BOTTOM_RIGHT:
-            return this.x += 1, this.y += 1, this.look()
-        case BOTTOM:
-            return this.y += 1, this.look()
-        case BOTTOM_LEFT:
-            return this.x -= 1, this.y += 1, this.look()
-        case LEFT:
-            return this.x -= 1, this.look()
-        case TOP_LEFT:
-            return this.x -= 1, this.y -= 1, this.look()
-        default:
-            return false
-    }
+RoomPosition.prototype.lookForInDirection = function (direction, type) {
+    return this.getPosInDirection(direction).lookFor(type)
 }
 
-RoomPosition.prototype.lookForInDirection = function (direction, type) {
+RoomPosition.prototype.getPosInDirection = function (direction) {
+    let rp = new RoomPosition(this.x, this.y, this.roomName)
     switch (direction) {
         case TOP:
-            return this.y -= 1, this.lookFor(type)
+            return rp.y -= 1, rp
         case TOP_RIGHT:
-            return this.x += 1, this.y -= 1, this.lookFor(type)
+            return rp.x += 1, rp.y -= 1, rp
         case RIGHT:
-            return this.x += 1, this.lookFor(type)
+            return rp.x += 1, rp
         case BOTTOM_RIGHT:
-            return this.x += 1, this.y += 1, this.lookFor(type)
+            return rp.x += 1, rp.y += 1, rp
         case BOTTOM:
-            return this.y += 1, this.lookFor(type)
+            return rp.y += 1, rp
         case BOTTOM_LEFT:
-            return this.x -= 1, this.y += 1, this.lookFor(type)
+            return rp.x -= 1, rp.y += 1, rp
         case LEFT:
-            return this.x -= 1, this.lookFor(type)
+            return rp.x -= 1, rp
         case TOP_LEFT:
-            return this.x -= 1, this.y -= 1, this.lookFor(type)
+            return rp.x -= 1, rp.y -= 1, rp
         default:
             return false
     }
