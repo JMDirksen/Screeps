@@ -93,7 +93,7 @@ function run(creep) {
     }
 
     // Fill before idle
-    if (creep.memory.transport && !creep.isFull()) {
+    if (!creep.isFull()) {
         creep.memory.transport = false
         if (creep.getEnergy()) return
     }
