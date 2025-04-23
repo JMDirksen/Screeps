@@ -47,7 +47,8 @@ module.exports.loop = function () {
 
     // CPU usage monitoring
     let samples = 25
-    if (Memory.cpuAvg == undefined) Memory.cpuAvg = Game.cpu.getUsed() / Game.cpu.limit * 100
-    Memory.cpuAvg = ((samples - 1) * Memory.cpuAvg + Math.round(Game.cpu.getUsed() / Game.cpu.limit * 100)) / samples
-    if (!(Game.time % 10) && Memory.cpuAvg >= 95) info(`🔥 Average cpu usage: ${Math.round(Memory.cpuAvg)}%`)
+    if (Memory.cpuAvg == undefined) Memory.cpuAvg = Game.cpu.getUsed()
+    Memory.cpuAvg = ((samples - 1) * Memory.cpuAvg + Game.cpu.getUsed()) / samples
+    Memory.cpuAvgPct = Math.round(Memory.cpuAvg / Game.cpu.limit * 100)
+    if (!(Game.time % 10) && Memory.cpuAvgPct >= 95) info(`🔥 Average cpu usage: ${Memory.cpuAvgPct}%`)
 }
