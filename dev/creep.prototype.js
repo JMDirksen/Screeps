@@ -44,6 +44,7 @@ Creep.prototype.isFull = function () {
 Creep.prototype.getEnergy = function (opts = {}) {
     if (opts.fromStorage === undefined) opts.fromStorage = true
     if (opts.minAmount === undefined) opts.minAmount = 50
+    if (opts.preferredAmount === undefined) opts.preferredAmount = 0
 
     // Structures
     let energySources = this.room.find(FIND_STRUCTURES, {
