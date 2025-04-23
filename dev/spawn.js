@@ -79,7 +79,7 @@ module.exports = function () {
         // Guard
         let guardsNeeded = spawn.memory.guards
         if (spawn.room.find(FIND_HOSTILE_CREEPS, {
-            filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK])
+            filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK, HEAL])
         }).length) guardsNeeded += 1
         if (spawn.room.countCreeps('guard') < guardsNeeded) {
             const type = 'guard'

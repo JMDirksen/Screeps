@@ -25,7 +25,7 @@ function run(creep) {
         const eTowers = creep.room.find(FIND_MY_STRUCTURES, {
             filter: s =>
                 s.structureType == STRUCTURE_TOWER
-                && s.store.getFreeCapacity(RESOURCE_ENERGY) >= 750
+                && s.store.getFreeCapacity(RESOURCE_ENERGY) >= 500
         })
         const eTower = _.sortBy(eTowers, t => t.store.getUsedCapacity(RESOURCE_ENERGY))[0]
         if (eTower && creep.memory.transport) {

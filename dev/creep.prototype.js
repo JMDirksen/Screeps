@@ -102,8 +102,8 @@ Creep.prototype.getEnergy = function (opts = {}) {
 }
 
 // Idle
-Creep.prototype.idle = function () {
-    const idleFlag = this.pos.findClosestByPath(FIND_FLAGS, { filter: { color: COLOR_WHITE } })
+Creep.prototype.idle = function (flagColor = COLOR_WHITE) {
+    const idleFlag = this.pos.findClosestByPath(FIND_FLAGS, { filter: { color: flagColor } })
     const spawn = this.room.spawn()
 
     // Move towards idle flag
@@ -184,9 +184,9 @@ Creep.prototype.flee = function (range = 4) {
             this.switchRoom()
         }
 
-        // Flee to idle flag
+        // Flee to safe flag (green)
         else {
-            this.idle()
+            this.idle(COLOR_GREEN)
         }
 
         return true
