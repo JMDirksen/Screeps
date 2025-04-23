@@ -16,10 +16,14 @@ function run(creep) {
     // Switch room
     if (creep.switchRoom()) return
 
-    // Get hostile target
-    let target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS, {
-        filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK, HEAL])
-    })
+    // Get closest hostile in range of spawn
+    let spawn = creep.room.spawn()
+    let guardRange = spawn.memory.guardRange
+    let target = creep.pos.findClosestByPath(
+        spawn.pos.findInRange(FIND_HOSTILE_CREEPS, guardRange, {
+            filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK, HEAL])
+        })
+    )
 
     // Attack
     if (target) {
