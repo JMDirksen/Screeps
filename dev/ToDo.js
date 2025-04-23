@@ -1,6 +1,7 @@
 /*
 
 [ ] Attackers (room)
-[.] getEnergy() preferred amount
+[x] getEnergy() preferred amount
+[ ] idle random move not to swamp
 
 */

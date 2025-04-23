@@ -32,19 +32,19 @@ Creep.prototype.goTo = function (target, inRange = 0, maxRooms = 1) {
 
 // isEmpty
 Creep.prototype.isEmpty = function () {
-    return !_.sum(this.carry);
+    return this.store.getUsedCapacity() == 0
 }
 
 // isFull
 Creep.prototype.isFull = function () {
-    return _.sum(this.carry) == this.carryCapacity;
+    return this.store.getFreeCapacity() == 0
 }
 
 // getEnergy
 Creep.prototype.getEnergy = function (opts = {}) {
     if (opts.fromStorage === undefined) opts.fromStorage = true
     if (opts.minAmount === undefined) opts.minAmount = 50
-    if (opts.preferredAmount === undefined) opts.preferredAmount = 0
+    if (opts.preferredAmount === undefined) opts.preferredAmount = this.store.getFreeCapacity()
 
     // Structures
     let energySources = this.room.find(FIND_STRUCTURES, {
@@ -72,6 +72,15 @@ Creep.prototype.getEnergy = function (opts = {}) {
     energySources = energySources.concat(this.room.find(FIND_DROPPED_RESOURCES, {
         filter: r => r.resourceType == RESOURCE_ENERGY && r.amount >= opts.minAmount
     }))
+
+    // Check for preferred amount
+    if (opts.preferredAmount > opts.minAmount) {
+        let withPreferredAmount = _.filter(energySources, s =>
+            (s.store && s.store[RESOURCE_ENERGY] >= opts.preferredAmount)
+            || (s.amount >= opts.preferredAmount)
+        )
+        if (withPreferredAmount.length) energySources = withPreferredAmount
+    }
 
     // Go fetch closest
     if (energySources.length) {
