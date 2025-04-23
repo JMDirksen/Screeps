@@ -9,9 +9,17 @@ require('string.prototype')
 module.exports.loop = function () {
 
     // CPU Bucket check
-    if (Game.cpu.bucket < 100) {
+    if (Game.cpu.bucket < 2 * Game.cpu.limit) {
         info('🪣 Skipping tick due to low CPU bucket')
         return
+    }
+
+    // Generate pixel
+    if (Memory.generatePixels == undefined) Memory.generatePixels = true
+    if (Memory.generatePixels && Game.cpu.bucket >= 10000) {
+        let r = Game.cpu.generatePixel()
+        if (r == OK) return info('🟩 Generated a pixel')
+        else info('🟥 Pixel generation failed')
     }
 
     // Clear memory
