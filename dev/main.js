@@ -8,12 +8,6 @@ require('string.prototype')
 
 module.exports.loop = function () {
 
-    // CPU Bucket check
-    if (Game.cpu.bucket < 2 * Game.cpu.limit) {
-        info('🪣 Skipping tick due to low CPU bucket')
-        return
-    }
-
     // Generate pixel
     if (Memory.generatePixels == undefined) Memory.generatePixels = true
     if (Memory.generatePixels && Game.cpu.bucket >= 10000) {
@@ -60,4 +54,5 @@ module.exports.loop = function () {
     Memory.cpuAvg = ((samples - 1) * Memory.cpuAvg + Game.cpu.getUsed()) / samples
     Memory.cpuAvgPct = Math.round(Memory.cpuAvg / Game.cpu.limit * 100)
     if (!(Game.time % 10) && Memory.cpuAvgPct >= 95) info(`🔥 Average cpu usage: ${Memory.cpuAvgPct}%`)
+
 }
