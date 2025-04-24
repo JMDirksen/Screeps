@@ -194,11 +194,20 @@ Creep.prototype.flee = function (range = 4) {
     return false
 }
 
-// CountParts
+// CountActiveParts
 Creep.prototype.countActiveParts = function (types = []) {
     let count = 0
     for (const type of types) {
         count += this.getActiveBodyparts(type)
+    }
+    return count
+}
+
+// CountParts
+Creep.prototype.countParts = function (types = []) {
+    let count = 0
+    for (const type of types) {
+        count += this.body.reduce((n, part) => n + (part.type == type), 0)
     }
     return count
 }

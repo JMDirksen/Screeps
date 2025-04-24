@@ -21,7 +21,7 @@ function run(creep) {
     let guardRange = spawn.memory.guardRange
     let target = creep.pos.findClosestByPath(
         spawn.pos.findInRange(FIND_HOSTILE_CREEPS, guardRange, {
-            filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK, HEAL])
+            filter: c => c.countParts([ATTACK, RANGED_ATTACK, HEAL])
         })
     )
 
