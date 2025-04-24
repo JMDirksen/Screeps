@@ -49,10 +49,10 @@ module.exports.loop = function () {
     require('observer')()
 
     // CPU usage monitoring
-    let samples = 100
+    const samples = 100
     if (Memory.cpuAvg == undefined) Memory.cpuAvg = Game.cpu.getUsed()
     Memory.cpuAvg = ((samples - 1) * Memory.cpuAvg + Game.cpu.getUsed()) / samples
-    Memory.cpuAvgPct = Math.round(Memory.cpuAvg / Game.cpu.limit * 100)
+    Memory.cpuAvgPct = Math.round(Memory.cpuAvg / Game.cpu.limit * 100) + '%'
     if (!(Game.time % 10) && Memory.cpuAvgPct >= 95) info(`🔥 Average cpu usage: ${Memory.cpuAvgPct}%`)
 
 }
