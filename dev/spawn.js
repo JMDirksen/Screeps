@@ -11,7 +11,7 @@ module.exports = function () {
         if (spawn.memory.attackers == undefined) spawn.memory.attackers = 5
         if (spawn.memory.builders == undefined) spawn.memory.builders = 2
         if (spawn.memory.claimers == undefined) spawn.memory.claimers = 3
-        if (spawn.memory.guards == undefined) spawn.memory.guards = 2
+        if (spawn.memory.guards == undefined) spawn.memory.guards = 3
         if (spawn.memory.repairers == undefined) spawn.memory.repairers = 1
         if (spawn.memory.transporters == undefined) spawn.memory.transporters = 2
         if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = 2
