@@ -17,6 +17,7 @@ function run(creep) {
     // Get job
     if (!creep.memory.job) {
         creep.memory.job = getRepairJob(creep)
+        if (!creep.memory.job && !creep.isFull()) creep.memory.job = 'getEnergy'
         if (!creep.memory.job) return creep.idle()
     }
 
@@ -52,7 +53,8 @@ function getRepairJob(creep) {
             s.structureType.isInList(STRUCTURE_ROAD, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK, STRUCTURE_TOWER)
             && s.hits < s.hitsMax
     })
-    const structure = _.sortBy(structures, 'hits')[0]
+    //debug(`${creep.name} ${structures.length} structures to repair`)
+    const structure = creep.pos.findClosestByPath(structures)
     if (structure) return structure.id
     else return false
 }
