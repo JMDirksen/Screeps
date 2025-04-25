@@ -20,6 +20,7 @@ module.exports = function () {
         if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3
         // Structure settings
         if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null
+        if (spawn.memory.renewCreeps == undefined) spawn.memory.renewCreeps = false
         if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 25
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 10
         // Instructions
@@ -34,10 +35,12 @@ module.exports = function () {
         if (spawn.spawning) continue
 
         // Renew nearby creeps
-        const renewCreeps = spawn.pos.findInRange(FIND_MY_CREEPS, 1, { filter: c => c.ticksToLive < 1490 })
-        if (renewCreeps.length) {
-            const renewCreep = _.sortBy(renewCreeps, 'ticksToLive')[0]
-            if (spawn.renewCreep(renewCreep) == OK) continue
+        if (spawn.memory.renewCreeps) {
+            const renewCreeps = spawn.pos.findInRange(FIND_MY_CREEPS, 1, { filter: c => c.ticksToLive < 1490 })
+            if (renewCreeps.length) {
+                const renewCreep = _.sortBy(renewCreeps, 'ticksToLive')[0]
+                if (spawn.renewCreep(renewCreep) == OK) continue
+            }
         }
 
         // Skip 9/10 ticks

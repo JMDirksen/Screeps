@@ -213,9 +213,8 @@ Creep.prototype.countParts = function (types = []) {
 }
 
 // Renew
-if (Memory.renewCreeps == undefined) Memory.renewCreeps = true
 Creep.prototype.renew = function () {
-    if (!Memory.renewCreeps) return false
+    if (!this.room.spawn().memory.renewCreeps) return false
     if (!this.memory.renew && this.ticksToLive > 30) return false
     const spawn = this.room.spawn()
     if (spawn.store[RESOURCE_ENERGY] < 150) return false
