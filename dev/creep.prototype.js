@@ -45,13 +45,13 @@ Creep.prototype.getEnergy = function (opts = {}) {
     if (opts.fromStorage === undefined) opts.fromStorage = true
     if (opts.minAmount === undefined) opts.minAmount = 50
     if (opts.preferredAmount === undefined) opts.preferredAmount = this.store.getFreeCapacity()
+    if (opts.structureMinPercentFull === undefined) opts.structureMinPercentFull = 0
 
     // Structures
     let energySources = this.room.find(FIND_STRUCTURES, {
-        filter: s => (
-            s.structureType == STRUCTURE_CONTAINER
-            || s.structureType == STRUCTURE_LINK
-        ) && s.store[RESOURCE_ENERGY] >= opts.minAmount
+        filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_LINK)
+            && s.store[RESOURCE_ENERGY] >= opts.minAmount
+            && s.store[RESOURCE_ENERGY] / s.store.getCapacity(RESOURCE_ENERGY) * 100 >= opts.structureMinPercentFull
     })
     // Storage
     if (opts.fromStorage) {

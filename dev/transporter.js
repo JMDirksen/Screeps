@@ -83,7 +83,7 @@ function run(creep) {
         return
     }
     if (storage && !creep.memory.transport) {
-        if (creep.getEnergy({ fromStorage: false })) return
+        if (creep.getEnergy({ fromStorage: false, structureMinPercentFull: 50 })) return
     }
 
     // Idle
