@@ -115,11 +115,11 @@ Creep.prototype.idle = function (flagColor = COLOR_WHITE) {
     // Move towards controller
     else if (!idleFlag && !spawn && !this.pos.inRangeTo(this.room.controller, 2)) this.goTo(this.room.controller, 2)
 
-    // Move clockwise
+    // Move random direction
     else {
-        for (i = 0; i <= 7; i++) {
-            // Turn clockwise every tick, extra right-turns if not plain
-            direction = (Game.time % 8 + i) % 8 + 1
+        for (i = 1; i <= 10; i++) {
+            // Get random direction
+            direction = Math.floor(Math.random() * 8) + 1
             // Check for plain
             if (this.pos.lookForInDirection(direction, LOOK_TERRAIN)[0] == 'plain') break
         }
