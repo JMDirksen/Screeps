@@ -89,6 +89,11 @@ function run(creep) {
         if (creep.getEnergy({ fromStorage: false, structureMinPercentFull: 50 })) return
     }
 
+    // Get energy before idling
+    if (!creep.isFull()) {
+        if (creep.getEnergy({ fromStorage: false })) return
+    }
+
     // Idle
     creep.idle()
 
