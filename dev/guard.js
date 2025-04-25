@@ -32,7 +32,11 @@ function run(creep) {
         // Attack
         if (range == 1) creep.attack(target)
         // Ranged attack
-        if (range <= 3) creep.rangedAttack(target)
+        if (range <= 3) {
+            let hostilesInRange = creep.pos.findInRange(FIND_HOSTILE_CREEPS, 3)
+            if (hostilesInRange > 1) creep.rangedMassAttack()
+            else creep.rangedAttack(target)
+        }
 
         // Heal self
         if (range > 1 && creep.hits < creep.hitsMax) creep.heal(creep)
