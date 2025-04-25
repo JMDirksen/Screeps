@@ -12,6 +12,9 @@ function run(creep) {
     // Switch room
     if (creep.switchRoom()) return
 
+    // Renew
+    if (creep.renew()) return
+
     // Get job
     if (!creep.memory.job) {
         creep.memory.job = getRepairJob(creep)

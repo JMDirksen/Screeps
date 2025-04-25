@@ -43,7 +43,7 @@ module.exports.loop = function () {
     require('guard')()
 
     // Run structures
-    if (!(Game.time % 10)) require('spawn')()
+    require('spawn')()
     require('tower')()
     require('link')()
     require('observer')()

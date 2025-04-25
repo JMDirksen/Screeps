@@ -16,6 +16,9 @@ function run(creep) {
     // Switch room
     if (creep.switchRoom()) return
 
+    // Renew
+    if (creep.renew()) return
+
     // Get weakest hostile in range of rangePoint
     const rangePointFlag = creep.room.find(FIND_FLAGS, { filter: { color: COLOR_YELLOW } })[0]
     const rangePoint = rangePointFlag ? rangePointFlag.pos : creep.room.spawn().pos

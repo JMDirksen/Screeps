@@ -30,8 +30,18 @@ module.exports = function () {
         if (spawn.memory.roomEnergyProduction == undefined) spawn.memory.roomEnergyProduction = room.energyProduction()
         if (spawn.memory.roomSourceSpots == undefined) spawn.memory.roomSourceSpots = room.sourceSpots()
 
-        // Skip spawning
-        if (spawn.spawning) continue;
+        // Skip when spawning
+        if (spawn.spawning) continue
+
+        // Renew nearby creeps
+        const renewCreeps = spawn.pos.findInRange(FIND_MY_CREEPS, 1, { filter: c => c.ticksToLive < 1490 })
+        if (renewCreeps.length) {
+            const renewCreep = _.sortBy(renewCreeps, 'ticksToLive')[0]
+            if (spawn.renewCreep(renewCreep) == OK) continue
+        }
+
+        // Skip 9/10 ticks
+        if (Game.time % 10) continue
 
         // Max energy per RCL: 1:300 2:550 3:800 4:1300 5:1800 6:2300 7:5300 8:12300
 
@@ -62,6 +72,7 @@ module.exports = function () {
         }
 
         // Upgrader
+        //debug(`${room.getUsedCapacity()} < ${500 * room.controller.level}`)
         let upgradersNeeded = room.controller.level
         if (room.getUsedCapacityPercentage() >= 75) upgradersNeeded += 2
         if (room.getUsedCapacityPercentage() >= 95) upgradersNeeded += 2

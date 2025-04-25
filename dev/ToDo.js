@@ -2,7 +2,7 @@
 
 [ ] Attackers (room)
 [x] Guards rangedMassAttack
-[ ] Renew creeps
+[x] Renew creeps
 [ ] Guard healer
 [x] Repairer repair closestByPath hits < hitsMax
 [x] Transporter supply to storage only from containers >50% full
