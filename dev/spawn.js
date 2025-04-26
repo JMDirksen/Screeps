@@ -27,7 +27,9 @@ module.exports = function () {
         // Room settings
         if (spawn.memory.guardBounds == undefined) spawn.memory.guardBounds = [{ x: 0, y: 0 }, { x: 49, y: 49 }]
         // Instructions
-        if (spawn.memory.attackID == undefined) spawn.memory.attackID = null
+        if (spawn.memory.attackId == undefined) spawn.memory.attackId = null
+        if (spawn.memory.attackRoom == undefined) spawn.memory.attackRoom = null
+        if (spawn.memory.attackPause == undefined) spawn.memory.attackPause = true
         if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null
         if (spawn.memory.remoteHarvestRooms == undefined) spawn.memory.remoteHarvestRooms = null
         // Statistics
@@ -179,14 +181,14 @@ module.exports = function () {
 
         // Attacker
         const attackersNeeded = spawn.memory.attackers
-        if (spawn.memory.attackID && room.countCreeps('attackers') < attackersNeeded) {
-            const type = 'attacker';
-            let body = null;
-            if (spawn.energyPossible(1300)) body = { tier: 4, parts: [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(780)) body = { tier: 3, parts: [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(520)) body = { tier: 2, parts: [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(260)) body = { tier: 1, parts: [ATTACK, ATTACK, MOVE, MOVE] };
-            if (spawn.buildCreep(type, body, { attackID: spawn.memory.attackID, pause: true })) continue;
+        if (spawn.memory.attackRoom && room.countCreeps('attackers') < attackersNeeded) {
+            const type = 'attacker'
+            let body = null
+            if (spawn.energyPossible(1290)) body = { tier: 4, parts: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL] }
+            else if (spawn.energyPossible(760)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK, HEAL] }
+            else if (spawn.energyPossible(460)) body = { tier: 2, parts: [MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK] }
+            else if (spawn.energyPossible(260)) body = { tier: 1, parts: [MOVE, MOVE, ATTACK, ATTACK] }
+            if (spawn.buildCreep(type, body)) continue
         }
 
         // Remote harvester
