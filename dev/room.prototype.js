@@ -70,3 +70,14 @@ Room.prototype.hasDanger = function () {
 Room.prototype.spawn = function () {
     return this.find(FIND_MY_SPAWNS)[0]
 }
+
+Room.prototype.findInBounds = function (type, bounds, opts = {}) {
+    // Bounds: [{ x: 0, y: 0 }, { x: 49, y: 49 }]
+    const foundInRoom = this.find(type, opts)
+    return _.filter(foundInRoom, o =>
+        o.pos.x >= bounds[0].x
+        && o.pos.y >= bounds[0].y
+        && o.pos.x <= bounds[1].x
+        && o.pos.y <= bounds[1].y
+    )
+}

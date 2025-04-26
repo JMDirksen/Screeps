@@ -19,11 +19,10 @@ function run(creep) {
     // Renew
     if (creep.renew()) return
 
-    // Get weakest hostile in range of rangePoint
-    const rangePointFlag = creep.room.find(FIND_FLAGS, { filter: { color: COLOR_YELLOW } })[0]
-    const rangePoint = rangePointFlag ? rangePointFlag.pos : creep.room.spawn().pos
-    const guardRange = creep.room.spawn().memory.guardRange
-    let target = _.sortBy(rangePoint.findInRange(FIND_HOSTILE_CREEPS, guardRange, {
+    // Get weakest hostile in guardBounds
+    const room = creep.room
+    const guardBounds = room.spawn().memory.guardBounds
+    const target = _.sortBy(room.findInBounds(FIND_HOSTILE_CREEPS, guardBounds, {
         filter: c => c.countParts([ATTACK, RANGED_ATTACK, HEAL])
     }), 'hits')[0]
 

@@ -23,6 +23,8 @@ module.exports = function () {
         if (spawn.memory.renewCreeps == undefined) spawn.memory.renewCreeps = false
         if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 25
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 10
+        // Room settings
+        if (spawn.memory.guardBounds == undefined) spawn.memory.guardBounds = [{ x: 0, y: 0 }, { x: 49, y: 49 }]
         // Instructions
         if (spawn.memory.attackID == undefined) spawn.memory.attackID = null
         if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null
