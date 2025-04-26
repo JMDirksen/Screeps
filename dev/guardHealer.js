@@ -20,7 +20,7 @@ function run(creep) {
     if (creep.renew()) return
 
     // Idle
-    if (!creep.room.countCreeps('guard')) creep.idle(COLOR_RED)
+    if (!creep.room.countCreeps('guard')) creep.idle({ flagColor: COLOR_RED })
 
     // Move in range of closest guard
     const closestGuard = creep.pos.findClosestByPath(FIND_MY_CREEPS, {

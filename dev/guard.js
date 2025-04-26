@@ -67,7 +67,7 @@ function run(creep) {
         }
 
         // Idle
-        creep.idle(COLOR_RED)
+        creep.idle({ flagColor: COLOR_RED })
     }
 
 }

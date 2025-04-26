@@ -1,8 +1,6 @@
 /*
 
 [ ] Attackers (room)
-[x] Guard healer
-[x] Guard boundaries
-[ ] Idle in place option
+[x] Idle in place option
 
 */

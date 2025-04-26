@@ -102,18 +102,24 @@ Creep.prototype.getEnergy = function (opts = {}) {
 }
 
 // Idle
-Creep.prototype.idle = function (flagColor = COLOR_WHITE) {
-    const idleFlag = this.pos.findClosestByPath(FIND_FLAGS, { filter: { color: flagColor } })
+Creep.prototype.idle = function (opts = {}) {
+    if (opts.flagColor === undefined) opts.flagColor = COLOR_WHITE
+    if (opts.inPlace === undefined) opts.inPlace = false
+
+    const idleFlag = this.pos.findClosestByPath(FIND_FLAGS, { filter: { color: opts.flagColor } })
     const spawn = this.room.spawn()
 
     // Move towards idle flag
-    if (idleFlag && !this.pos.inRangeTo(idleFlag, 2)) this.goTo(idleFlag, 2)
+    if (!opts.inPlace && idleFlag && !this.pos.inRangeTo(idleFlag, 2))
+        this.goTo(idleFlag, 2)
 
     // Move towards spawn
-    else if (!idleFlag && spawn && !this.pos.inRangeTo(spawn, 2)) this.goTo(spawn, 2)
+    else if (!opts.inPlace && !idleFlag && spawn && !this.pos.inRangeTo(spawn, 2))
+        this.goTo(spawn, 2)
 
     // Move towards controller
-    else if (!idleFlag && !spawn && !this.pos.inRangeTo(this.room.controller, 2)) this.goTo(this.room.controller, 2)
+    else if (!opts.inPlace && !idleFlag && !spawn && !this.pos.inRangeTo(this.room.controller, 2))
+        this.goTo(this.room.controller, 2)
 
     // Move random direction
     else {
@@ -186,7 +192,7 @@ Creep.prototype.flee = function (range = 4) {
 
         // Flee to safe flag (green)
         else {
-            this.idle(COLOR_GREEN)
+            this.idle({ flagColor: COLOR_GREEN })
         }
 
         return true
