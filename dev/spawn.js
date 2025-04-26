@@ -83,7 +83,7 @@ module.exports = function () {
         if (room.getUsedCapacityPercentage() >= 75) upgradersNeeded += 2
         if (room.getUsedCapacityPercentage() >= 95) upgradersNeeded += 2
         if (room.controller.level == 8) upgradersNeeded = 1
-        else if (room.getUsedCapacity() < 500 * room.controller.level) upgradersNeeded = 1
+        else if (room.getUsedCapacity() < 1000 * room.controller.level) upgradersNeeded = 1
         else if (room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
         if (room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader'
