@@ -32,7 +32,7 @@ module.exports = function () {
 
 			// Heal guards ignoring range
 			let healGuard = tower.pos.findClosestByRange(FIND_MY_CREEPS, {
-				filter: c => c.memory.type == 'guard' && c.hits < c.hitsMax
+				filter: c => c.memory.type.isInList('guard', 'guardHealer') && c.hits < c.hitsMax
 			})
 			if (healGuard) {
 				tower.heal(healGuard)

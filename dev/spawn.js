@@ -11,7 +11,8 @@ module.exports = function () {
         if (spawn.memory.attackers == undefined) spawn.memory.attackers = 5
         if (spawn.memory.builders == undefined) spawn.memory.builders = 2
         if (spawn.memory.claimers == undefined) spawn.memory.claimers = 3
-        if (spawn.memory.guards == undefined) spawn.memory.guards = 3
+        if (spawn.memory.guards == undefined) spawn.memory.guards = 2
+        if (spawn.memory.guardHealers == undefined) spawn.memory.guardHealers = 1
         if (spawn.memory.repairers == undefined) spawn.memory.repairers = 1
         if (spawn.memory.transporters == undefined) spawn.memory.transporters = 2
         if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = 2
@@ -92,6 +93,18 @@ module.exports = function () {
             else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] }
             else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] }
             if (spawn.buildCreep(type, body)) continue
+        }
+
+        // Guard healer
+        let guardHealersNeeded = spawn.memory.guardHealers
+        if (room.countCreeps('guardHealer') < guardHealersNeeded) {
+            const type = 'guardHealer'
+            let body = null
+            if (spawn.energyPossible(1500)) body = { tier: 4, parts: [MOVE, MOVE, MOVE, MOVE, MOVE, HEAL, HEAL, HEAL, HEAL, HEAL] }
+            else if (spawn.energyPossible(1200)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, HEAL, HEAL, HEAL, HEAL] }
+            else if (spawn.energyPossible(600)) body = { tier: 2, parts: [MOVE, MOVE, HEAL, HEAL] }
+            else if (spawn.energyPossible(300)) body = { tier: 1, parts: [MOVE, HEAL] }
+            if (spawn.buildCreep(type, body, { guardRoom: room.name }, 'GH')) continue
         }
 
         // Guard

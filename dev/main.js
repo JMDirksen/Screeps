@@ -41,6 +41,7 @@ module.exports.loop = function () {
     require('attacker')()
     require('claimer')()
     require('guard')()
+    require('guardHealer')()
 
     // Run structures
     require('spawn')()
