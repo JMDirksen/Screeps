@@ -81,3 +81,11 @@ Room.prototype.findInBounds = function (type, bounds, opts = {}) {
         && o.pos.y <= bounds[1].y
     )
 }
+
+Room.prototype.getFlagBounds = function (flagColor) {
+    const flags = this.find(FIND_FLAGS, { filter: f => f.color == flagColor })
+    if (flags.length < 2) return null
+    const flag1 = _.sortByOrder(flags, ['pos.x', 'pos.y'], ['asc', 'asc'])[0]
+    const flag2 = _.sortByOrder(flags, ['pos.x', 'pos.y'], ['desc', 'desc'])[0]
+    return [{ x: flag1.pos.x, y: flag1.pos.y }, { x: flag2.pos.x, y: flag2.pos.y }]
+}
