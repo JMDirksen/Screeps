@@ -111,6 +111,7 @@ module.exports = function () {
 
         // Guard
         let guardsNeeded = spawn.memory.guards
+        // Extra guard when hostiles in room
         if (room.find(FIND_HOSTILE_CREEPS, {
             filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK, HEAL])
         }).length) guardsNeeded += 1
