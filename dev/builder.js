@@ -33,13 +33,13 @@ function run(creep) {
             if (creep.build(site) == ERR_NOT_IN_RANGE) creep.goTo(site, 3)
         }
         else {
-            creep.idle()
+            creep.idle({ inPlace: true })
         }
     }
 
     // Get energy
     else if (!creep.getEnergy()) {
         if (creep.store[RESOURCE_ENERGY]) creep.memory.build = true
-        creep.idle()
+        creep.idle({ inPlace: true })
     }
 }
