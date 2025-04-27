@@ -59,6 +59,8 @@ function run(creep) {
 }
 
 function getRepairJob(creep) {
+    const wallsMaxHits = creep.room.spawn().memory.wallsMaxHits
+
     // Prioritize decaying ramparts
     const prioRamparts = creep.room.find(FIND_STRUCTURES, {
         filter: s =>
@@ -78,12 +80,12 @@ function getRepairJob(creep) {
     const structures = creep.room.find(FIND_STRUCTURES, {
         filter: s =>
             s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
-            && s.hits < s.hitsMax
+            && s.hits < wallsMaxHits
             && !creepsWithJob(creep.memory.type, s.id).length
     })
     if (structures.length) {
         // Iterate 5K repair blocks
-        for (i = 0; i < 3000000; i += 5000) {
+        for (i = 0; i < wallsMaxHits; i += 5000) {
             let structuresInBlock = _.filter(structures, s => s.hits >= i && s.hits < i + 5000)
             if (structuresInBlock.length) {
                 let structure = creep.pos.findClosestByPath(structuresInBlock)
