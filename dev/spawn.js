@@ -161,7 +161,6 @@ module.exports = function () {
 
         // Wall repairer
         let wallRepairersNeeded = spawn.memory.wallRepairers
-        if (room.getUsedCapacity() < 1000) wallRepairersNeeded = 1
         const wallBuilds = room.find(FIND_MY_CONSTRUCTION_SITES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
@@ -171,6 +170,9 @@ module.exports = function () {
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
                 && s.hits < spawn.memory.wallsMaxHits
         }).length
+        if (room.getUsedCapacity() < 1000) wallRepairersNeeded = 1
+        //debug(`wallBuilds + wallRepairs = ${wallBuilds + wallRepairs}`)
+        if (wallBuilds + wallRepairs < 5) wallRepairersNeeded = 1
         if ((wallRepairs || wallBuilds) && room.countCreeps('wallRepairer') < wallRepairersNeeded) {
             const type = 'wallRepairer'
             let body = null
