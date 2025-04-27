@@ -1,16 +1,22 @@
 module.exports = function () {
+	// Iterate spawns
 	for (const spawnName in Game.spawns) {
 		const spawn = Game.spawns[spawnName]
-		const links = _.sortBy(spawn.room.find(FIND_MY_STRUCTURES, {
+
+		// Get links in room
+		let links = spawn.room.find(FIND_MY_STRUCTURES, {
 			filter: s => s.structureType == STRUCTURE_LINK
-		}), 'store')
-		if (!links.length) continue
-		const totalEnergy = _.sum(links, 'store')
+		})
+		if (links.length < 2) continue
+
+		// Get links data
+		links = _.sortBy(links, s => s.store.getUsedCapacity())
+		const totalEnergy = _.sum(links, s => s.store.getUsedCapacity())
 		const lowest = links[0]
 		const highest = links[links.length - 1]
 
-		const amount = highest.store - totalEnergy / links.length
-		if (amount < 50) continue
-		highest.transferEnergy(lowest, amount)
+		// Transfer amount from highest to lowest
+		const amount = highest.store.getUsedCapacity() - totalEnergy / links.length
+		if (amount >= 50) highest.transferEnergy(lowest, amount)
 	}
 }
