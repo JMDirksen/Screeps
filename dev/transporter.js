@@ -74,6 +74,21 @@ function run(creep) {
         if (creep.getEnergy()) return
     }
 
+    // Links
+    const link = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+        filter: s =>
+            s.structureType == STRUCTURE_LINK
+            && s.store.getUsedPercentage() < 75
+    })
+    if (link && creep.memory.transport) {
+        const r = creep.transfer(link, RESOURCE_ENERGY)
+        if (r == ERR_NOT_IN_RANGE) creep.goTo(link, 1)
+        return
+    }
+    if (link && !creep.memory.transport) {
+        if (creep.getEnergy({ fromStorage: false })) return
+    }
+
     // Storage
     const storage = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: s =>
