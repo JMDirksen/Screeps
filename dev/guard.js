@@ -39,6 +39,8 @@ function run(creep) {
             if (hostilesInRange > 1) creep.rangedMassAttack()
             else creep.rangedAttack(target)
         }
+        // Boast
+        else creep.rangedMassAttack()
 
         // Heal self
         if (range > 1 && creep.hits < creep.hitsMax) creep.heal(creep)
@@ -65,6 +67,9 @@ function run(creep) {
         if (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 3, { filter: c => c.hits < c.hitsMax })[0]) {
             creep.rangedHeal(healCreep)
         }
+
+        // Boast
+        if (room.find(FIND_HOSTILE_CREEPS).length) creep.rangedMassAttack()
 
         // Idle
         creep.idle({ flagColor: COLOR_RED })
