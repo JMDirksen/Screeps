@@ -4,6 +4,7 @@ module.exports = function () {
 		const spawn = room.find(FIND_MY_SPAWNS)[0]
 		const attackRange = spawn.memory.towerAttackRange
 		const healRange = spawn.memory.towerHealRange
+		const guardBounds = spawn.memory.guardBounds
 		const towers = Game.rooms[roomName].find(FIND_MY_STRUCTURES, {
 			filter: s => s.structureType == STRUCTURE_TOWER
 		})
@@ -12,9 +13,10 @@ module.exports = function () {
 		for (let t = 0; t < towers.length; t++) {
 			const tower = towers[t]
 
-			// Attack weakest hostile in range
+			// Attack weakest hostile in range/bounds
 			const hostile = _.sortBy(tower.pos.findInRange(FIND_HOSTILE_CREEPS, attackRange, {
 				filter: c => c.countParts([ATTACK, RANGED_ATTACK, HEAL])
+					&& c.pos.isInBounds(guardBounds)
 			}), 'hits')[0]
 			if (hostile) {
 				tower.attack(hostile)

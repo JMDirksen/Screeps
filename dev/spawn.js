@@ -22,7 +22,7 @@ module.exports = function () {
         // Structure settings
         if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null
         if (spawn.memory.renewCreeps == undefined) spawn.memory.renewCreeps = false
-        if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 25
+        if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 50
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 10
         // Room settings
         spawn.memory.guardBounds = room.getFlagBounds(COLOR_GREY) || [{ x: 0, y: 0 }, { x: 49, y: 49 }]
