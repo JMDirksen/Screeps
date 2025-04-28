@@ -5,6 +5,7 @@ module.exports = function () {
     for (const spawnName in Game.spawns) {
         const spawn = Game.spawns[spawnName]
         const room = spawn.room
+        const controllerLevel = room.controller.level
 
         // Setup spawn memory defaults
         // Creep counts
@@ -27,6 +28,8 @@ module.exports = function () {
         // Room settings
         spawn.memory.guardBounds = room.getFlagBounds(COLOR_GREY) || [{ x: 0, y: 0 }, { x: 49, y: 49 }]
         if (spawn.memory.wallsMaxHits == undefined) spawn.memory.wallsMaxHits = 500000
+        if (controllerLevel < 8) spawn.memory.wallsMaxHits = controllerLevel * 100000
+        else spawn.memory.wallsMaxHits = 3000000
         // Instructions
         if (spawn.memory.attackId == undefined) spawn.memory.attackId = null
         if (spawn.memory.attackRoom == undefined) spawn.memory.attackRoom = null
@@ -81,12 +84,12 @@ module.exports = function () {
         }
 
         // Upgrader
-        //debug(`${room.getUsedCapacity()} < ${500 * room.controller.level}`)
-        let upgradersNeeded = room.controller.level
+        //debug(`${room.getUsedCapacity()} < ${500 * controllerLevel}`)
+        let upgradersNeeded = controllerLevel
         if (room.getUsedCapacityPercentage() >= 75) upgradersNeeded += 2
         if (room.getUsedCapacityPercentage() >= 95) upgradersNeeded += 2
-        if (room.controller.level == 8) upgradersNeeded = 1
-        else if (room.getUsedCapacity() < 1000 * room.controller.level) upgradersNeeded = 1
+        if (controllerLevel == 8) upgradersNeeded = 1
+        else if (room.getUsedCapacity() < 1000 * controllerLevel) upgradersNeeded = 1
         else if (room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
         if (room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader'
