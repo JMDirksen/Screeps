@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = function () {
 	// Iterate spawns
 	for (const spawnName in Game.spawns) {

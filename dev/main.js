@@ -1,3 +1,5 @@
+'use strict'
+
 // Load generic functions
 require('functions')
 
@@ -10,7 +12,7 @@ require('store.prototype')
 require('string.prototype')
 
 module.exports.loop = function () {
-
+    
     // Generate pixel
     if (Memory.generatePixels == undefined) Memory.generatePixels = true
     if (Memory.generatePixels && Game.cpu.bucket >= 10000) {

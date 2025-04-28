@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = function () {
 	for (const roomName in Game.rooms) {
 		const room = Game.rooms[roomName]

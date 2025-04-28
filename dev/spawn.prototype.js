@@ -1,3 +1,5 @@
+'use strict'
+
 StructureSpawn.prototype.generateCreepName = function (type, tier = null, overrideName = null) {
     const t = overrideName ? overrideName : type.charAt(0).toUpperCase()
     for (let i = 1; i <= 100; i++) {

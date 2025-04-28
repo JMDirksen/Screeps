@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = function () {
     for (const creepName in Game.creeps) {
         const creep = Game.creeps[creepName]

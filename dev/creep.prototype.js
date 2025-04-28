@@ -1,3 +1,5 @@
+'use strict'
+
 // goTo
 if (Memory.reusePath == undefined) Memory.reusePath = 5
 Creep.prototype.goTo = function (target, inRange = 0, maxRooms = 1) {
@@ -123,7 +125,8 @@ Creep.prototype.idle = function (opts = {}) {
 
     // Move random direction
     else {
-        for (i = 1; i <= 10; i++) {
+        let direction
+        for (let i = 1; i <= 10; i++) {
             // Get random direction
             direction = Math.floor(Math.random() * 8) + 1
             // Check for plain or road

@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = function () {
     for (const creepName in Game.creeps) {
         const creep = Game.creeps[creepName];
@@ -55,6 +57,8 @@ function run(creep) {
     }
 
     else {
+        let healCreep
+        
         // Heal self
         if (creep.hits < creep.hitsMax) creep.heal(creep)
 

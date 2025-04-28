@@ -1,3 +1,5 @@
+'use strict'
+
 if (Memory.info == undefined) Memory.info = true
 if (Memory.debug == undefined) Memory.debug = false
 

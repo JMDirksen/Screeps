@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = function () {
     for (const spawnName in Game.spawns) {
         const spawn = Game.spawns[spawnName];
