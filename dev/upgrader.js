@@ -40,7 +40,7 @@ function run(creep) {
 
     // Get energy
     else if (!creep.getEnergy()) {
-        if (creep.store[RESOURCE_ENERGY]) creep.memory.build = true
+        if (creep.store[RESOURCE_ENERGY]) creep.memory.upgrade = true
         return creep.idle()
     }
 
