@@ -114,6 +114,6 @@ function run(creep) {
     }
 
     // Idle
-    creep.idle()
+    creep.idle({ inPlace: true })
 
 }
