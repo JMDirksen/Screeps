@@ -90,7 +90,7 @@ function run(creep) {
         return
     }
     if (link && !creep.memory.transport) {
-        if (creep.getEnergy({ fromStorage: false })) return
+        if (creep.getEnergy({ fromLinks: false, fromStorage: false })) return
     }
 
     // Storage
