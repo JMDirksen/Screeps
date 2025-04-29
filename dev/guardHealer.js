@@ -8,6 +8,8 @@ module.exports = function () {
 }
 
 function run(creep) {
+    if (creep.spawning) return
+
     // Back to guard room
     if (creep.room.name != creep.memory.guardRoom) {
         creep.memory.room = creep.memory.guardRoom

@@ -8,6 +8,8 @@ module.exports = function () {
 };
 
 function run(creep) {
+    if (creep.spawning) return
+
     // Flee
     if(creep.flee()) return
 

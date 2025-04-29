@@ -8,6 +8,8 @@ module.exports = function () {
 };
 
 function run(creep) {
+    if (creep.spawning) return
+
     // Back to guard room
     if (creep.room.name != creep.memory.guardRoom) {
         creep.memory.room = creep.memory.guardRoom
@@ -58,7 +60,7 @@ function run(creep) {
 
     else {
         let healCreep
-        
+
         // Heal self
         if (creep.hits < creep.hitsMax) creep.heal(creep)
 

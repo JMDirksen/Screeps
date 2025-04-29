@@ -8,6 +8,8 @@ module.exports = function () {
 };
 
 function run(creep) {
+    if (creep.spawning) return
+
     // Got shot at
     if (creep.hits < creep.hitsMax) {
         const spawnRoomSpawn = Game.rooms[creep.memory.spawnRoom].spawn()

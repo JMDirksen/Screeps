@@ -8,6 +8,8 @@ module.exports = function () {
 };
 
 function run(creep) {
+    if (creep.spawning) return
+
     const spawn = Game.spawns[creep.memory.spawnRoom]
     const attackPause = spawn.memory.attackPause
     const attackRoom = spawn.memory.attackRoom
