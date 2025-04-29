@@ -224,7 +224,7 @@ module.exports = function () {
                     continue
                 }
 
-                // Count remote harvesters in remote room
+                // Count remote harvesters for remote room
                 let remoteHarvesters = _.filter(Game.creeps, c =>
                     c.memory.type == 'remoteHarvester'
                     && c.memory.spawnRoom == room.name

@@ -4,6 +4,7 @@ module.exports = function () {
 	for (const roomName in Game.rooms) {
 		const room = Game.rooms[roomName]
 		const spawn = room.find(FIND_MY_SPAWNS)[0]
+		if (!spawn) continue
 		const attackRange = spawn.memory.towerAttackRange
 		const healRange = spawn.memory.towerHealRange
 		const guardBounds = spawn.memory.guardBounds
