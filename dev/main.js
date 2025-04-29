@@ -54,6 +54,9 @@ module.exports.loop = function () {
     require('link')()
     require('observer')()
 
+    // Run other
+    require('roadBuilder')()
+
     // CPU usage monitoring
     const samples = 100
     if (Memory.cpuAvg == undefined) Memory.cpuAvg = Game.cpu.getUsed()

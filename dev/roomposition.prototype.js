@@ -24,3 +24,22 @@ RoomPosition.prototype.isInBounds = function (bounds) {
         && this.x <= bounds[1].x
         && this.y <= bounds[1].y
 }
+
+RoomPosition.prototype.registerBuildRoad = function () {
+    const spawn = Game.rooms[this.roomName].spawn()
+    if (!spawn) return
+    if (spawn.memory.autoBuildRoads == undefined) spawn.memory.autoBuildRoads = true
+    if (!spawn.memory.autoBuildRoads) return
+    if (spawn.memory.autoBuildRoadsList == undefined) spawn.memory.autoBuildRoadsList = []
+    if (this.lookFor(LOOK_TERRAIN)[0] != 'swamp') return
+    if (this.lookFor(LOOK_CONSTRUCTION_SITES)[0]) return
+    let list = spawn.memory.autoBuildRoadsList
+    let listPos = _.filter(list, { 'x': this.x, 'y': this.y })[0]
+    if (listPos) {
+        listPos.count++
+    }
+    else {
+        list.push({ 'x': this.x, 'y': this.y, 'count': 1 })
+    }
+    //debug(`registerBuildRoad: ${this.x} ${this.y}`)
+}

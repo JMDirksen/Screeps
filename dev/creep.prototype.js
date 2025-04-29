@@ -12,11 +12,10 @@ Creep.prototype.goTo = function (target, inRange = 0, maxRooms = 1) {
     switch (r) {
         case OK:
             return true
-            break
         case ERR_TIRED:
             this.say('💤')
+            this.pos.registerBuildRoad()
             return true
-            break
         case ERR_NO_PATH:
             this.say('⛔')
             break
