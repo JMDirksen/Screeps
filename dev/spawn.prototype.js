@@ -26,7 +26,7 @@ StructureSpawn.prototype.buildCreep = function (type, body, memory = null, overr
 }
 
 StructureSpawn.prototype.energyPossible = function (amount) {
-    if (amount < 300) return true
+    if (amount <= 300) return true
     if (this.room.energyCapacityAvailable < amount) return false
     if (!this.room.countCreeps('harvester')) return false
     if (!this.room.countCreeps('transporter')) return false
