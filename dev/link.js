@@ -19,6 +19,6 @@ module.exports = function () {
 
 		// Transfer amount from highest to lowest
 		const amount = highest.store.getUsedCapacity(RESOURCE_ENERGY) - totalEnergy / links.length
-		if (amount >= 50) highest.transferEnergy(lowest, amount)
+		if (amount >= 100) highest.transferEnergy(lowest, amount)
 	}
 }
