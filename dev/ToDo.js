@@ -1,7 +1,7 @@
 /*
 
 [.] Attackers (room)
-[x] Links balance energy
 [ ] Market code (terminal required)
+[x] Info/Debug show tick
 
 */
