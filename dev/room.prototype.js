@@ -91,3 +91,13 @@ Room.prototype.getFlagBounds = function (flagColor) {
     const flag2 = _.sortByOrder(flags, ['pos.x', 'pos.y'], ['desc', 'desc'])[0]
     return [{ x: flag1.pos.x, y: flag1.pos.y }, { x: flag2.pos.x, y: flag2.pos.y }]
 }
+
+Room.prototype.linksUsedPercentage = function () {
+    let links = this.find(FIND_MY_STRUCTURES, {
+        filter: s => s.structureType == STRUCTURE_LINK
+    })
+    if (!links.length) return false
+    let used = _.sum(links, s => s.store.getUsedCapacity(RESOURCE_ENERGY))
+    let total = _.sum(links, s => s.store.getCapacity(RESOURCE_ENERGY))
+    return Math.round(used / total * 100)
+}

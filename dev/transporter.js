@@ -22,17 +22,17 @@ function run(creep) {
     // Check if empty/full
     if (creep.memory.transport && creep.isEmpty()) {
         creep.memory.transport = false
-        //debug(`${creep.name} empty`)
+        debug(`${creep.name} empty`)
     }
     if (!creep.memory.transport && creep.isFull()) {
         creep.memory.transport = true
-        //debug(`${creep.name} full`)
+        debug(`${creep.name} full`)
     }
 
     // Get job
     if (!creep.memory.job) {
         let job = getTransportJob(creep)
-        //debug(`${creep.name} ${job}`)
+        debug(`${creep.name} ${job}`)
         if (job) creep.memory.job = job
         else return creep.idle({ inPlace: true })
     }
@@ -97,8 +97,9 @@ function run(creep) {
         const link = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: s =>
                 s.structureType == STRUCTURE_LINK
+                //&& s.store.getUsedPercentage() < 75
         })
-        if (link.store.getUsedPercentage() >= 75) return creep.memory.job = false
+        if (link.store.getFreeCapacity(RESOURCE_ENERGY) < 100) return creep.memory.job = false
         if (!link) return creep.memory.job = false
         if (creep.memory.transport) {
             const r = creep.transfer(link, RESOURCE_ENERGY)
@@ -154,12 +155,8 @@ function getTransportJob(creep) {
     if (spawns.length) return 'spawn'
 
     // Link
-    const links = creep.room.find(FIND_MY_STRUCTURES, {
-        filter: s =>
-            s.structureType == STRUCTURE_LINK
-            && s.store.getUsedPercentage() < 75
-    })
-    if (links.length) return 'link'
+    const linksFullPercent = creep.room.linksUsedPercentage()
+    if (linksFullPercent !== false && linksFullPercent < 75) return 'link'
 
     // Tower
     const towers = creep.room.find(FIND_MY_STRUCTURES, {
