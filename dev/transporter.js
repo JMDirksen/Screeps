@@ -22,17 +22,17 @@ function run(creep) {
     // Check if empty/full
     if (creep.memory.transport && creep.isEmpty()) {
         creep.memory.transport = false
-        debug(`${creep.name} empty`)
+        //debug(`${creep.name} empty`)
     }
     if (!creep.memory.transport && creep.isFull()) {
         creep.memory.transport = true
-        debug(`${creep.name} full`)
+        //debug(`${creep.name} full`)
     }
 
     // Get job
     if (!creep.memory.job) {
         let job = getTransportJob(creep)
-        debug(`${creep.name} ${job}`)
+        //debug(`${creep.name} ${job}`)
         if (job) creep.memory.job = job
         else return creep.idle({ inPlace: true })
     }
