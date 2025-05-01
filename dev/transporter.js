@@ -30,6 +30,12 @@ function run(creep) {
         //debug(`${creep.name} full`)
     }
 
+    // Check if job done (target full)
+    if (creep.memory.job) {
+        let target = Game.getObjectById(creep.memory.job)
+        if (target && target.store.getFreeCapacity(RESOURCE_ENERGY) == 0) creep.memory.job = false
+    }
+
     // Get job
     if (!creep.memory.job) {
         let job = getTransportJob(creep)
@@ -44,15 +50,13 @@ function run(creep) {
         creep.memory.job = false
         return creep.say('❓')
     }
+    // Deliver energy
     if (creep.memory.transport) {
         const r = creep.transfer(target, RESOURCE_ENERGY)
-        if (r == OK) {
-            if (target.store.getFreeCapacity(RESOURCE_ENERGY) == 0) creep.memory.job = false
-            return
-        }
+        if (r == OK) return
         if (r == ERR_NOT_IN_RANGE) if (creep.goTo(target, 1)) return
-        if (r == ERR_FULL) return creep.memory.job = false
     }
+    // Get energy
     else {
         let opts = {}
         if (target.structureType == STRUCTURE_LINK) opts = {
@@ -78,6 +82,7 @@ function getTransportJob(creep) {
             filter: s =>
                 s.structureType == STRUCTURE_TOWER
                 && s.store.getFreeCapacity(RESOURCE_ENERGY) >= 500
+                && !creepsWithJob('transporter', s.id).length
         })
         if (eTowers.length) {
             creep.say('❗')
@@ -90,6 +95,7 @@ function getTransportJob(creep) {
         filter: s =>
             s.structureType.isInList(STRUCTURE_SPAWN, STRUCTURE_EXTENSION)
             && s.store.getFreeCapacity(RESOURCE_ENERGY)
+            && !creepsWithJob('transporter', s.id).length
     })
     if (spawn) return spawn.id
 
@@ -99,7 +105,10 @@ function getTransportJob(creep) {
         const link = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: s => s.structureType == STRUCTURE_LINK
         })
-        if (link.store.getFreeCapacity(RESOURCE_ENERGY) >= 100) return link.id
+        if (
+            link.store.getFreeCapacity(RESOURCE_ENERGY)
+            && !creepsWithJob('transporter', link.id).length
+        ) return link.id
     }
 
     // Tower
@@ -107,6 +116,7 @@ function getTransportJob(creep) {
         filter: s =>
             s.structureType == STRUCTURE_TOWER
             && s.store.getFreeCapacity(RESOURCE_ENERGY)
+            && !creepsWithJob('transporter', s.id).length
     })
     if (towers.length) return _.sortBy(towers, t => t.store.getUsedCapacity(RESOURCE_ENERGY))[0].id
 
@@ -115,6 +125,7 @@ function getTransportJob(creep) {
         filter: s =>
             s.structureType == STRUCTURE_STORAGE
             && s.store.getFreeCapacity(RESOURCE_ENERGY)
+            && !creepsWithJob('transporter', s.id).length
     })
     if (storage) return storage.id
 
