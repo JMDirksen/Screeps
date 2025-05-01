@@ -47,6 +47,7 @@ function run(creep) {
         else creep.rangedMassAttack()
 
         // Heal self
+        let healCreep
         if (range > 1 && creep.hits < creep.hitsMax) creep.heal(creep)
         // Heal other
         else if (range > 1 && (healCreep = creep.pos.findInRange(FIND_MY_CREEPS, 1, { filter: c => c.hits < c.hitsMax })[0])) {
