@@ -58,7 +58,9 @@ Creep.prototype.getEnergy = function (opts = {}) {
     // Links
     if (opts.fromLinks) {
         energySources = energySources.concat(this.room.find(FIND_STRUCTURES, {
-            filter: s => s.structureType == STRUCTURE_LINK && s.store[RESOURCE_ENERGY] >= opts.minAmount
+            filter: s => s.structureType == STRUCTURE_LINK
+            && s.store[RESOURCE_ENERGY] >= opts.minAmount
+            && s.store.getUsedPercentage(RESOURCE_ENERGY) >= opts.structureMinPercentFull
         }))
     }
     // Storage
