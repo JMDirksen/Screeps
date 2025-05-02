@@ -45,7 +45,7 @@ Creep.prototype.isFull = function () {
 Creep.prototype.getEnergy = function (opts = {}) {
     if (opts.fromStorage === undefined) opts.fromStorage = true
     if (opts.fromLinks === undefined) opts.fromLinks = true
-    if (opts.minAmount === undefined) opts.minAmount = 50
+    if (opts.minAmount === undefined) opts.minAmount = 25
     if (opts.preferredAmount === undefined) opts.preferredAmount = this.store.getFreeCapacity()
     if (opts.structureMinPercentFull === undefined) opts.structureMinPercentFull = 0
 
@@ -59,8 +59,8 @@ Creep.prototype.getEnergy = function (opts = {}) {
     if (opts.fromLinks) {
         energySources = energySources.concat(this.room.find(FIND_STRUCTURES, {
             filter: s => s.structureType == STRUCTURE_LINK
-            && s.store[RESOURCE_ENERGY] >= opts.minAmount
-            && s.store.getUsedPercentage(RESOURCE_ENERGY) >= opts.structureMinPercentFull
+                && s.store[RESOURCE_ENERGY] >= opts.minAmount
+                && s.store.getUsedPercentage(RESOURCE_ENERGY) >= opts.structureMinPercentFull
         }))
     }
     // Storage
@@ -82,6 +82,11 @@ Creep.prototype.getEnergy = function (opts = {}) {
     energySources = energySources.concat(this.room.find(FIND_DROPPED_RESOURCES, {
         filter: r => r.resourceType == RESOURCE_ENERGY && r.amount >= opts.minAmount
     }))
+
+    // Check nearby
+    let nearbyRange = 5
+    let nearbySources = _.filter(energySources, s => s.pos.inRangeTo(this.pos, nearbyRange))
+    if (nearbySources.length) energySources = nearbySources
 
     // Check for preferred amount
     if (opts.preferredAmount > opts.minAmount) {
