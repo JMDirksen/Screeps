@@ -1,6 +1,6 @@
 'use strict'
 
-// Load generic functions
+// Load global functions
 require('functions')
 
 // Load prototypes
@@ -10,6 +10,15 @@ require('p.roomposition')
 require('p.spawn')
 require('p.store')
 require('p.string')
+
+// Load structure modules
+var spawn = require('s.spawn')
+var tower = require('s.tower')
+var link = require('s.link')
+var observer = require('s.observer')
+
+// Load virtual modules
+var roadBuilder = require('v.roadBuilder')
 
 module.exports.loop = function () {
 
@@ -45,13 +54,13 @@ module.exports.loop = function () {
     }
 
     // Run structures
-    require('s.spawn')()
-    require('s.tower')()
-    require('s.link')()
-    require('s.observer')()
+    spawn()
+    tower()
+    link()
+    observer()
 
     // Run virtuals
-    require('v.roadBuilder')()
+    roadBuilder()
 
     // CPU usage monitoring
     const samples = 100
