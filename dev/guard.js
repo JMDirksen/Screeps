@@ -22,7 +22,8 @@ function run(creep) {
 
     // Get weakest hostile in guardBounds
     const room = creep.room
-    const guardBounds = room.spawn().memory.guardBounds
+    let guardBounds = [{ x: 0, y: 0 }, { x: 49, y: 49 }]
+    if (room.spawn()) guardBounds = room.spawn().memory.guardBounds
     const target = _.sortBy(room.findInBounds(FIND_HOSTILE_CREEPS, guardBounds, {
         filter: c => c.countParts([ATTACK, RANGED_ATTACK, HEAL])
     }), 'hits')[0]
