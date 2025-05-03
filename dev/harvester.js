@@ -16,9 +16,6 @@ function run(creep) {
     // Switch room
     if (creep.switchRoom()) return
 
-    // Renew
-    if (creep.renew()) return
-
     // Check if empty/full
     if (!creep.memory.harvest && creep.isEmpty()) {
         creep.memory.harvest = true

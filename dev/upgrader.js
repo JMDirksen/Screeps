@@ -13,9 +13,6 @@ function run(creep) {
     // Flee
     if(creep.flee()) return
 
-    // Renew
-    if (creep.renew()) return
-
     // Check if empty/full
     if (creep.memory.upgrade && creep.isEmpty()) {
         creep.memory.upgrade = false

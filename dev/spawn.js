@@ -24,7 +24,6 @@ module.exports = function () {
         if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3
         // Structure settings
         if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null
-        if (spawn.memory.renewCreeps == undefined) spawn.memory.renewCreeps = false
         if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 50
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 10
         // Room settings
@@ -44,15 +43,6 @@ module.exports = function () {
 
         // Skip when spawning
         if (spawn.spawning) continue
-
-        // Renew nearby creeps
-        if (spawn.memory.renewCreeps) {
-            const renewCreeps = spawn.pos.findInRange(FIND_MY_CREEPS, 1, { filter: c => c.ticksToLive < 1490 })
-            if (renewCreeps.length) {
-                const renewCreep = _.sortBy(renewCreeps, 'ticksToLive')[0]
-                if (spawn.renewCreep(renewCreep) == OK) continue
-            }
-        }
 
         // Skip 9/10 ticks
         if (Game.time % 10) continue

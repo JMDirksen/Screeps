@@ -20,9 +20,6 @@ function run(creep) {
     // Switch room
     if (creep.switchRoom()) return
 
-    // Renew
-    if (creep.renew()) return
-
     // Idle
     if (!creep.room.countCreeps('guard')) creep.idle({ flagColor: COLOR_RED })
 

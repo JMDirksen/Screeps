@@ -20,9 +20,6 @@ function run(creep) {
     // Switch room
     if (creep.switchRoom()) return
 
-    // Renew
-    if (creep.renew()) return
-
     // Get weakest hostile in guardBounds
     const room = creep.room
     const guardBounds = room.spawn().memory.guardBounds
