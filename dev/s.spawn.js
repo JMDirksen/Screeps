@@ -103,7 +103,7 @@ module.exports = function () {
             else if (spawn.energyPossible(1200)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, HEAL, HEAL, HEAL, HEAL] }
             else if (spawn.energyPossible(600)) body = { tier: 2, parts: [MOVE, MOVE, HEAL, HEAL] }
             else if (spawn.energyPossible(300)) body = { tier: 1, parts: [MOVE, HEAL] }
-            if (spawn.buildCreep(type, body, { guardRoom: room.name }, 'GH')) continue
+            if (spawn.buildCreep(type, body, { guardRoom: room.name, dontFlee: true }, 'GH')) continue
         }
 
         // Guard
@@ -120,7 +120,7 @@ module.exports = function () {
             else if (spawn.energyPossible(760)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK, HEAL] }
             else if (spawn.energyPossible(460)) body = { tier: 2, parts: [MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK] }
             else if (spawn.energyPossible(260)) body = { tier: 1, parts: [MOVE, MOVE, ATTACK, ATTACK] }
-            if (spawn.buildCreep(type, body, { guardRoom: room.name })) continue
+            if (spawn.buildCreep(type, body, { guardRoom: room.name, dontFlee: true })) continue
         }
 
         // Builder
@@ -195,7 +195,7 @@ module.exports = function () {
             else if (spawn.energyPossible(800)) body = { tier: 3, parts: [[4, MOVE], [4, RANGED_ATTACK]] }
             else if (spawn.energyPossible(400)) body = { tier: 2, parts: [[2, MOVE], [2, RANGED_ATTACK]] }
             else if (spawn.energyPossible(300)) body = { tier: 1, parts: [[1, MOVE], [1, RANGED_ATTACK]] }
-            if (spawn.buildCreep(type, body)) continue
+            if (spawn.buildCreep(type, body, { dontFlee: true })) continue
         }
 
         // Remote harvester
@@ -247,7 +247,7 @@ module.exports = function () {
                     else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
                     else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
                     else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
-                    if (spawn.buildCreep(type, body, { remoteRoom: remoteHarvestRoom }, 'RH')) continue spawnloop
+                    if (spawn.buildCreep(type, body, { remoteRoom: remoteHarvestRoom, fleeRange: 15 }, 'RH')) continue spawnloop
                 }
 
             }
@@ -297,7 +297,7 @@ module.exports = function () {
                 if (spawn.energyPossible(900)) body = { tier: 2, parts: [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE] };
             }
 
-            if (body && spawn.buildCreep(type, body, { room: spawn.memory.claimRoom })) continue;
+            if (body && spawn.buildCreep(type, body, { room: spawn.memory.claimRoom, dontFlee: true })) continue;
         }
 
     }

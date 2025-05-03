@@ -1,18 +1,6 @@
 'use strict'
 
-module.exports = function () {
-    for (const creepName in Game.creeps) {
-        const creep = Game.creeps[creepName]
-        if (creep.memory.type == 'upgrader') run(creep)
-    }
-};
-
-function run(creep) {
-    if (creep.spawning) return
-
-    // Flee
-    if(creep.flee()) return
-
+module.exports = function (creep) {
     // Check if empty/full
     if (creep.memory.upgrade && creep.isEmpty()) {
         creep.memory.upgrade = false

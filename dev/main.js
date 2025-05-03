@@ -4,15 +4,15 @@
 require('functions')
 
 // Load prototypes
-require('creep.prototype')
-require('room.prototype')
-require('roomposition.prototype')
-require('spawn.prototype')
-require('store.prototype')
-require('string.prototype')
+require('p.creep')
+require('p.room')
+require('p.roomposition')
+require('p.spawn')
+require('p.store')
+require('p.string')
 
 module.exports.loop = function () {
-    
+
     // Generate pixel
     if (Memory.generatePixels == undefined) Memory.generatePixels = true
     if (Memory.generatePixels && Game.cpu.bucket >= 10000) {
@@ -35,27 +35,23 @@ module.exports.loop = function () {
         }
     }
 
-    // Run creep types
-    require('harvester')()
-    require('remoteHarvester')()
-    require('upgrader')()
-    require('builder')()
-    require('transporter')()
-    require('repairer')()
-    require('wallRepairer')()
-    require('attacker')()
-    require('claimer')()
-    require('guard')()
-    require('guardHealer')()
+    // Run creeps
+    for (const creepName in Game.creeps) {
+        const creep = Game.creeps[creepName]
+        if (creep.spawning) continue
+        if (creep.flee()) continue
+        if (creep.switchRoom()) continue
+        require('c.' + creep.memory.type)(creep)
+    }
 
     // Run structures
-    require('spawn')()
-    require('tower')()
-    require('link')()
-    require('observer')()
+    require('s.spawn')()
+    require('s.tower')()
+    require('s.link')()
+    require('s.observer')()
 
-    // Run other
-    require('roadBuilder')()
+    // Run virtuals
+    require('v.roadBuilder')()
 
     // CPU usage monitoring
     const samples = 100

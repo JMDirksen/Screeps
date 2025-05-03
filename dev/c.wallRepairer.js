@@ -1,19 +1,4 @@
-module.exports = function () {
-    for (const creepName in Game.creeps) {
-        const creep = Game.creeps[creepName]
-        if (creep.memory.type == 'wallRepairer') run(creep)
-    }
-};
-
-function run(creep) {
-    if (creep.spawning) return
-
-    // Flee
-    if (creep.flee(3)) return
-
-    // Switch room
-    if (creep.switchRoom()) return
-
+module.exports = function (creep) {
     // Get job
     if (!creep.memory.job) {
         creep.memory.job = getRepairJob(creep)

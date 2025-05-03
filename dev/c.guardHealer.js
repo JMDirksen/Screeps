@@ -1,23 +1,12 @@
 'use strict'
 
-module.exports = function () {
-    for (const creepName in Game.creeps) {
-        const creep = Game.creeps[creepName]
-        if (creep.memory.type == 'guardHealer') run(creep)
-    }
-}
-
-function run(creep) {
-    if (creep.spawning) return
-
+module.exports = function (creep) {
     // Back to guard room
     if (creep.room.name != creep.memory.guardRoom) {
         creep.memory.room = creep.memory.guardRoom
         creep.say('🔙')
+        if (creep.switchRoom()) return
     }
-
-    // Switch room
-    if (creep.switchRoom()) return
 
     // Idle
     if (!creep.room.countCreeps('guard')) creep.idle({ flagColor: COLOR_RED })

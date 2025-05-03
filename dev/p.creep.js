@@ -182,7 +182,8 @@ Creep.prototype.switchRoom = function () {
 }
 
 // Flee
-Creep.prototype.flee = function (range = 4) {
+Creep.prototype.flee = function () {
+    if (this.memory.dontFlee) return false
     let hostiles = 0
     if (!this.memory.flee) {
         // Check if on rampart
@@ -191,6 +192,7 @@ Creep.prototype.flee = function (range = 4) {
         ).length) return false
 
         // Check for hostiles
+        let range = this.memory.fleeRange || 4
         hostiles = this.pos.findInRange(FIND_HOSTILE_CREEPS, range, {
             filter: c => c.countActiveParts([ATTACK, RANGED_ATTACK])
         }).length

@@ -1,15 +1,6 @@
 'use strict'
 
-module.exports = function () {
-    for (const creepName in Game.creeps) {
-        const creep = Game.creeps[creepName];
-        if (creep.memory.type == 'claimer') run(creep);
-    }
-};
-
-function run(creep) {
-    if (creep.spawning) return
-
+module.exports = function (creep) {
     // Got shot at
     if (creep.hits < creep.hitsMax) {
         const spawnRoomSpawn = Game.rooms[creep.memory.spawnRoom].spawn()
@@ -20,11 +11,6 @@ function run(creep) {
             console.log(msg)
             Game.notify(msg)
         }
-    }
-
-    // Switch room
-    if (creep.switchRoom()) {
-        return;
     }
 
     // Claim

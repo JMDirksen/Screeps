@@ -1,14 +1,6 @@
 'use strict'
 
-module.exports = function () {
-    for (const creepName in Game.creeps) {
-        const creep = Game.creeps[creepName];
-        if (creep.memory.type == 'attacker') run(creep);
-    }
-};
-
-function run(creep) {
-    if (creep.spawning) return
+module.exports = function (creep) {
     const spawn = Game.rooms[creep.memory.spawnRoom].spawn()
     const attackPause = spawn.memory.attackPause
     const attackRoom = spawn.memory.attackRoom
@@ -18,8 +10,10 @@ function run(creep) {
     if (attackPause) return creep.idle()
 
     // Switch room
-    if (creep.room.name != attackRoom) creep.memory.room = attackRoom
-    if (creep.switchRoom()) return
+    if (creep.room.name != attackRoom) {
+        creep.memory.room = attackRoom
+        if (creep.switchRoom()) return
+    }
 
     // Attack id
     let target = Game.getObjectById(attackId)
