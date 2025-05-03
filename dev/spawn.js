@@ -37,6 +37,7 @@ module.exports = function () {
         // Statistics
         if (spawn.memory.roomEnergyProduction == undefined) spawn.memory.roomEnergyProduction = room.energyProduction()
         if (spawn.memory.roomSourceSpots == undefined) spawn.memory.roomSourceSpots = room.sourceSpots()
+        if (!Game.time % 100) spawn.memory.wallsStrength = room.wallsStrength()
 
         // Skip when spawning
         if (spawn.spawning) continue
