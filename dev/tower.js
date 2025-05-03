@@ -18,7 +18,7 @@ module.exports = function () {
 
 			// Weakest hostile in range/bounds
 			const hostile = _.sortBy(tower.pos.findInRange(FIND_HOSTILE_CREEPS, attackRange, {
-				filter: c => c.countParts([ATTACK, RANGED_ATTACK, HEAL])
+				filter: c => c.countParts([WORK, ATTACK, RANGED_ATTACK, HEAL])
 					&& c.pos.isInBounds(guardBounds)
 			}), 'hits')[0]
 

@@ -24,7 +24,7 @@ function run(creep) {
     let guardBounds = [{ x: 0, y: 0 }, { x: 49, y: 49 }]
     if (room.spawn()) guardBounds = room.spawn().memory.guardBounds
     const target = _.sortBy(room.findInBounds(FIND_HOSTILE_CREEPS, guardBounds, {
-        filter: c => c.countParts([ATTACK, RANGED_ATTACK, HEAL])
+        filter: c => c.countParts([WORK, ATTACK, RANGED_ATTACK, HEAL])
     }), 'hits')[0]
 
     // Attack
