@@ -58,7 +58,7 @@ function run(creep) {
 }
 
 function getRepairJob(creep) {
-    const wallsMaxHits = creep.room.spawn().memory.wallsMaxHits
+    const wallsMaxHits = creep.room.wallsStrength()
 
     // Prioritize decaying ramparts
     const prioRamparts = creep.room.find(FIND_STRUCTURES, {

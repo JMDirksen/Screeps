@@ -101,3 +101,17 @@ Room.prototype.linksUsedPercentage = function () {
     let total = _.sum(links, s => s.store.getCapacity(RESOURCE_ENERGY))
     return Math.round(used / total * 100)
 }
+
+Room.prototype.controllerLevel = function () {
+    return round(
+        this.controller.level + this.controller.progress / this.controller.progressTotal,
+        1
+    )
+}
+
+Room.prototype.wallsStrength = function () {
+    let lvl1Hits = 100000   // 100K
+    let lvl8Hits = 1000000  //   1M
+    let slope = (lvl8Hits - lvl1Hits) / 7
+    return Math.round(this.controllerLevel() * slope + (lvl1Hits - slope))
+}

@@ -28,9 +28,6 @@ module.exports = function () {
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 10
         // Room settings
         spawn.memory.guardBounds = room.getFlagBounds(COLOR_GREY) || [{ x: 0, y: 0 }, { x: 49, y: 49 }]
-        if (spawn.memory.wallsMaxHits == undefined) spawn.memory.wallsMaxHits = 500000
-        if (controllerLevel < 8) spawn.memory.wallsMaxHits = controllerLevel * 100000
-        else spawn.memory.wallsMaxHits = 3000000
         // Instructions
         if (spawn.memory.attackId == undefined) spawn.memory.attackId = null
         if (spawn.memory.attackRoom == undefined) spawn.memory.attackRoom = null
@@ -165,7 +162,7 @@ module.exports = function () {
         const wallRepairs = room.find(FIND_STRUCTURES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
-                && s.hits < spawn.memory.wallsMaxHits
+                && s.hits < room.wallsStrength()
         }).length
         if (room.getUsedCapacity() < 1000) wallRepairersNeeded = 1
         //debug(`wallBuilds + wallRepairs = ${wallBuilds + wallRepairs}`)

@@ -32,3 +32,8 @@ global.debug = function (text) {
 global.creepsWithJob = function (creepType, jobId) {
     return _.filter(Game.creeps, c => c.memory.type == creepType && c.memory.job == jobId)
 }
+
+global.round = function (value, precision) {
+    var multiplier = Math.pow(10, precision || 0)
+    return Math.round(value * multiplier) / multiplier
+}
