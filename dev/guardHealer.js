@@ -14,7 +14,6 @@ function run(creep) {
     if (creep.room.name != creep.memory.guardRoom) {
         creep.memory.room = creep.memory.guardRoom
         creep.say('🔙')
-        info('🔙 ' + creep.room.name + ' ' + creep.name + ' going back to guard room')
     }
 
     // Switch room
