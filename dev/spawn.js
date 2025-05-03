@@ -8,6 +8,7 @@ module.exports = function () {
         const spawn = Game.spawns[spawnName]
         const room = spawn.room
         const controllerLevel = room.controller.level
+        const energyBuffer = controllerLevel * 1000
 
         // Setup spawn memory defaults
         // Creep counts
@@ -46,6 +47,7 @@ module.exports = function () {
         if (Game.time % 10) continue
 
         // Max energy per RCL: 1:300 2:550 3:800 4:1300 5:1800 6:2300 7:5300 8:12300
+        // MOVE:50 WORK:100 CARRY:50 ATTACK:80 RANGED_ATTACK:150 HEAL:250 CLAIM:600 TOUGH:10
 
         // Harvester
         let roomHarvesters = room.find(FIND_MY_CREEPS, { filter: c => c.memory.type == 'harvester' })
@@ -79,7 +81,7 @@ module.exports = function () {
         if (room.getUsedCapacityPercentage() >= 75) upgradersNeeded += 2
         if (room.getUsedCapacityPercentage() >= 95) upgradersNeeded += 2
         if (controllerLevel == 8) upgradersNeeded = 1
-        else if (room.getUsedCapacity() < 1000 * controllerLevel) upgradersNeeded = 1
+        else if (room.getUsedCapacity() < energyBuffer) upgradersNeeded = 1
         else if (room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
         if (room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader'
@@ -165,7 +167,7 @@ module.exports = function () {
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
                 && s.hits < room.wallsStrength()
         }).length
-        if (room.getUsedCapacity() < 1000) wallRepairersNeeded = 1
+        if (room.getUsedCapacity() < energyBuffer) wallRepairersNeeded = 1
         //debug(`wallBuilds + wallRepairs = ${wallBuilds + wallRepairs}`)
         if (wallBuilds + wallRepairs < 5) wallRepairersNeeded = 1
         if ((wallRepairs || wallBuilds) && room.countCreeps('wallRepairer') < wallRepairersNeeded) {
@@ -180,14 +182,19 @@ module.exports = function () {
 
         // Attacker
         const attackersNeeded = spawn.memory.attackers
-        if (spawn.memory.attackRoom && room.countCreeps('attackers') < attackersNeeded) {
+        const countAttackers = _.filter(Game.creeps, c =>
+            c.memory.type == 'attacker'
+            && c.memory.spawnRoom == room.name
+        ).length
+        if (spawn.memory.attackRoom && countAttackers < attackersNeeded) {
             const type = 'attacker'
             let body = null
-            if (spawn.energyPossible(1740)) body = { tier: 5, parts: [TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL] }
-            else if (spawn.energyPossible(1290)) body = { tier: 4, parts: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL] }
-            else if (spawn.energyPossible(760)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK, HEAL] }
-            else if (spawn.energyPossible(460)) body = { tier: 2, parts: [MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK] }
-            else if (spawn.energyPossible(260)) body = { tier: 1, parts: [MOVE, MOVE, ATTACK, ATTACK] }
+            if (spawn.energyPossible(2300)) body = { tier: 6, parts: [[10, MOVE], [7, RANGED_ATTACK], [3, HEAL]] }
+            else if (spawn.energyPossible(1800)) body = { tier: 5, parts: [[8, MOVE], [6, RANGED_ATTACK], [2, HEAL]] }
+            else if (spawn.energyPossible(1300)) body = { tier: 4, parts: [[6, MOVE], [5, RANGED_ATTACK], [1, HEAL]] }
+            else if (spawn.energyPossible(800)) body = { tier: 3, parts: [[4, MOVE], [4, RANGED_ATTACK]] }
+            else if (spawn.energyPossible(400)) body = { tier: 2, parts: [[2, MOVE], [2, RANGED_ATTACK]] }
+            else if (spawn.energyPossible(300)) body = { tier: 1, parts: [[1, MOVE], [1, RANGED_ATTACK]] }
             if (spawn.buildCreep(type, body)) continue
         }
 
