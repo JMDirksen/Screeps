@@ -1,7 +1,9 @@
 'use strict'
 
 RoomPosition.prototype.lookForInDirection = function (direction, type) {
-    return this.getPosInDirection(direction).lookFor(type)
+    let pos = this.getPosInDirection(direction)
+    if (pos) return pos.lookFor(type)
+    else return false
 }
 
 RoomPosition.prototype.getPosInDirection = function (direction) {
