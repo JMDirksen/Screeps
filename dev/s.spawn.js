@@ -87,13 +87,7 @@ module.exports = function () {
         }
 
         // Upgrader
-        let upgradersNeeded = controllerLevel
-        if (room.getUsedCapacityPercentage() >= 75) upgradersNeeded += 2
-        if (room.getUsedCapacityPercentage() >= 95) upgradersNeeded += 2
-        if (controllerLevel == 8) upgradersNeeded = 1
-        else if (room.getUsedCapacity() < energyBuffer) upgradersNeeded = 1
-        else if (room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
-        if (room.countCreeps('upgrader') < upgradersNeeded) {
+        if (room.countCreeps('upgrader') < 1) {
             const type = 'upgrader'
             const bodies = [
                 { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
@@ -343,6 +337,22 @@ module.exports = function () {
 
             const memory = { room: spawn.memory.claimRoom, dontFlee: true }
             if (body && spawn.buildCreep(type, body, memory)) continue
+        }
+
+        // Extra upgraders
+        if (controllerLevel == 8) continue
+        else if (room.getUsedCapacity() < energyBuffer) continue
+        else if (room.find(FIND_MY_CONSTRUCTION_SITES).length) continue
+        if (room.countCreeps('upgrader') < controllerLevel) {
+            const type = 'upgrader'
+            const bodies = [
+                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
+                { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
+                { tier: 3, parts: [[3, WORK], [3, CARRY], [6, MOVE]] }  // 750
+            ]
+            let body = null
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
+            if (spawn.buildCreep(type, body)) continue
         }
 
     }
