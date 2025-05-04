@@ -181,7 +181,6 @@ module.exports = function () {
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
                 && s.hits < room.wallsStrength()
         }).length
-        if (room.getUsedCapacity() < energyBuffer) need = 1
         if (wallBuilds + wallRepairs < 5) need = 1
         if ((wallRepairs || wallBuilds) && room.countCreeps('wallRepairer') < need) {
             const type = 'wallRepairer'
