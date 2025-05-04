@@ -14,7 +14,7 @@ StructureSpawn.prototype.buildCreep = function (type, body, memory = null, overr
     if (!body) return false
     const name = this.generateCreepName(type, body.tier, overrideName)
     const memMerge = Object.assign({ type: type, spawnRoom: this.room.name }, memory)
-    const r = this.spawnCreep(expandBody(body.parts), name, { memory: memMerge })
+    const r = this.spawnCreep(expandParts(body.parts), name, { memory: memMerge })
     if (r == OK) {
         let extraInfo = ''
         if (memory) extraInfo = JSON.stringify(memory)
@@ -25,18 +25,12 @@ StructureSpawn.prototype.buildCreep = function (type, body, memory = null, overr
     return false
 }
 
-StructureSpawn.prototype.energyPossible = function (amount) {
-    if (amount <= 300) return true
-    if (this.room.energyCapacityAvailable < amount) return false
+StructureSpawn.prototype.hasCapacity = function (body) {
+    let parts = expandParts(body.parts)
+    let cost = partsCost(parts)
+    if (cost <= 300) return true
+    if (this.room.energyCapacityAvailable < cost) return false
     if (!this.room.countCreeps('harvester')) return false
     if (!this.room.countCreeps('transporter')) return false
     return true
-}
-
-function expandBody(parts) {
-    // Converts [[3, MOVE], [2, ATTACK], RANGED_ATTACK] to [MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK]
-    return [].concat(...parts.map(p => {
-        if (Array.isArray(p)) return Array(p[0]).fill(p[1])
-        else return p
-    }))
 }

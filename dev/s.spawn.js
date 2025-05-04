@@ -8,7 +8,7 @@ module.exports = function () {
         const spawn = Game.spawns[spawnName]
         const room = spawn.room
         const controllerLevel = room.controller.level
-        const energyBuffer = controllerLevel * 1000
+        const energyBuffer = (controllerLevel + 1) * 1000
 
         // Setup spawn memory defaults
         // Creep counts
@@ -28,7 +28,8 @@ module.exports = function () {
         if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 50
         if (spawn.memory.towerHealRange == undefined) spawn.memory.towerHealRange = 10
         // Room settings
-        spawn.memory.guardBounds = room.getFlagBounds(COLOR_GREY) || [{ x: 0, y: 0 }, { x: 49, y: 49 }]
+        spawn.memory.guardBounds = room.getFlagBounds(COLOR_GREY)
+            || [{ x: 0, y: 0 }, { x: 49, y: 49 }]
         // Instructions
         if (spawn.memory.attackId == undefined) spawn.memory.attackId = null
         if (spawn.memory.attackRoom == undefined) spawn.memory.attackRoom = null
@@ -36,8 +37,10 @@ module.exports = function () {
         if (spawn.memory.claimRoom == undefined) spawn.memory.claimRoom = null
         if (spawn.memory.remoteHarvestRooms == undefined) spawn.memory.remoteHarvestRooms = null
         // Statistics
-        if (spawn.memory.roomEnergyProduction == undefined) spawn.memory.roomEnergyProduction = room.energyProduction()
-        if (spawn.memory.roomSourceSpots == undefined) spawn.memory.roomSourceSpots = room.sourceSpots()
+        if (spawn.memory.roomEnergyProduction == undefined)
+            spawn.memory.roomEnergyProduction = room.energyProduction()
+        if (spawn.memory.roomSourceSpots == undefined)
+            spawn.memory.roomSourceSpots = room.sourceSpots()
         if (!Game.time % 100) spawn.memory.wallsStrength = room.wallsStrength()
 
         // Skip when spawning
@@ -50,33 +53,40 @@ module.exports = function () {
         // MOVE:50 WORK:100 CARRY:50 ATTACK:80 RANGED_ATTACK:150 HEAL:250 CLAIM:600 TOUGH:10
 
         // Harvester
-        let roomHarvesters = room.find(FIND_MY_CREEPS, { filter: c => c.memory.type == 'harvester' })
+        let roomHarvesters = room.find(FIND_MY_CREEPS, {
+            filter: c => c.memory.type == 'harvester'
+        })
         let energyHarvesting = 0
-        roomHarvesters.forEach(c => { energyHarvesting += c.getActiveBodyparts(WORK) * 2 })
-        if (energyHarvesting < spawn.memory.roomEnergyProduction && roomHarvesters.length < spawn.memory.roomSourceSpots) {
-            const type = 'harvester';
-            let body = null;
-            //if (spawn.energyPossible(1300)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            if (spawn.energyPossible(700)) body = { tier: 3, parts: [WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(550)) body = { tier: 2, parts: [WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
-            if (spawn.buildCreep(type, body)) continue;
+        roomHarvesters.forEach(c => energyHarvesting += c.getActiveBodyparts(WORK) * 2)
+        let roomEnergyProduction = spawn.memory.roomEnergyProduction
+        let roomSourceSpots = spawn.memory.roomSourceSpots
+        if (energyHarvesting < roomEnergyProduction && roomHarvesters.length < roomSourceSpots) {
+            const type = 'harvester'
+            const bodies = [
+                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },      // 250
+                { tier: 2, parts: [[3, WORK], CARRY, [4, MOVE]] }, // 550
+                { tier: 3, parts: [[4, WORK], CARRY, [5, MOVE]] }  // 700
+            ]
+            let body = null
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
+            if (spawn.buildCreep(type, body)) continue
         }
 
         // Transporter
         const transportersNeeded = spawn.memory.transporters
         if (room.countCreeps('transporter') < transportersNeeded) {
-            const type = 'transporter';
-            let body = null;
-            //if (spawn.energyPossible(1300)) body = { tier: 4, parts: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            if (spawn.energyPossible(800)) body = { tier: 3, parts: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(300)) body = { tier: 1, parts: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE] };
-            if (spawn.buildCreep(type, body)) continue;
+            const type = 'transporter'
+            const bodies = [
+                { tier: 1, parts: [[3, CARRY], [3, MOVE]] }, // 300
+                { tier: 2, parts: [[5, CARRY], [5, MOVE]] }, // 500
+                { tier: 3, parts: [[8, CARRY], [8, MOVE]] }  // 800
+            ]
+            let body = null
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
+            if (spawn.buildCreep(type, body)) continue
         }
 
         // Upgrader
-        //debug(`${room.getUsedCapacity()} < ${500 * controllerLevel}`)
         let upgradersNeeded = controllerLevel
         if (room.getUsedCapacityPercentage() >= 75) upgradersNeeded += 2
         if (room.getUsedCapacityPercentage() >= 95) upgradersNeeded += 2
@@ -85,11 +95,13 @@ module.exports = function () {
         else if (room.find(FIND_MY_CONSTRUCTION_SITES).length) upgradersNeeded = 1
         if (room.countCreeps('upgrader') < upgradersNeeded) {
             const type = 'upgrader'
+            const bodies = [
+                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
+                { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
+                { tier: 3, parts: [[3, WORK], [3, CARRY], [6, MOVE]] }  // 750
+            ]
             let body = null
-            //if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] }
-            if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] }
-            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] }
-            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] }
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
             if (spawn.buildCreep(type, body)) continue
         }
 
@@ -97,12 +109,15 @@ module.exports = function () {
         let guardHealersNeeded = spawn.memory.guardHealers
         if (room.countCreeps('guardHealer') < guardHealersNeeded) {
             const type = 'guardHealer'
+            const bodies = [
+                { tier: 1, parts: [MOVE, HEAL] },           // 300
+                { tier: 2, parts: [[2, MOVE], [2, HEAL]] }, // 600
+                { tier: 3, parts: [[4, MOVE], [4, HEAL]] }, // 1200
+                { tier: 4, parts: [[5, MOVE], [5, HEAL]] }, // 1500
+                { tier: 5, parts: [[6, MOVE], [6, HEAL]] }  // 1800
+            ]
             let body = null
-            if (spawn.energyPossible(1800)) body = { tier: 5, parts: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, HEAL, HEAL, HEAL, HEAL, HEAL, HEAL] }
-            else if (spawn.energyPossible(1500)) body = { tier: 4, parts: [MOVE, MOVE, MOVE, MOVE, MOVE, HEAL, HEAL, HEAL, HEAL, HEAL] }
-            else if (spawn.energyPossible(1200)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, HEAL, HEAL, HEAL, HEAL] }
-            else if (spawn.energyPossible(600)) body = { tier: 2, parts: [MOVE, MOVE, HEAL, HEAL] }
-            else if (spawn.energyPossible(300)) body = { tier: 1, parts: [MOVE, HEAL] }
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
             if (spawn.buildCreep(type, body, { guardRoom: room.name, dontFlee: true }, 'GH')) continue
         }
 
@@ -114,12 +129,15 @@ module.exports = function () {
         }).length) guardsNeeded += 1
         if (room.countCreeps('guard') < guardsNeeded) {
             const type = 'guard'
+            const bodies = [
+                { tier: 1, parts: [[2, MOVE], [2, ATTACK]] },                                       // 260
+                { tier: 2, parts: [[3, MOVE], [2, ATTACK], RANGED_ATTACK] },                        // 460
+                { tier: 3, parts: [[4, MOVE], [2, ATTACK], RANGED_ATTACK, HEAL] },                  // 760
+                { tier: 4, parts: [[7, MOVE], [3, ATTACK], [3, RANGED_ATTACK], HEAL] },             // 1290
+                { tier: 5, parts: [[2, TOUGH], [11, MOVE], [4, ATTACK], [4, RANGED_ATTACK], HEAL] } // 1740
+            ]
             let body = null
-            if (spawn.energyPossible(1740)) body = { tier: 5, parts: [TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL] }
-            else if (spawn.energyPossible(1290)) body = { tier: 4, parts: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL] }
-            else if (spawn.energyPossible(760)) body = { tier: 3, parts: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK, HEAL] }
-            else if (spawn.energyPossible(460)) body = { tier: 2, parts: [MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK] }
-            else if (spawn.energyPossible(260)) body = { tier: 1, parts: [MOVE, MOVE, ATTACK, ATTACK] }
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
             if (spawn.buildCreep(type, body, { guardRoom: room.name, dontFlee: true })) continue
         }
 
@@ -130,34 +148,39 @@ module.exports = function () {
             filter: s => !s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
         }).length
         if (sites && room.countCreeps('builder') < buildersNeeded) {
-            const type = 'builder';
-            let body = null;
-            //if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
-            if (spawn.buildCreep(type, body)) continue;
+            const type = 'builder'
+            const bodies = [
+                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
+                { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
+                { tier: 3, parts: [[3, WORK], [3, CARRY], [6, MOVE]] }  // 750
+            ]
+            let body = null
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
+            if (spawn.buildCreep(type, body)) continue
         }
 
         // Repairer
         const repairersNeeded = spawn.memory.repairers
         const repairs = room.find(FIND_STRUCTURES, {
-            filter: s =>
-                s.structureType.isInList(STRUCTURE_ROAD, STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK, STRUCTURE_TOWER)
-                && s.hits < s.hitsMax
-        }).length;
+            filter: s => s.structureType.isInList(
+                STRUCTURE_ROAD, STRUCTURE_CONTAINER, STRUCTURE_STORAGE
+                , STRUCTURE_LINK, STRUCTURE_TOWER
+            ) && s.hits < s.hitsMax
+        }).length
         if (repairs && room.countCreeps('repairer') < repairersNeeded) {
-            const type = 'repairer';
-            let body = null;
-            //if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
-            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
-            if (spawn.buildCreep(type, body)) continue;
+            const type = 'repairer'
+            const bodies = [
+                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
+                { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
+                { tier: 3, parts: [[3, WORK], [3, CARRY], [6, MOVE]] }  // 750
+            ]
+            let body = null
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
+            if (spawn.buildCreep(type, body)) continue
         }
 
         // Wall repairer
-        let wallRepairersNeeded = spawn.memory.wallRepairers
+        let need = spawn.memory.wallRepairers
         const wallBuilds = room.find(FIND_MY_CONSTRUCTION_SITES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
@@ -167,16 +190,17 @@ module.exports = function () {
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
                 && s.hits < room.wallsStrength()
         }).length
-        if (room.getUsedCapacity() < energyBuffer) wallRepairersNeeded = 1
-        //debug(`wallBuilds + wallRepairs = ${wallBuilds + wallRepairs}`)
-        if (wallBuilds + wallRepairs < 5) wallRepairersNeeded = 1
-        if ((wallRepairs || wallBuilds) && room.countCreeps('wallRepairer') < wallRepairersNeeded) {
+        if (room.getUsedCapacity() < energyBuffer) need = 1
+        if (wallBuilds + wallRepairs < 5) need = 1
+        if ((wallRepairs || wallBuilds) && room.countCreeps('wallRepairer') < need) {
             const type = 'wallRepairer'
+            const bodies = [
+                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
+                { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
+                { tier: 3, parts: [[3, WORK], [3, CARRY], [6, MOVE]] }  // 750
+            ]
             let body = null
-            //if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] }
-            if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] }
-            else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] }
-            else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] }
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
             if (spawn.buildCreep(type, body)) continue
         }
 
@@ -188,13 +212,16 @@ module.exports = function () {
         ).length
         if (spawn.memory.attackRoom && countAttackers < attackersNeeded) {
             const type = 'attacker'
+            const bodies = [
+                { tier: 1, parts: [[1, MOVE], [1, RANGED_ATTACK]] },            // 300
+                { tier: 2, parts: [[2, MOVE], [2, RANGED_ATTACK]] },            // 400
+                { tier: 3, parts: [[4, MOVE], [4, RANGED_ATTACK]] },            // 800
+                { tier: 4, parts: [[6, MOVE], [5, RANGED_ATTACK], [1, HEAL]] }, // 1300
+                { tier: 5, parts: [[8, MOVE], [6, RANGED_ATTACK], [2, HEAL]] }, // 1800
+                { tier: 6, parts: [[10, MOVE], [7, RANGED_ATTACK], [3, HEAL]] } // 2300
+            ]
             let body = null
-            if (spawn.energyPossible(2300)) body = { tier: 6, parts: [[10, MOVE], [7, RANGED_ATTACK], [3, HEAL]] }
-            else if (spawn.energyPossible(1800)) body = { tier: 5, parts: [[8, MOVE], [6, RANGED_ATTACK], [2, HEAL]] }
-            else if (spawn.energyPossible(1300)) body = { tier: 4, parts: [[6, MOVE], [5, RANGED_ATTACK], [1, HEAL]] }
-            else if (spawn.energyPossible(800)) body = { tier: 3, parts: [[4, MOVE], [4, RANGED_ATTACK]] }
-            else if (spawn.energyPossible(400)) body = { tier: 2, parts: [[2, MOVE], [2, RANGED_ATTACK]] }
-            else if (spawn.energyPossible(300)) body = { tier: 1, parts: [[1, MOVE], [1, RANGED_ATTACK]] }
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
             if (spawn.buildCreep(type, body, { dontFlee: true })) continue
         }
 
@@ -218,7 +245,9 @@ module.exports = function () {
 
                 // Check for hostiles (visible remote room)
                 if (Game.rooms[remoteHarvestRoom] && Game.rooms[remoteHarvestRoom].hasDanger()) {
-                    info('⛔ ' + room.name + ' ' + Game.rooms[remoteHarvestRoom].name + ' has hostiles, not spawing remote harvester')
+                    let thisRoom = room.name
+                    let remoteRoom = remoteHarvestRoom
+                    info(`⛔ ${thisRoom} ${remoteRoom} has hostiles, not spawing remote harvester`)
                     continue
                 }
 
@@ -240,14 +269,21 @@ module.exports = function () {
                 }
 
                 // Spawn remote harvester
-                if (energyHarvesting < roomEnergyProduction && remoteHarvesters.length < sourceSpots) {
-                    const type = 'remoteHarvester';
-                    let body = null;
-                    if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                    else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                    else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
-                    else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
-                    if (spawn.buildCreep(type, body, { remoteRoom: remoteHarvestRoom, fleeRange: 15 }, 'RH')) continue spawnloop
+                if (
+                    energyHarvesting < roomEnergyProduction
+                    && remoteHarvesters.length < sourceSpots
+                ) {
+                    const type = 'remoteHarvester'
+                    const bodies = [
+                        { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
+                        { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
+                        { tier: 3, parts: [[3, WORK], [3, CARRY], [6, MOVE]] }, // 750
+                        { tier: 4, parts: [[5, WORK], [5, CARRY], [10, MOVE]] } // 1250
+                    ]
+                    let body = null
+                    bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
+                    const memory = { remoteRoom: remoteHarvestRoom, fleeRange: 15 }
+                    if (spawn.buildCreep(type, body, memory, 'RH')) continue spawnloop
                 }
 
             }
@@ -256,22 +292,28 @@ module.exports = function () {
         // Claimer
         const claimersNeeded = spawn.memory.claimers
         if (spawn.memory.claimRoom) {
-            const type = 'claimer';
-            const room = Game.rooms[spawn.memory.claimRoom];
-            let body = null;
+            const type = 'claimer'
+            const room = Game.rooms[spawn.memory.claimRoom]
+            const bodies = [
+                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
+                { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
+                { tier: 3, parts: [[3, WORK], [3, CARRY], [6, MOVE]] }, // 750
+                { tier: 4, parts: [[5, WORK], [5, CARRY], [10, MOVE]] } // 1250
+            ]
+            let body = null
 
             // Room visible
             if (room) {
 
                 // Check/stop if room is fully claimed (has owned spawn)
                 if (room.find(FIND_MY_SPAWNS).length) {
-                    spawn.memory.claimRoom = null;
-                    continue;
+                    spawn.memory.claimRoom = null
+                    continue
                 }
 
                 // Check max claimers
                 if (room.countCreeps('claimer') >= claimersNeeded) {
-                    continue;
+                    continue
                 }
 
                 // Check for danger
@@ -279,27 +321,27 @@ module.exports = function () {
 
                 // Claimer when room visible but controller not owned
                 if (!room.controller.my) {
-                    if (spawn.energyPossible(900)) body = { tier: 2, parts: [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE] };
+                    let b = { tier: 2, parts: [CLAIM, WORK, CARRY, [3, MOVE]] } // 900
+                    if (spawn.hasCapacity(b)) body = b
                 }
 
                 // Claimer supporter when room has no spawn yet
                 else {
-                    if (spawn.energyPossible(1250)) body = { tier: 4, parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                    else if (spawn.energyPossible(750)) body = { tier: 3, parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE] };
-                    else if (spawn.energyPossible(500)) body = { tier: 2, parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] };
-                    else if (spawn.energyPossible(250)) body = { tier: 1, parts: [WORK, CARRY, MOVE, MOVE] };
+                    bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
                 }
             }
 
             // Room not visible
             else {
                 // Claimer when room not visible (and thus controller not owned)
-                if (spawn.energyPossible(900)) body = { tier: 2, parts: [CLAIM, WORK, CARRY, MOVE, MOVE, MOVE] };
+                let b = { tier: 2, parts: [CLAIM, WORK, CARRY, [3, MOVE]] } // 900
+                if (spawn.hasCapacity(b)) body = b
             }
 
-            if (body && spawn.buildCreep(type, body, { room: spawn.memory.claimRoom, dontFlee: true })) continue;
+            const memory = { room: spawn.memory.claimRoom, dontFlee: true }
+            if (body && spawn.buildCreep(type, body, memory)) continue
         }
 
     }
 
-};
+}

@@ -37,3 +37,29 @@ global.round = function (value, precision) {
     var multiplier = Math.pow(10, precision || 0)
     return Math.round(value * multiplier) / multiplier
 }
+
+global.expandParts = function (parts) {
+    // Converts [[3, MOVE], [2, ATTACK], RANGED_ATTACK] to [MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK]
+    if (!parts || !parts.length) return parts
+    return [].concat(...parts.map(p => {
+        if (Array.isArray(p)) return Array(p[0]).fill(p[1])
+        else return p
+    }))
+}
+
+global.partsCost = function (parts) {
+    if (!parts || !parts.length) return 0
+    parts = expandParts(parts)
+    let cost = 0
+    parts.forEach(p => {
+        if (p == MOVE) cost += 50
+        else if (p == WORK) cost += 100
+        else if (p == CARRY) cost += 50
+        else if (p == ATTACK) cost += 80
+        else if (p == RANGED_ATTACK) cost += 150
+        else if (p == HEAL) cost += 250
+        else if (p == CLAIM) cost += 600
+        else if (p == TOUGH) cost += 10
+    })
+    return cost
+}

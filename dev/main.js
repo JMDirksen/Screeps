@@ -33,7 +33,8 @@ module.exports.loop = function () {
     // Clear memory
     for (const name in Memory.creeps) {
         if (!Game.creeps[name]) {
-            info('🪦 ' + name + ' died ' + JSON.stringify(_.omit(Memory.creeps[name], ['_move', 'path', 'timer', 'build', 'harvest'])))
+            let omit = ['_move', 'path', 'timer', 'build', 'harvest', 'type']
+            info('🪦 ' + name + ' died ' + JSON.stringify(_.omit(Memory.creeps[name], omit)))
             delete Memory.creeps[name]
         }
     }
@@ -67,6 +68,6 @@ module.exports.loop = function () {
     if (Memory.cpuAvg == undefined) Memory.cpuAvg = Game.cpu.getUsed()
     Memory.cpuAvg = ((samples - 1) * Memory.cpuAvg + Game.cpu.getUsed()) / samples
     Memory.cpuAvgPct = Math.round(Memory.cpuAvg / Game.cpu.limit * 100) + '%'
-    if (!(Game.time % 10) && Memory.cpuAvgPct >= 95) info(`🔥 Average cpu usage: ${Memory.cpuAvgPct}%`)
+    if (!(Game.time % 10) && Memory.cpuAvgPct >= 95) info(`🔥 Average cpu: ${Memory.cpuAvgPct}%`)
 
 }
