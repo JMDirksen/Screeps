@@ -312,7 +312,10 @@ module.exports = function () {
                 }
 
                 // Check max claimers
-                if (room.countCreeps('claimer') >= claimersNeeded) {
+                let claimers = _.filter(Game.creeps, c =>
+                    c.memory.type == type && c.memory.spawnRoom == room.name
+                ).length
+                if (claimers >= claimersNeeded) {
                     continue
                 }
 
