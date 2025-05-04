@@ -1,7 +1,8 @@
 'use strict'
 
-// Load global functions
+// Load global modules
 require('functions')
+require('commands')
 
 // Load prototypes
 require('p.creep')

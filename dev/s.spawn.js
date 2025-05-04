@@ -20,9 +20,6 @@ module.exports = function () {
         if (spawn.memory.repairers == undefined) spawn.memory.repairers = 1
         if (spawn.memory.transporters == undefined) spawn.memory.transporters = 2
         if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = 2
-        // Creep settings
-        if (spawn.memory.guardRange == undefined) spawn.memory.guardRange = 25
-        if (spawn.memory.squadSize == undefined) spawn.memory.squadSize = 3
         // Structure settings
         if (spawn.memory.observeRoom == undefined) spawn.memory.observeRoom = null
         if (spawn.memory.towerAttackRange == undefined) spawn.memory.towerAttackRange = 50
