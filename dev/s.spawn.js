@@ -38,7 +38,13 @@ module.exports = function () {
             spawn.memory.roomEnergyProduction = room.energyProduction()
         if (spawn.memory.roomSourceSpots == undefined)
             spawn.memory.roomSourceSpots = room.sourceSpots()
-        if (!Game.time % 100) spawn.memory.wallsStrength = room.wallsStrength()
+        if (!(Game.time % 100)) {
+            let wallsStrength = room.wallsStrength()
+            if (spawn.memory.wallsStrength != wallsStrength) {
+                spawn.memory.wallsStrength = wallsStrength
+                info(`RCL: ${room.controllerLevel()} Build walls to: ${shortNumber(wallsStrength)}`)
+            }
+        }
 
         // Skip when spawning
         if (spawn.spawning) continue

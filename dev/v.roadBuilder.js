@@ -15,6 +15,7 @@ module.exports = function () {
             let roomPos = new RoomPosition(highestCount.x, highestCount.y, spawn.room.name)
             roomPos.createConstructionSite(STRUCTURE_ROAD)
             _.remove(list, i => i.x == highestCount.x && i.y == highestCount.y)
+            info(`🛣️ ${roomPos.roomName} Building road at ${roomPos.x},${roomPos.y}`)
         }
 
         // Decrease counts

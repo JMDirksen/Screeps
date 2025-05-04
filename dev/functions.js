@@ -63,3 +63,9 @@ global.partsCost = function (parts) {
     })
     return cost
 }
+
+global.shortNumber = function (number) {
+    if (number >= 10000000) return Math.round(number / 1000000) + 'M'
+    if (number >= 10000) return Math.round(number / 1000) + 'K'
+    return number
+}

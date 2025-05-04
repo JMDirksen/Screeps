@@ -34,7 +34,7 @@ module.exports = function () {
 
 			// Switch back and forth between attack/heal
 			if (hostile && (healCreep || healGuard)) {
-				if (!Game.time % 2) tower.attack(hostile)
+				if (!(Game.time % 2)) tower.attack(hostile)
 				else if (healGuard) tower.heal(healGuard)
 				else if (healCreep) tower.heal(healCreep)
 				continue
