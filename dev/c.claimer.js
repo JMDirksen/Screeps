@@ -7,9 +7,7 @@ module.exports = function (creep) {
         const claimRoom = spawnRoomSpawn.memory.claimRoom
         if (claimRoom) {
             spawnRoomSpawn.memory.claimRoom = null
-            const msg = 'Claimer ' + creep.name + ' got shot, claiming ' + claimRoom + ' canceled'
-            console.log(msg)
-            Game.notify(msg)
+            info(`❌ Claimer ${creep.name} got shot, claiming ${claimRoom} canceled`)
         }
     }
 
