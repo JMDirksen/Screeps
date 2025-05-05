@@ -99,7 +99,9 @@ module.exports = function () {
             ]
             let body = null
             bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
-            if (spawn.buildCreep(type, body)) continue
+            let buildCreep = spawn.buildCreep(type, body)
+            if (buildCreep == 1) spawn.memory.lastUpgraderBuilt = Game.time
+            if (buildCreep) continue
         }
 
         // Guard healer
@@ -342,10 +344,13 @@ module.exports = function () {
         }
 
         // Extra upgraders
-        if (controllerLevel == 8) continue
-        else if (room.getUsedCapacity() < energyBuffer) continue
-        else if (room.find(FIND_MY_CONSTRUCTION_SITES).length) continue
-        if (room.countCreeps('upgrader') < controllerLevel) {
+        let extraUpgraderNeeded = true
+        if (controllerLevel == 8) extraUpgraderNeeded = false
+        else if (room.getUsedCapacity() < energyBuffer) extraUpgraderNeeded = false
+        else if (room.find(FIND_MY_CONSTRUCTION_SITES).length) extraUpgraderNeeded = false
+        else if (Game.time - spawn.memory.lastUpgraderBuilt < 500) extraUpgraderNeeded = false
+        else if (room.countCreeps('upgrader') >= controllerLevel) extraUpgraderNeeded = false
+        if (extraUpgraderNeeded) {
             const type = 'upgrader'
             const bodies = [
                 { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
@@ -354,7 +359,9 @@ module.exports = function () {
             ]
             let body = null
             bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
-            if (spawn.buildCreep(type, body)) continue
+            let buildCreep = spawn.buildCreep(type, body)
+            if (buildCreep == 1) spawn.memory.lastUpgraderBuilt = Game.time
+            if (buildCreep) continue
         }
 
     }
