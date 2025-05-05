@@ -109,11 +109,12 @@ module.exports = function () {
         if (room.countCreeps('guardHealer') < guardHealersNeeded) {
             const type = 'guardHealer'
             const bodies = [
-                { tier: 1, parts: [MOVE, HEAL] },           // 300
-                { tier: 2, parts: [[2, MOVE], [2, HEAL]] }, // 600
-                { tier: 3, parts: [[4, MOVE], [4, HEAL]] }, // 1200
-                { tier: 4, parts: [[5, MOVE], [5, HEAL]] }, // 1500
-                { tier: 5, parts: [[6, MOVE], [6, HEAL]] }  // 1800
+                { tier: 1, parts: [MOVE, HEAL] },                       // 300
+                { tier: 2, parts: [[2, MOVE], [2, HEAL]] },             // 600
+                { tier: 3, parts: [[4, MOVE], [4, HEAL]] },             // 1200
+                { tier: 4, parts: [[5, MOVE], [5, HEAL]] },             // 1500
+                { tier: 5, parts: [[6, MOVE], [6, HEAL]] },             // 1800
+                { tier: 6, parts: [[3, TOUGH], [10, MOVE], [7, HEAL]] } // 2280
             ]
             let body = null
             bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
@@ -129,11 +130,12 @@ module.exports = function () {
         if (room.countCreeps('guard') < guardsNeeded) {
             const type = 'guard'
             const bodies = [
-                { tier: 1, parts: [[2, MOVE], [2, ATTACK]] },                                       // 260
-                { tier: 2, parts: [[3, MOVE], [2, ATTACK], RANGED_ATTACK] },                        // 460
-                { tier: 3, parts: [[4, MOVE], [2, ATTACK], RANGED_ATTACK, HEAL] },                  // 760
-                { tier: 4, parts: [[7, MOVE], [3, ATTACK], [3, RANGED_ATTACK], HEAL] },             // 1290
-                { tier: 5, parts: [[2, TOUGH], [11, MOVE], [4, ATTACK], [4, RANGED_ATTACK], HEAL] } // 1740
+                { tier: 1, parts: [[2, MOVE], [2, ATTACK]] },                                             // 260
+                { tier: 2, parts: [[3, MOVE], [2, ATTACK], RANGED_ATTACK] },                              // 460
+                { tier: 3, parts: [[4, MOVE], [2, ATTACK], RANGED_ATTACK, HEAL] },                        // 760
+                { tier: 4, parts: [[7, MOVE], [3, ATTACK], [3, RANGED_ATTACK], HEAL] },                   // 1290
+                { tier: 5, parts: [[2, TOUGH], [11, MOVE], [4, ATTACK], [4, RANGED_ATTACK], HEAL] },      // 1740
+                { tier: 6, parts: [[0, TOUGH], [12, MOVE], [5, ATTACK], [5, RANGED_ATTACK], [2, HEAL]] }  // 2250
             ]
             let body = null
             bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
