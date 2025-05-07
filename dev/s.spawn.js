@@ -350,7 +350,7 @@ module.exports = function () {
         if (controllerLevel == 8) extraUpgraderNeeded = false
         else if (room.getUsedCapacity() < energyBuffer) extraUpgraderNeeded = false
         else if (room.find(FIND_MY_CONSTRUCTION_SITES).length) extraUpgraderNeeded = false
-        else if (Game.time - spawn.memory.lastUpgraderBuilt < 500) extraUpgraderNeeded = false
+        else if (Game.time - spawn.memory.lastUpgraderBuilt < 200) extraUpgraderNeeded = false
         else if (room.countCreeps('upgrader') >= controllerLevel) extraUpgraderNeeded = false
         if (extraUpgraderNeeded) {
             const type = 'upgrader'
