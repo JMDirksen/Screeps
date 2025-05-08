@@ -7,8 +7,8 @@ module.exports = function () {
     for (const spawnName in Game.spawns) {
         const spawn = Game.spawns[spawnName]
         const room = spawn.room
-        const controllerLevel = room.controller.level
-        const energyBuffer = (controllerLevel + 1) * 1000
+        const controllerLevel = room.controllerLevel
+        const energyBuffer = (controllerLevel * 2) * 1000
 
         // Setup spawn memory defaults
         // Creep counts
@@ -42,7 +42,7 @@ module.exports = function () {
             let wallsStrength = room.wallsStrength()
             if (spawn.memory.wallsStrength != wallsStrength) {
                 spawn.memory.wallsStrength = wallsStrength
-                info(`RCL: ${room.controllerLevel()} Build walls to: ${shortNumber(wallsStrength)}`)
+                info(`🔨 RCL ${room.controllerLevel()}, build walls to ${shortNumber(wallsStrength)} hits`)
             }
         }
 
