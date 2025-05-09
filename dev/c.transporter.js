@@ -88,7 +88,7 @@ function getTransportJob(creep) {
             filter: s => s.structureType == STRUCTURE_LINK
         })
         if (
-            link.store.getFreeCapacity(RESOURCE_ENERGY)
+            link && link.store.getFreeCapacity(RESOURCE_ENERGY)
             && !creepsWithJob('transporter', link.id).length
         ) return link.id
     }
