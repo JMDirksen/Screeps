@@ -42,7 +42,7 @@ module.exports = function () {
             let wallsStrength = room.wallsStrength()
             if (spawn.memory.wallsStrength != wallsStrength) {
                 spawn.memory.wallsStrength = wallsStrength
-                info(`🔨 RCL ${room.controllerLevel()}, build walls to ${shortNumber(wallsStrength)} hits`)
+                info(`🔨 RCL ${controllerLevel}, build walls to ${shortNumber(wallsStrength)} hits`)
             }
         }
 
