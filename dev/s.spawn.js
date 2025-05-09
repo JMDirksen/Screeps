@@ -7,7 +7,7 @@ module.exports = function () {
     for (const spawnName in Game.spawns) {
         const spawn = Game.spawns[spawnName]
         const room = spawn.room
-        const controllerLevel = room.controllerLevel
+        const controllerLevel = room.controllerLevel()
         const energyBuffer = (controllerLevel * 2) * 1000
 
         // Setup spawn memory defaults
