@@ -142,11 +142,14 @@ Creep.prototype.idle = function (opts = {}) {
         for (let i = 1; i <= 10; i++) {
             // Get random direction
             direction = Math.floor(Math.random() * 8) + 1
+            let pos = this.pos.getPosInDirection(direction)
+            // Check for non exit
+            if (pos.x < 1 || pos.x > 48 || pos.y < 1 || pos.y > 48) break
             // Check for plain or road
             if (
-                this.pos.lookForInDirection(direction, LOOK_TERRAIN)[0] == 'plain'
+                pos.lookFor(LOOK_TERRAIN)[0] == 'plain'
                 || _.filter(
-                    this.pos.lookForInDirection(direction, LOOK_STRUCTURES),
+                    pos.lookFor(LOOK_STRUCTURES),
                     s => s.structureType == STRUCTURE_ROAD
                 ).length
             ) break
