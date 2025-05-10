@@ -109,7 +109,7 @@ Room.prototype.controllerLevel = function () {
     )
 }
 
-Room.prototype.wallsStrength = function () {
+Room.prototype.wallStrength = function () {
     let lvl1Hits = 100000   // 100K
     let lvl8Hits = 1000000  //   1M
     let slope = (lvl8Hits - lvl1Hits) / 7

@@ -39,10 +39,10 @@ module.exports = function () {
         if (spawn.memory.roomSourceSpots == undefined)
             spawn.memory.roomSourceSpots = room.sourceSpots()
         if (!(Game.time % 100)) {
-            let wallsStrength = room.wallsStrength()
-            if (spawn.memory.wallsStrength != wallsStrength) {
-                spawn.memory.wallsStrength = wallsStrength
-                info(`🔨 RCL ${controllerLevel}, build walls to ${shortNumber(wallsStrength)} hits`)
+            let wallStrength = room.wallStrength()
+            if (spawn.memory.wallStrength != wallStrength) {
+                spawn.memory.wallStrength = wallStrength
+                info(`🔨 RCL ${controllerLevel}, build walls to ${shortNumber(wallStrength)} hits`)
             }
         }
 
@@ -189,7 +189,7 @@ module.exports = function () {
         const wallRepairs = room.find(FIND_STRUCTURES, {
             filter: s =>
                 s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
-                && s.hits < room.wallsStrength()
+                && s.hits < room.wallStrength()
         }).length
         if (wallBuilds + wallRepairs < 5) need = 1
         if ((wallRepairs || wallBuilds) && room.countCreeps('wallRepairer') < need) {
