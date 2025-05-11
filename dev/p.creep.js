@@ -143,6 +143,7 @@ Creep.prototype.idle = function (opts = {}) {
             // Get random direction
             direction = Math.floor(Math.random() * 8) + 1
             let pos = this.pos.getPosInDirection(direction)
+            if (!pos) continue
             // Check for non exit
             if (pos.x < 1 || pos.x > 48 || pos.y < 1 || pos.y > 48) continue
             // Check for plain or road
