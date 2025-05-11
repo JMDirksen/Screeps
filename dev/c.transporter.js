@@ -7,7 +7,7 @@ module.exports = function (creep) {
         creep.memory.job = false
         //debug(`${creep.name} empty`)
     }
-    if (!creep.memory.transport && creep.isFull()) {
+    if (!creep.memory.transport && !creep.isEmpty()) {
         creep.memory.transport = true
         //debug(`${creep.name} full`)
     }

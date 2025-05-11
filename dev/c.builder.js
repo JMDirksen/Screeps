@@ -5,7 +5,7 @@ module.exports = function (creep) {
     if (creep.memory.build && creep.isEmpty()) {
         creep.memory.build = false
     }
-    if (!creep.memory.build && creep.isFull()) {
+    if (!creep.memory.build && !creep.isEmpty()) {
         creep.memory.build = true
     }
 
@@ -27,7 +27,6 @@ module.exports = function (creep) {
 
     // Get energy
     else if (!creep.getEnergy()) {
-        if (creep.store[RESOURCE_ENERGY]) creep.memory.build = true
         creep.idle({ inPlace: true })
     }
 }

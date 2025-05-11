@@ -10,7 +10,7 @@ module.exports = function (creep) {
 
     // Get energy
     if (creep.memory.job == 'getEnergy') {
-        if (creep.isFull()) creep.memory.job = getRepairJob(creep)
+        if (!creep.isEmpty()) creep.memory.job = getRepairJob(creep)
         else if (!creep.getEnergy()) return creep.idle()
     }
 
