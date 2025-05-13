@@ -17,6 +17,7 @@ module.exports = function () {
         if (spawn.memory.claimers == undefined) spawn.memory.claimers = 3
         if (spawn.memory.guards == undefined) spawn.memory.guards = 2
         if (spawn.memory.guardHealers == undefined) spawn.memory.guardHealers = 1
+        if (spawn.memory.mineralharvesters == undefined) spawn.memory.mineralharvesters = 1
         if (spawn.memory.repairers == undefined) spawn.memory.repairers = 1
         if (spawn.memory.transporters == undefined) spawn.memory.transporters = 2
         if (spawn.memory.wallRepairers == undefined) spawn.memory.wallRepairers = 2
@@ -202,6 +203,20 @@ module.exports = function () {
             let body = null
             bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
             if (spawn.buildCreep(type, body)) continue
+        }
+
+        // Mineral harvester
+        if (room.countCreeps('mineralharvester') < spawn.memory.mineralharvesters) {
+            const type = 'mineralharvester'
+            const bodies = [
+                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },      // 250
+                { tier: 2, parts: [[3, WORK], CARRY, [4, MOVE]] }, // 550
+                { tier: 3, parts: [[4, WORK], CARRY, [5, MOVE]] }, // 700
+                { tier: 4, parts: [[5, WORK], CARRY, [6, MOVE]] }  // 850
+            ]
+            let body = null
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
+            if (spawn.buildCreep(type, body, null, 'MH')) continue
         }
 
         // Attacker
