@@ -32,7 +32,6 @@ module.exports = function (creep) {
         })
         if (storage) {
             const resource = Object.keys(creep.store)[0]
-            creep.say(resource)
             const r = creep.transfer(storage, resource)
             if (r == ERR_NOT_IN_RANGE) creep.goTo(storage, 1)
             return

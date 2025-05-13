@@ -206,13 +206,14 @@ module.exports = function () {
         }
 
         // Mineral harvester
-        if (room.countCreeps('mineralharvester') < spawn.memory.mineralharvesters) {
+        const extractors = room.find(FIND_MY_STRUCTURES, {
+            filter: { structureType: STRUCTURE_EXTRACTOR }
+        }).length
+        if (extractors && room.countCreeps('mineralharvester') < spawn.memory.mineralharvesters) {
             const type = 'mineralharvester'
             const bodies = [
-                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },      // 250
-                { tier: 2, parts: [[3, WORK], CARRY, [4, MOVE]] }, // 550
-                { tier: 3, parts: [[4, WORK], CARRY, [5, MOVE]] }, // 700
-                { tier: 4, parts: [[5, WORK], CARRY, [6, MOVE]] }  // 850
+                { tier: 1, parts: [[10, WORK], [3, CARRY], [13, MOVE]] }, // 1800
+                { tier: 2, parts: [[13, WORK], [3, CARRY], [16, MOVE]] }  // 2250
             ]
             let body = null
             bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
