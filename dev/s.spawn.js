@@ -207,7 +207,8 @@ module.exports = function () {
 
         // Mineral harvester
         const extractors = room.find(FIND_MY_STRUCTURES, {
-            filter: { structureType: STRUCTURE_EXTRACTOR }
+            filter: s => s.structureType == STRUCTURE_EXTRACTOR
+                && s.pos.lookFor(LOOK_MINERALS)[0].mineralAmount > 0
         }).length
         if (extractors && room.countCreeps('mineralharvester') < spawn.memory.mineralharvesters) {
             const type = 'mineralharvester'
