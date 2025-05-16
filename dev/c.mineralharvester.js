@@ -21,6 +21,7 @@ module.exports = function (creep) {
         else if (r == ERR_TIRED) return
         else if (r == ERR_INVALID_TARGET) creep.memory.harvest = false
         else if (r == OK) return
+        else if (r == ERR_NOT_ENOUGH_RESOURCES) return creep.idle()
         else creep.say(r)
     }
 
