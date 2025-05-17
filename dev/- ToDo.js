@@ -1,6 +1,6 @@
 /*
 
 [.] Attackers (room)
-[ ] Market code (terminal required)
+[.] Market code (terminal required)
 
 */

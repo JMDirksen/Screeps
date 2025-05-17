@@ -17,6 +17,7 @@ var spawn = require('s.spawn')
 var tower = require('s.tower')
 var link = require('s.link')
 var observer = require('s.observer')
+var terminal = require('s.terminal')
 
 // Load virtual modules
 var roadBuilder = require('v.roadBuilder')
@@ -60,6 +61,7 @@ module.exports.loop = function () {
     tower()
     link()
     observer()
+    terminal()
 
     // Run virtuals
     roadBuilder()
