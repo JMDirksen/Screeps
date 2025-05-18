@@ -27,14 +27,25 @@ module.exports = function (creep) {
 
     // Deliver
     else {
-        const storage = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        const resource = Object.keys(creep.store)[0]
+
+        // Terminal
+        let deliverTo = creep.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: s =>
-                s.structureType.isInList(STRUCTURE_STORAGE)
+                s.structureType == STRUCTURE_TERMINAL
+                && s.store.getFreeCapacity(resource) > 0
         })
-        if (storage) {
-            const resource = Object.keys(creep.store)[0]
-            const r = creep.transfer(storage, resource)
-            if (r == ERR_NOT_IN_RANGE) creep.goTo(storage, 1)
+        // Storage
+        if (!deliverTo) {
+            deliverTo = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: s =>
+                    s.structureType == STRUCTURE_STORAGE
+                    && s.store.getFreeCapacity(resource) > 0
+            })
+        }
+        if (deliverTo) {
+            const r = creep.transfer(deliverTo, resource)
+            if (r == ERR_NOT_IN_RANGE) creep.goTo(deliverTo, 1)
             return
         }
 
