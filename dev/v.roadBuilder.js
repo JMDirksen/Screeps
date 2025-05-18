@@ -5,6 +5,7 @@ module.exports = function () {
 
     for (const spawnName in Game.spawns) {
         const spawn = Game.spawns[spawnName]
+        if (spawn.memory.autoBuildRoadsList == undefined) spawn.memory.autoBuildRoadsList = []
         let list = spawn.memory.autoBuildRoadsList
 
         // Look for road to build
