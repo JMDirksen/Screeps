@@ -8,7 +8,7 @@ global.info = function (text) {
     // Stringify object
     if (typeof text === 'object') text = JSON.stringify(text)
     // Room links
-    text = text.replace(/(?:W|E)\d{1,2}(?:N|S)\d{1,2}/g, '<a href="#!/room/$&">$&</a>')
+    if (typeof text === 'string') text = text.replace(/(?:W|E)\d{1,2}(?:N|S)\d{1,2}/g, '<a href="#!/room/$&">$&</a>')
     // Game tick (short)
     let tick = Game.time.toString().slice(-3)
     // Prefix
@@ -21,7 +21,7 @@ global.debug = function (text) {
     // Stringify object
     if (typeof text === 'object') text = JSON.stringify(text)
     // Room links
-    text = text.replace(/(?:W|E)\d{1,2}(?:N|S)\d{1,2}/g, '<a href="#!/room/$&">$&</a>')
+    if (typeof text === 'string') text = text.replace(/(?:W|E)\d{1,2}(?:N|S)\d{1,2}/g, '<a href="#!/room/$&">$&</a>')
     // Game tick (short)
     let tick = Game.time.toString().slice(-3)
     // Prefix
