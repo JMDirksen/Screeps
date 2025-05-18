@@ -102,6 +102,16 @@ function getTransportJob(creep) {
     })
     if (towers.length) return _.sortBy(towers, t => t.store.getUsedCapacity(RESOURCE_ENERGY))[0].id
 
+    // Terminal
+    const terminal = creep.room.find(FIND_MY_STRUCTURES, {
+        filter: s =>
+            s.structureType == STRUCTURE_TERMINAL
+            && s.store.getFreeCapacity(RESOURCE_ENERGY)
+            && s.store.getUsedCapacity(RESOURCE_ENERGY) < 10000
+            && !creepsWithJob('transporter', s.id).length
+    })[0]
+    if (terminal) return terminal.id
+
     // Storage
     const storage = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: s =>
