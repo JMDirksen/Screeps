@@ -105,6 +105,24 @@ module.exports = function () {
             if (buildCreep) continue
         }
 
+        // Builder
+        let buildersNeeded = spawn.memory.builders
+        if (room.getUsedCapacity(RESOURCE_ENERGY, true) < 100) buildersNeeded = 0
+        const sites = room.find(FIND_MY_CONSTRUCTION_SITES, {
+            filter: s => !s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
+        }).length
+        if (sites && room.countCreeps('builder') < buildersNeeded) {
+            const type = 'builder'
+            const bodies = [
+                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
+                { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
+                { tier: 3, parts: [[3, WORK], [3, CARRY], [6, MOVE]] }  // 750
+            ]
+            let body = null
+            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
+            if (spawn.buildCreep(type, body)) continue
+        }
+
         // Guard healer
         let guardHealersNeeded = spawn.memory.guardHealers
         if (room.countCreeps('guardHealer') < guardHealersNeeded) {
@@ -141,24 +159,6 @@ module.exports = function () {
             let body = null
             bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
             if (spawn.buildCreep(type, body, { guardRoom: room.name, dontFlee: true })) continue
-        }
-
-        // Builder
-        let buildersNeeded = spawn.memory.builders
-        if (room.getUsedCapacity(RESOURCE_ENERGY, true) < 100) buildersNeeded = 0
-        const sites = room.find(FIND_MY_CONSTRUCTION_SITES, {
-            filter: s => !s.structureType.isInList(STRUCTURE_WALL, STRUCTURE_RAMPART)
-        }).length
-        if (sites && room.countCreeps('builder') < buildersNeeded) {
-            const type = 'builder'
-            const bodies = [
-                { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
-                { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
-                { tier: 3, parts: [[3, WORK], [3, CARRY], [6, MOVE]] }  // 750
-            ]
-            let body = null
-            bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
-            if (spawn.buildCreep(type, body)) continue
         }
 
         // Repairer
