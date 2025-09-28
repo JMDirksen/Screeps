@@ -7,6 +7,7 @@ module.exports = function () {
     for (const spawnName in Game.spawns) {
         const spawn = Game.spawns[spawnName]
         const room = spawn.room
+        const controller = room.controller
         const controllerLevel = room.controllerLevel()
         const energyBuffer = (controllerLevel * 2) * 1000
 
@@ -91,7 +92,10 @@ module.exports = function () {
         }
 
         // Upgrader
-        if (room.countCreeps('upgrader') < 1 && !(controller.level == 8 && controller.ticksToDowngrade > 5000)) {
+        if (
+            room.countCreeps('upgrader') < 1
+            && !(controller.level == 8 && controller.ticksToDowngrade > 5000)
+        ) {
             const type = 'upgrader'
             const bodies = [
                 { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
