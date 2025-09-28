@@ -314,7 +314,7 @@ module.exports = function () {
         const claimersNeeded = spawn.memory.claimers
         if (spawn.memory.claimRoom) {
             const type = 'claimer'
-            const room = Game.rooms[spawn.memory.claimRoom]
+            const claimRoom = Game.rooms[spawn.memory.claimRoom]
             const bodies = [
                 { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
                 { tier: 2, parts: [[2, WORK], [2, CARRY], [4, MOVE]] }, // 500
@@ -323,11 +323,11 @@ module.exports = function () {
             ]
             let body = null
 
-            // Room visible
-            if (room) {
+            // Claim room visible
+            if (claimRoom) {
 
                 // Check/stop if room is fully claimed (has owned spawn)
-                if (room.find(FIND_MY_SPAWNS).length) {
+                if (claimRoom.find(FIND_MY_SPAWNS).length) {
                     spawn.memory.claimRoom = null
                     continue
                 }
@@ -341,7 +341,7 @@ module.exports = function () {
                 }
 
                 // Check for danger
-                if (room.hasDanger()) continue
+                if (claimRoom.hasDanger()) continue
 
                 // Claimer when room visible but controller not owned
                 if (!room.controller.my) {
