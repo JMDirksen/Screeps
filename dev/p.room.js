@@ -103,6 +103,7 @@ Room.prototype.linksUsedPercentage = function () {
 }
 
 Room.prototype.controllerLevel = function () {
+    if (!this.controller.progressTotal) return 8
     return round(
         this.controller.level + this.controller.progress / this.controller.progressTotal,
         2
