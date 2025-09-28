@@ -344,7 +344,7 @@ module.exports = function () {
                 if (claimRoom.hasDanger()) continue
 
                 // Claimer when room visible but controller not owned
-                if (!room.controller.my) {
+                if (!claimRoom.controller.my) {
                     let b = { tier: 2, parts: [CLAIM, WORK, CARRY, [3, MOVE]] } // 900
                     if (spawn.hasCapacity(b)) body = b
                 }
