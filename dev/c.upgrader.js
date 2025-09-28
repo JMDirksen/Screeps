@@ -20,6 +20,10 @@ module.exports = function (creep) {
                 return creep.goTo(controller, 1)
         }
 
+        // Check if upgrade needed
+        if (controller.level == 8 && controller.ticksToDowngrade > 5000)
+            return creep.idle()
+
         // Upgrade controller
         if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE)
             return creep.goTo(controller, 3)

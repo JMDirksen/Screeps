@@ -91,7 +91,7 @@ module.exports = function () {
         }
 
         // Upgrader
-        if (room.countCreeps('upgrader') < 1) {
+        if (room.countCreeps('upgrader') < 1 && !(controller.level == 8 && controller.ticksToDowngrade > 5000)) {
             const type = 'upgrader'
             const bodies = [
                 { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
