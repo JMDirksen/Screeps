@@ -92,10 +92,7 @@ module.exports = function () {
         }
 
         // Upgrader
-        if (
-            room.countCreeps('upgrader') < 1
-            && !(controller.level == 8 && controller.ticksToDowngrade > 5000)
-        ) {
+        if (room.countCreeps('upgrader') < 1) {
             const type = 'upgrader'
             const bodies = [
                 { tier: 1, parts: [WORK, CARRY, [2, MOVE]] },           // 250
@@ -104,6 +101,7 @@ module.exports = function () {
             ]
             let body = null
             bodies.forEach(b => { if (spawn.hasCapacity(b)) body = b })
+            if (controllerLevel == 8) body = bodies[0]
             let buildCreep = spawn.buildCreep(type, body)
             if (buildCreep == 1) spawn.memory.lastUpgraderBuilt = Game.time
             if (buildCreep) continue
